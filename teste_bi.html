@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Ambiente de Testes BI - Controle Operacional</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { color: #001e62; font-size: 20px; text-align: center; }
+        .upload-section {
+            background: #f0f4f8;
+            border: 2px dashed #002f6c;
+            padding: 15px;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .bancada-teste {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        /* Estilização da Bolinha Indicadora (LED) */
+        .status-led {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 12px;
+            background-color: #bbb; /* Cor cinza padrão quando está sem dados */
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        /* Cores Dinâmicas do Mapa de Calor */
+        .led-verde { background-color: #00a650; box-shadow: 0 0 8px #00a650; }
+        .led-amarelo { background-color: #ffc107; box-shadow: 0 0 8px #ffc107; }
+        .led-vermelho { background-color: #e50014; box-shadow: 0 0 8px #e50014; }
+        
+        .info-metrica {
+            margin-left: auto;
+            font-size: 11px;
+            color: #666;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🧪 Sandbox: Teste de Integração JSON (Meli BI)</h1>
+    
+    <div class="upload-section">
+        <p style="margin: 0 0 10px 0; font-size: 13px; font-weight: bold;">Simular entrada da Query de Linha:</p>
+        <input type="file" id="jsonInput" accept=".json">
+    </div>
+
+    <div id="lista-bancadas">
+        <div class="bancada-teste" data-usuario="Fernanda">
+            <span class="status-led" id="led-Fernanda"></span>
+            <span>E1 - Pesca (Fernanda)</span>
+            <div class="info-metrica" id="info-Fernanda">Sem dados</div>
+        </div>
+        <div class="bancada-teste" data-usuario="Pietra">
+            <span class="status-led" id="led-Pietra"></span>
+            <span>E2 - GM (Pietra)</span>
+            <div class="info-metrica" id="info-Pietra">Sem dados</div>
+        </div>
+        <div class="bancada-teste" data-usuario="Letícia">
+            <span class="status-led" id="led-Letícia"></span>
+            <span>E3 - GM (Letícia)</span>
+            <div class="info-metrica" id="info-Letícia">Sem dados</div>
+        </div>
+        <div class="bancada-teste" data-usuario="Isaac de Araújo">
+            <span class="status-led" id="led-Isaac"></span>
+            <span>E4 - GM (Isaac de Araújo)</span>
+            <div class="info-metrica" id="info-Isaac">Sem dados</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('jsonInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const dadosMetricas = JSON.parse(e.target.result);
+                processarDadosBI(dadosMetricas);
+            } catch (err) {
+                alert('Erro ao ler o arquivo JSON. Verifique a formatação.');
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    function processarDadosBI(dados) {
+        // Mapeamento dos operadores para facilitar a busca rápida
+        const dadosPorUsuario = {};
+        dados.forEach(item => {
+            dadosPorUsuario[item.usuario.trim()] = item;
+        });
+
+        // Lista de checagem interna baseada nos IDs das bolinhas
+        const mapeamentoLeds = [
+            { nome: "Fernanda", ledId: "led-Fernanda", infoId: "info-Fernanda" },
+            { nome: "Pietra", ledId: "led-Pietra", infoId: "info-Pietra" },
+            { nome: "Letícia", ledId: "led-Letícia", infoId: "info-Letícia" },
+            { nome: "Isaac de Araújo", ledId: "led-Isaac", infoId: "info-Isaac" }
+        ];
+
+        mapeamentoLeds.forEach(rep => {
+            const ledEl = document.getElementById(rep.ledId);
+            const infoEl = document.getElementById(rep.infoId);
+            const dadosRep = dadosPorUsuario[rep.nome];
+
+            // Limpa classes anteriores de teste
+            ledEl.className = "status-led";
+
+            if (dadosRep) {
+                const prod = dadosRep.produtividade;
+                const ocioso = dadosRep.minutos_ocioso;
+
+                // Regra de Negócio Crítica para acender o LED
+                if (ocioso >= 10) {
+                    ledEl.classList.add("led-vermelho"); // Ociosidade crítica no fundo
+                } else if (prod < 80) {
+                    ledEl.classList.add("led-amarelo"); // Baixa produtividade
+                } else {
+                    ledEl.classList.add("led-verde"); // Operação normal voando
+                }
+
+                infoEl.innerHTML = `Prod: ${prod}%<br>Ocioso: ${ocioso} min`;
+            } else {
+                infoEl.innerHTML = "Rep não localizado";
+            }
+        });
+    }
+</script>
+</body>
+</html>
