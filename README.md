@@ -42,7 +42,7 @@ A ferramenta foi desenvolvida sob medida para **digitalizar o desenho físico da
 
 O sistema está publicado e pode ser acessado em televisores na pista ou por smartphones da liderança através do link abaixo:
 
-🔗 **[CLIQUE AQUI PARA ABRIR O PAINEL EM TEMPO REAL](https://Tatysketch.github.io/Operational-Control-3P/)**
+🔗 **(https://Tatysketch.github.io/Operational-Control-3P/)**
 
 ---
 
