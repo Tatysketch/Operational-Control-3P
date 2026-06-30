@@ -7,13 +7,14 @@
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f7; padding: 20px; }
         .box { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .upload-area { border: 2px dashed #001e62; padding: 15px; text-align: center; margin-bottom: 20px; background: #f0f4f8; border-radius: 6px; }
-        .bancada-linha { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
-        .status-led { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 10px; background-color: #bbb; }
-        .led-verde { background-color: #00a650; box-shadow: 0 0 6px #00a650; }
-        .led-amarelo { background-color: #ffc107; box-shadow: 0 0 6px #ffc107; }
-        .led-vermelho { background-color: #e50014; box-shadow: 0 0 6px #e50014; }
-        .metrica { margin-left: auto; font-size: 11px; color: #666; text-align: right; }
+        .btn-simular { display: block; width: 100%; background: #001e62; color: white; border: none; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 20px; text-align: center; }
+        .btn-simular:hover { background: #002f6c; }
+        .bancada-linha { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
+        .status-led { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 10px; background-color: #bbb; transition: all 0.3s ease; }
+        .led-verde { background-color: #00a650; box-shadow: 0 0 8px #00a650; }
+        .led-amarelo { background-color: #ffc107; box-shadow: 0 0 8px #ffc107; }
+        .led-vermelho { background-color: #e50014; box-shadow: 0 0 8px #e50014; }
+        .metrica { margin-left: auto; font-size: 11px; color: #666; text-align: right; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -21,10 +22,7 @@
 <div class="box">
     <h3 style="text-align:center; color:#001e62; margin-top:0;">Simulador BI com Operação Real 3P</h3>
     
-    <div class="upload-area">
-        <label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">Selecione o arquivo 'dados_linha_atual.json':</label>
-        <input type="file" id="arquivoJson" accept=".json">
-    </div>
+    <button class="btn-simular" id="btnSimular">⚡ SIMULAR DADOS DA QUERY EM TEMPO REAL</button>
 
     <div id="lista-operadores">
         <div class="bancada-linha" data-nome="joao"><span class="status-led" id="led-joao"></span> Check-In 10: joao <div class="metrica" id="txt-joao">Aguardando dados...</div></div>
@@ -38,43 +36,39 @@
 </div>
 
 <script>
-    document.getElementById('arquivoJson').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            try {
-                const dados = JSON.parse(evt.target.result);
+    document.getElementById('btnSimular').addEventListener('click', function() {
+        // Dados injetados diretamente por código para garantir o teste rápido
+        const dadosSimulados = [
+          {"usuario": "joao", "produtividade": 105, "minutos_ocioso": 1},
+          {"usuario": "cintia", "produtividade": 98, "minutos_ocioso": 2},
+          {"usuario": "tati", "produtividade": 115, "minutos_ocioso": 0},
+          {"usuario": "pietra", "produtividade": 85, "minutos_ocioso": 3},
+          {"usuario": "hellen", "produtividade": 70, "minutos_ocioso": 4},
+          {"usuario": "leticia", "produtividade": 50, "minutos_ocioso": 14},
+          {"usuario": "jeferson", "produtividade": 90, "minutos_ocioso": 1}
+        ];
+        
+        dadosSimulados.forEach(rep => {
+            const nomeFormatado = rep.usuario.toLowerCase().trim();
+            const led = document.getElementById('led-' + nomeFormatado);
+            const txt = document.getElementById('txt-' + nomeFormatado);
+            
+            if (led && txt) {
+                led.className = "status-led"; // reseta cor cinzenta
                 
-                // Processar cada operador que veio no JSON
-                dados.forEach(rep => {
-                    const nomeFormatado = rep.usuario.toLowerCase().trim();
-                    const led = document.getElementById('led-' + nomeFormatado);
-                    const txt = document.getElementById('txt-' + nomeFormatado);
-                    
-                    if (led && txt) {
-                        led.className = "status-led"; // reseta
-                        
-                        // Regra de status
-                        if (rep.minutos_ocioso >= 10) {
-                            led.classList.add('led-vermelho');
-                        } else if (rep.produtividade < 80) {
-                            led.classList.add('led-amarelo');
-                        } else {
-                            led.classList.add('led-verde');
-                        }
-                        
-                        txt.innerHTML = `Prod: ${rep.produtividade}%<br>Ocioso: ${rep.minutos_ocioso}m`;
-                    }
-                });
-            } catch(err) {
-                alert('Erro ao processar o JSON.');
+                // Aplicação exata da regra de negócio
+                if (rep.minutos_ocioso >= 10) {
+                    led.classList.add('led-vermelho'); // Alerta Crítico de Idleness
+                } else if (rep.produtividade < 80) {
+                    led.classList.add('led-amarelo');  // Alerta de Ritmo Baixo
+                } else {
+                    led.classList.add('led-verde');    // Ritmo Ideal Meli
+                }
+                
+                txt.innerHTML = `Prod: ${rep.produtividade}%<br>Ocioso: ${rep.minutos_ocioso}m`;
             }
-        };
-        reader.readAsText(file);
+        });
     });
 </script>
 </body>
-</html>
 </html>
