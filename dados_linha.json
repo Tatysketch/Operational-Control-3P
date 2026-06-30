@@ -1,9 +1,0 @@
-[
-  {"usuario": "joao", "produtividade": 105, "minutos_ocioso": 1},
-  {"usuario": "cintia", "produtividade": 98, "minutos_ocioso": 2},
-  {"usuario": "tati", "produtividade": 115, "minutos_ocioso": 0},
-  {"usuario": "pietra", "produtividade": 85, "minutos_ocioso": 3},
-  {"usuario": "hellen", "produtividade": 70, "minutos_ocioso": 4},
-  {"usuario": "leticia", "produtividade": 50, "minutos_ocioso": 14},
-  {"usuario": "jeferson", "produtividade": 90, "minutos_ocioso": 1}
-]
