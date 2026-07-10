@@ -67,9 +67,6 @@
         .btn-toggle-config { background: #666; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 12px; }
         .btn-salvar { background: #27ae60; color: white; border: none; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; grid-column: span 4; text-transform: uppercase;}
         .btn-reset { background: #c0392b; color: white; border: none; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 5px; grid-column: span 4; text-transform: uppercase;}
-        
-        /* Estilos dos Indicadores */
-        .container-indicadores-rep { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; font-size: 11px; font-weight: bold; color: #444; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -87,6 +84,7 @@
 
     <div class="layout-esteira-unica">
         
+        <!-- COLUNA ESQUERDA (CHECK-IN 10-17 & P2M LADO ESQUERDO) -->
         <div class="lado-esquerdo">
             <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 10</div><div class="nome-colaborador" id="ch-e10">---</div></div>
             <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 11</div><div class="nome-colaborador" id="ch-e11">---</div></div>
@@ -107,11 +105,13 @@
             <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="e5">---</div></div>
         </div>
 
+        <!-- ESTEIRA CENTRAL INTEIRA - PRETA -->
         <div class="esteira-central">
             <div class="secao-esteira ch">ESTEIRA CHECK-IN</div>
             <div class="secao-esteira p2m">ESTEIRA P2M</div>
         </div>
 
+        <!-- COLUNA DIREITA (CHECK-IN 1-9 & P2M LADO DIREITO) -->
         <div class="lado-direito">
             <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 1</div><div class="nome-colaborador" id="ch-d1">---</div></div>
             <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 2</div><div class="nome-colaborador" id="ch-d2">---</div></div>
@@ -135,7 +135,7 @@
         </div>
     </div>
 
-    <button class="btn-grid-rotatividade btn-girar" onclick="gira()">Girar Rotatividade P2M 🔄</button>
+    <button class="btn-girar" onclick="gira()">Girar Rotatividade P2M 🔄</button>
 </div>
 
 <button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração (Líderes)</button>
@@ -143,6 +143,7 @@
 <div class="config-section" id="aba-config">
     <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno</h3>
     
+    <!-- Novo campo exclusivo para o nome do TL -->
     <div class="config-tl-section">
         <label style="font-size: 12px; font-weight: bold; color: #2d3277;">Responsável pelo Turno (Team Leader):</label>
         <input type="text" id="in-nome-tl" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Digite o nome do TL">
@@ -166,17 +167,6 @@ let p2mGiro = [...padraoP2mGiro];
 let p2mFixos = [...padraoP2mFixos];
 let nomeTL = padraoTL;
 
-// Base de Dados
-const dadosPainelMaster = [
-  {"usuario": "joao", "prod": "15000", "ocioso": "1m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS99281", "chegada": "13:00", "furo_fifo": false},
-  {"usuario": "leticia", "prod": "8500", "ocioso": "15m", "status_prod": "#ffc107", "status_ocio": "#e50014", "is_fifo": "IS88321", "chegada": "20:00", "furo_fifo": true},
-  {"usuario": "cintia", "prod": "12000", "ocioso": "2m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS77412", "chegada": "13:30", "furo_fifo": false},
-  {"usuario": "tati", "prod": "18500", "ocioso": "0m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS66514", "chegada": "11:00", "furo_fifo": false},
-  {"usuario": "pietra", "prod": "14200", "ocioso": "1m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS55423", "chegada": "12:15", "furo_fifo": false},
-  {"usuario": "hellen", "prod": "7100", "ocioso": "4m", "status_prod": "#ffc107", "status_ocio": "#ffc107", "is_fifo": "IS44152", "chegada": "14:00", "furo_fifo": false},
-  {"usuario": "fernanda", "prod": "13400", "ocioso": "3m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS33211", "chegada": "15:00", "furo_fifo": false}
-];
-
 function render() {
     document.getElementById('nome-tl-display').innerText = nomeTL || "---";
 
@@ -196,51 +186,6 @@ function render() {
     document.getElementById('d7').innerText = p2mGiro[5] || "---";
     document.getElementById('d6').innerText = p2mGiro[6] || "---";
     document.getElementById('d5').innerText = p2mGiro[7] || "---";
-
-    aplicarIndicadores();
-}
-
-function aplicarIndicadores() {
-    document.querySelectorAll('.container-indicadores-rep').forEach(el => el.remove());
-
-    document.querySelectorAll('.nome-colaborador').forEach(card => {
-        const textoNome = card.innerText.trim().split('\n')[0].trim();
-        if (textoNome === "---" || textoNome === "") return;
-
-        dadosPainelMaster.forEach(rep => {
-            if (textoNome.toLowerCase() === rep.usuario.toLowerCase()) {
-                const container = document.createElement('span');
-                container.className = 'container-indicadores-rep';
-
-                const spanProd = document.createElement('span');
-                spanProd.style.display = 'inline-flex';
-                spanProd.style.alignItems = 'center';
-                spanProd.style.gap = '3px';
-                spanProd.innerHTML = `<span style="color:${rep.status_prod}; font-size:13px; line-height:1;">●</span>${rep.prod}`;
-
-                const spanOcio = document.createElement('span');
-                spanOcio.style.display = 'inline-flex';
-                spanOcio.style.alignItems = 'center';
-                spanOcio.style.gap = '3px';
-                spanOcio.innerHTML = `<span style="color:${rep.status_ocio}; font-size:13px; line-height:1;">●</span>${rep.ocioso}`;
-
-                container.appendChild(spanProd);
-                container.appendChild(spanOcio);
-
-                const cardPaiInfo = card.previousElementSibling?.innerText || '';
-                if (rep.furo_fifo && cardPaiInfo.toUpperCase().includes('CHECK-IN')) {
-                    const alertaFifo = document.createElement('span');
-                    alertaFifo.innerHTML = `⚠️`;
-                    alertaFifo.style.cursor = 'help';
-                    alertaFifo.style.marginLeft = '2px';
-                    alertaFifo.title = `ALERTA DE FIFO (Torre de Espelho):\nCarga atual iniciada às ${rep.chegada}.\nExiste carga retida de menor horário pendente na rua.\nIS correspondente: ${rep.is_fifo}`;
-                    container.appendChild(alertaFifo);
-                }
-
-                card.appendChild(container);
-            }
-        });
-    });
 }
 
 function gira() {
