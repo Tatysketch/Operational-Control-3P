@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>CONTROLE OPERACIONAL - 3P</title>
+    <meta name="viewport" content="width=1024">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .painel { background: white; width: 1200px; border-radius: 12px; padding: 20px; border: 1px solid #dcdcdc; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        /* Topo */
+        .header-container { display: flex; align-items: center; justify-content: center; gap: 20px; border-bottom: 2px solid #2d3277; padding-bottom: 12px; margin-bottom: 15px; }
+        .logo-meli { width: 50px; height: auto; }
+        .header-titles h1 { color: #2d3277; margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-topo { display: flex; justify-content: space-between; color: #444; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
+        .tl-nome { color: #2d3277; border-bottom: 2px solid #ffdb00; text-transform: uppercase; }
+        #relogio { background: #2d3277; color: white; padding: 3px 10px; border-radius: 4px; font-family: monospace; }
+
+        /* Estrutura de Fluxo Espelhado */
+        .layout-esteira-unica { display: flex; justify-content: center; position: relative; margin-top: 10px; }
+        
+        .lado-esquerdo { width: 450px; display: flex; flex-direction: column; justify-content: flex-start; gap: 4px; }
+        .lado-direito { width: 450px; display: flex; flex-direction: column; justify-content: flex-start; gap: 4px; }
+        
+        /* Esteira Central Unificada - Toda em Preto Forte */
+        .esteira-central { width: 60px; background: #111111; margin: 0 20px; border-radius: 6px; display: flex; flex-direction: column; color: white; font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); }
+        .secao-esteira { flex: 1; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; text-orientation: mixed; }
+        .secao-esteira.ch { background: #111111; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom: 4px dashed #fff; min-height: 400px; }
+        .secao-esteira.p2m { background: #111111; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; min-height: 380px; }
+
+        /* Estilização dos Cards */
+        .card { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 6px 12px; min-height: 34px; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card-info { font-size: 9px; color: #666; font-weight: 800; margin-bottom: 1px; text-transform: uppercase; }
+        .nome-colaborador { color: #1a1a1a; font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* Bordas de Identificação Padronizadas em Azul (Check-in e GM) */
+        .card-ch { border-left: 6px solid #2d3277; }
+        .card-gm { border-left: 8px solid #2d3277; }
+        
+        /* Diferenciais: Categorias em Laranja */
+        .card-cat { border-left: 8px solid #f0ad4e; }
+        
+        /* Diferenciais: Destaque Vermelho Equilibrado na Pesca */
+        .card-pesca { border-left: 8px solid #b91c1c; background-color: #fef2f2; }
+        .tag-fixo-pesca { position: absolute; top: 3px; right: 6px; font-size: 7px; background: #b91c1c; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 800; }
+
+        /* Ajustes específicos para alinhar as alturas do Check-in */
+        .espacador-ch-esq { height: 38px; }
+
+        /* Tags e Detalhes */
+        .cat-tag { font-size: 8px; color: #d35400; font-weight: bold; border-top: 1px solid #eee; margin-top: 2px; padding-top: 1px; }
+
+        /* Botão Girar */
+        .btn-girar { background: #2d3277; color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+        .btn-girar:hover { background: #1e2252; }
+
+        /* Painel Administrativo Oculto */
+        .config-section { background: #eef2f7; border: 2px dashed #2d3277; border-radius: 8px; padding: 15px; margin-top: 20px; display: none; width: 1160px; }
+        .config-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .config-group { display: flex; flex-direction: column; }
+        .config-group label { font-size: 11px; font-weight: bold; color: #333; margin-bottom: 2px; }
+        .config-group input { padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; }
+        
+        /* Seção Especial para o TL na Configuração */
+        .config-tl-section { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+
+        .btn-toggle-config { background: #666; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 12px; }
+        .btn-salvar { background: #27ae60; color: white; border: none; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; grid-column: span 4; text-transform: uppercase;}
+        .btn-reset { background: #c0392b; color: white; border: none; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 5px; grid-column: span 4; text-transform: uppercase;}
+        
+        /* Estilos dos Indicadores */
+        .container-indicadores-rep { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; font-size: 11px; font-weight: bold; color: #444; vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+<div class="painel">
+    <div class="header-container">
+        <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
+        <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P</h1></div>
+    </div>
+
+    <div class="info-topo">
+        <div>TEAM LEADER: <span class="tl-nome" id="nome-tl-display">RAFAEL GUEDES</span></div>
+        <div id="relogio">--/--/---- | --:--:--</div>
+    </div>
+
+    <div class="layout-esteira-unica">
+        
+        <div class="lado-esquerdo">
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 10</div><div class="nome-colaborador" id="ch-e10">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 11</div><div class="nome-colaborador" id="ch-e11">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 12</div><div class="nome-colaborador" id="ch-e12">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 13</div><div class="nome-colaborador" id="ch-e13">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 14</div><div class="nome-colaborador" id="ch-e14">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 15</div><div class="nome-colaborador" id="ch-e15">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 16</div><div class="nome-colaborador" id="ch-e16">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 17</div><div class="nome-colaborador" id="ch-e17">---</div></div>
+            <div class="espacador-ch-esq"></div>
+
+            <div style="height: 20px;"></div>
+            
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 01 (GM)</div><div class="nome-colaborador" id="e1">---</div></div>
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 02 (GM)</div><div class="nome-colaborador" id="e2">---</div></div>
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 03 (GM)</div><div class="nome-colaborador" id="e3">---</div></div>
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 04 (GM)</div><div class="nome-colaborador" id="e4">---</div></div>
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="e5">---</div></div>
+        </div>
+
+        <div class="esteira-central">
+            <div class="secao-esteira ch">ESTEIRA CHECK-IN</div>
+            <div class="secao-esteira p2m">ESTEIRA P2M</div>
+        </div>
+
+        <div class="lado-direito">
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 1</div><div class="nome-colaborador" id="ch-d1">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 2</div><div class="nome-colaborador" id="ch-d2">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 3</div><div class="nome-colaborador" id="ch-d3">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 4</div><div class="nome-colaborador" id="ch-d4">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 5</div><div class="nome-colaborador" id="ch-d5">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 6</div><div class="nome-colaborador" id="ch-d6">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 7</div><div class="nome-colaborador" id="ch-d7">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 8</div><div class="nome-colaborador" id="ch-d8">---</div></div>
+            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 9</div><div class="nome-colaborador" id="ch-d9">---</div></div>
+
+            <div style="height: 20px;"></div>
+
+            <div class="card card-pesca" style="min-height:44px;"><span class="tag-fixo-pesca">FIXO</span><div class="card-info">P2M - BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="p_pesca">---</div></div>
+            <div class="card card-cat" style="min-height:44px;"><div class="card-info">P2M - BANCADA 02 (CAT)</div><div class="nome-colaborador" id="cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div></div>
+            <div class="card card-cat" style="min-height:44px;"><div class="card-info">P2M - BANCADA 03 (CAT)</div><div class="nome-colaborador" id="cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div></div>
+            <div class="card card-cat" style="min-height:44px;"><div class="card-info">P2M - BANCADA 04 (CAT)</div><div class="nome-colaborador" id="cat3">---</div><div class="cat-tag">HV / SANEANTES</div></div>
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="d5">---</div></div>
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 06 (GM)</div><div class="nome-colaborador" id="d6">---</div></div>
+            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 07 (GM)</div><div class="nome-colaborador" id="d7">---</div></div>
+        </div>
+    </div>
+
+    <button class="btn-grid-rotatividade btn-girar" onclick="gira()">Girar Rotatividade P2M 🔄</button>
+</div>
+
+<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração (Líderes)</button>
+
+<div class="config-section" id="aba-config">
+    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno</h3>
+    
+    <div class="config-tl-section">
+        <label style="font-size: 12px; font-weight: bold; color: #2d3277;">Responsável pelo Turno (Team Leader):</label>
+        <input type="text" id="in-nome-tl" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Digite o nome do TL">
+    </div>
+
+    <div class="config-grid" id="inputs-dinamicos"></div>
+    <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala no Painel</button>
+    <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
+</div>
+
+<script>
+const padraoCheckinEsq = Array(8).fill(""); 
+const padraoCheckinDir = Array(9).fill(""); 
+const padraoP2mGiro = Array(8).fill("");
+const padraoP2mFixos = ["", "", "", ""]; 
+const padraoTL = "RAFAEL GUEDES";
+
+let checkinEsq = [...padraoCheckinEsq];
+let checkinDir = [...padraoCheckinDir];
+let p2mGiro = [...padraoP2mGiro];
+let p2mFixos = [...padraoP2mFixos];
+let nomeTL = padraoTL;
+
+// Base de Dados
+const dadosPainelMaster = [
+  {"usuario": "joao", "prod": "15000", "ocioso": "1m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS99281", "chegada": "13:00", "furo_fifo": false},
+  {"usuario": "leticia", "prod": "8500", "ocioso": "15m", "status_prod": "#ffc107", "status_ocio": "#e50014", "is_fifo": "IS88321", "chegada": "20:00", "furo_fifo": true},
+  {"usuario": "cintia", "prod": "12000", "ocioso": "2m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS77412", "chegada": "13:30", "furo_fifo": false},
+  {"usuario": "tati", "prod": "18500", "ocioso": "0m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS66514", "chegada": "11:00", "furo_fifo": false},
+  {"usuario": "pietra", "prod": "14200", "ocioso": "1m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS55423", "chegada": "12:15", "furo_fifo": false},
+  {"usuario": "hellen", "prod": "7100", "ocioso": "4m", "status_prod": "#ffc107", "status_ocio": "#ffc107", "is_fifo": "IS44152", "chegada": "14:00", "furo_fifo": false},
+  {"usuario": "fernanda", "prod": "13400", "ocioso": "3m", "status_prod": "#00a650", "status_ocio": "#00a650", "is_fifo": "IS33211", "chegada": "15:00", "furo_fifo": false}
+];
+
+function render() {
+    document.getElementById('nome-tl-display').innerText = nomeTL || "---";
+
+    for(let i = 0; i < 8; i++) document.getElementById(`ch-e${i+10}`).innerText = checkinEsq[i] || "---";
+    for(let i = 0; i < 9; i++) document.getElementById(`ch-d${i+1}`).innerText = checkinDir[i] || "---";
+    
+    document.getElementById('p_pesca').innerText = p2mFixos[0] || "---";
+    document.getElementById('cat1').innerText = p2mFixos[1] || "---";
+    document.getElementById('cat2').innerText = p2mFixos[2] || "---";
+    document.getElementById('cat3').innerText = p2mFixos[3] || "---";
+
+    document.getElementById('e1').innerText = p2mGiro[0] || "---";
+    document.getElementById('e2').innerText = p2mGiro[1] || "---";
+    document.getElementById('e3').innerText = p2mGiro[2] || "---";
+    document.getElementById('e4').innerText = p2mGiro[3] || "---";
+    document.getElementById('e5').innerText = p2mGiro[4] || "---";
+    document.getElementById('d7').innerText = p2mGiro[5] || "---";
+    document.getElementById('d6').innerText = p2mGiro[6] || "---";
+    document.getElementById('d5').innerText = p2mGiro[7] || "---";
+
+    aplicarIndicadores();
+}
+
+function aplicarIndicadores() {
+    document.querySelectorAll('.container-indicadores-rep').forEach(el => el.remove());
+
+    document.querySelectorAll('.nome-colaborador').forEach(card => {
+        const textoNome = card.innerText.trim().split('\n')[0].trim();
+        if (textoNome === "---" || textoNome === "") return;
+
+        dadosPainelMaster.forEach(rep => {
+            if (textoNome.toLowerCase() === rep.usuario.toLowerCase()) {
+                const container = document.createElement('span');
+                container.className = 'container-indicadores-rep';
+
+                const spanProd = document.createElement('span');
+                spanProd.style.display = 'inline-flex';
+                spanProd.style.alignItems = 'center';
+                spanProd.style.gap = '3px';
+                spanProd.innerHTML = `<span style="color:${rep.status_prod}; font-size:13px; line-height:1;">●</span>${rep.prod}`;
+
+                const spanOcio = document.createElement('span');
+                spanOcio.style.display = 'inline-flex';
+                spanOcio.style.alignItems = 'center';
+                spanOcio.style.gap = '3px';
+                spanOcio.innerHTML = `<span style="color:${rep.status_ocio}; font-size:13px; line-height:1;">●</span>${rep.ocioso}`;
+
+                container.appendChild(spanProd);
+                container.appendChild(spanOcio);
+
+                const cardPaiInfo = card.previousElementSibling?.innerText || '';
+                if (rep.furo_fifo && cardPaiInfo.toUpperCase().includes('CHECK-IN')) {
+                    const alertaFifo = document.createElement('span');
+                    alertaFifo.innerHTML = `⚠️`;
+                    alertaFifo.style.cursor = 'help';
+                    alertaFifo.style.marginLeft = '2px';
+                    alertaFifo.title = `ALERTA DE FIFO (Torre de Espelho):\nCarga atual iniciada às ${rep.chegada}.\nExiste carga retida de menor horário pendente na rua.\nIS correspondente: ${rep.is_fifo}`;
+                    container.appendChild(alertaFifo);
+                }
+
+                card.appendChild(container);
+            }
+        });
+    });
+}
+
+function gira() {
+    p2mGiro.unshift(p2mGiro.pop());
+    render();
+    salvarNoLocalStorage();
+}
+
+function gerarInputsConfig() {
+    document.getElementById('in-nome-tl').value = nomeTL;
+
+    const container = document.getElementById('inputs-dinamicos');
+    container.innerHTML = '';
+
+    for(let i = 0; i < 8; i++) {
+        container.innerHTML += `<div class="config-group"><label>Check-in - Bancada ${i+10}</label><input type="text" id="in-ch-e${i+10}" value="${checkinEsq[i]}"></div>`;
+    }
+    for(let i = 0; i < 9; i++) {
+        container.innerHTML += `<div class="config-group"><label>Check-in - Bancada ${i+1}</label><input type="text" id="in-ch-d${i+1}" value="${checkinDir[i]}"></div>`;
+    }
+    
+    const rotulosFixos = ["P2M - B01 PESCA (Fixo)", "P2M - B02 CAT (Alimento)", "P2M - B03 CAT (Cosmético)", "P2M - B04 CAT (HV)"];
+    for(let i = 0; i < 4; i++) container.innerHTML += `<div class="config-group"><label>${rotulosFixos[i]}</label><input type="text" id="in-p2m-fixo-${i}" value="${p2mFixos[i]}"></div>`;
+    
+    const rotulosGiro = ["P2M - B01 (E1)", "P2M - B02 (E2)", "P2M - B03 (E3)", "P2M - B04 (E4)", "P2M - B05 (E5)", "P2M - B07 (D7)", "P2M - B06 (D6)", "P2M - B05 (D5)"];
+    for(let i = 0; i < 8; i++) container.innerHTML += `<div class="config-group"><label>${rotulosGiro[i]}</label><input type="text" id="in-p2m-giro-${i}" value="${p2mGiro[i]}"></div>`;
+}
+
+function salvarConfig() {
+    nomeTL = document.getElementById('in-nome-tl').value;
+
+    for(let i = 0; i < 8; i++) checkinEsq[i] = document.getElementById(`in-ch-e${i+10}`).value;
+    for(let i = 0; i < 9; i++) checkinDir[i] = document.getElementById(`in-ch-d${i+1}`).value;
+    for(let i = 0; i < 4; i++) p2mFixos[i] = document.getElementById(`in-p2m-fixo-${i}`).value;
+    for(let i = 0; i < 8; i++) p2mGiro[i] = document.getElementById(`in-p2m-giro-${i}`).value;
+
+    render();
+    salvarNoLocalStorage();
+    toggleConfig();
+    alert("Escala e Team Leader salvos com sucesso!");
+}
+
+function salvarNoLocalStorage() {
+    localStorage.setItem('meli_painel_a_save', JSON.stringify({ checkinEsq, checkinDir, p2mGiro, p2mFixos, nomeTL }));
+}
+
+function toggleConfig() {
+    const aba = document.getElementById('aba-config');
+    if(aba.style.display === 'block') {
+        aba.style.display = 'none';
+    } else {
+        gerarInputsConfig();
+        aba.style.display = 'block';
+        aba.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function resetarPainel() {
+    if(confirm("Deseja zerar todos os nomes e voltar o TL padrão?")) {
+        checkinEsq = [...padraoCheckinEsq];
+        checkinDir = [...padraoCheckinDir];
+        p2mGiro = [...padraoP2mGiro];
+        p2mFixos = [...padraoP2mFixos];
+        nomeTL = padraoTL;
+        localStorage.removeItem('meli_painel_a_save');
+        render();
+        toggleConfig();
+        alert("Painel resetado!");
+    }
+}
+
+function relogio() {
+    setInterval(() => {
+        const agora = new Date();
+        document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
+    }, 1000);
+}
+
+window.onload = () => {
+    relogio();
+    const salvo = JSON.parse(localStorage.getItem('meli_painel_a_save'));
+    if (salvo) {
+        if(salvo.checkinEsq) checkinEsq = salvo.checkinEsq;
+        if(salvo.checkinDir) checkinDir = salvo.checkinDir;
+        if(salvo.p2mGiro) p2mGiro = salvo.p2mGiro;
+        if(salvo.p2mFixos) p2mFixos = salvo.p2mFixos;
+        if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+    }
+    render();
+};
+</script>
+</body>
+</html>
