@@ -1,0 +1,5 @@
+SLA_CheckIn_Pallets:
+
+CREATE OR REPLACE TABLE meli-sbox.RCDATAOPS.CT_RC03_SLA_CHECKIN_PALLETS AS (
+### Projeto Stage-In
+# Busca de pallet prioritário [BRRC03] - Ajustado
