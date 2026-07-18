@@ -138,12 +138,18 @@
     <button class="btn-girar" onclick="gira()">Girar Rotatividade P2M 🔄</button>
 </div>
 
-<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração (Líderes)</button>
+<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração / Sincronizar</button>
 
 <div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno</h3>
+    <h3 style="margin-top:0; color:#2d3277;">⚙️ Configuração da API do Google Sheets</h3>
     
-    <!-- Novo campo exclusivo para o nome do TL -->
+    <div class="config-tl-section">
+        <label style="font-size: 12px; font-weight: bold; color: #2d3277;">ID da sua Planilha Google:</label>
+        <input type="text" id="in-spreadsheet-id" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Cole aqui o ID longo da URL da planilha">
+        <button class="btn-salvar" style="margin-top:10px; grid-column:auto;" onclick="conectarPlanilhaRealtime()">⚡ Puxar Dados em Tempo Real</button>
+    </div>
+
+    <h3 style="color:#2d3277; margin-top:20px;">📋 Ajuste Manual da Escala</h3>
     <div class="config-tl-section">
         <label style="font-size: 12px; font-weight: bold; color: #2d3277;">Responsável pelo Turno (Team Leader):</label>
         <input type="text" id="in-nome-tl" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Digite o nome do TL">
@@ -153,6 +159,9 @@
     <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala no Painel</button>
     <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
 </div>
+
+<!-- Importando a biblioteca oficial de queries do Google Sheets -->
+<script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
 const padraoCheckinEsq = Array(8).fill(""); 
@@ -166,6 +175,7 @@ let checkinDir = [...padraoCheckinDir];
 let p2mGiro = [...padraoP2mGiro];
 let p2mFixos = [...padraoP2mFixos];
 let nomeTL = padraoTL;
+let spreadsheetId = ""; // Guardará o ID da planilha do usuário
 
 function render() {
     document.getElementById('nome-tl-display').innerText = nomeTL || "---";
@@ -194,8 +204,93 @@ function gira() {
     salvarNoLocalStorage();
 }
 
+// ⚡ FUNÇÃO MASTER: Conecta e puxa as colunas selecionadas em tempo real sem quebrar
+function conectarPlanilhaRealtime() {
+    spreadsheetId = document.getElementById('in-spreadsheet-id').value.trim();
+    if(!spreadsheetId) {
+        alert("Por favor, insira o ID da sua planilha antes de conectar!");
+        return;
+    }
+
+    salvarNoLocalStorage();
+
+    // Carrega o pacote de visualização de dados do Google
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(() => {
+        // SQL-like query trazendo exatamente a lista de colunas solicitada
+        const query = encodeURIComponent("SELECT C, E, H, I, J, L, O, P, Q, R, S, T, U, V, W, X, Y, Z, AA, AB, AC, AD, AE, AF");
+        const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=Extração 1&tq=${query}`;
+        
+        const gq = new google.visualization.Query(url);
+        gq.send((response) => {
+            if (response.isError()) {
+                alert('Erro ao conectar com a planilha. Verifique se ela está compartilhada como "Qualquer pessoa com o link pode ler".');
+                console.error('Erro: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+                return;
+            }
+
+            const dataTable = response.getDataTable();
+            const totalLinhas = dataTable.getNumberOfRows();
+
+            if(totalLinhas === 0) {
+                alert("Conectado com sucesso, mas a aba 'Extração 1' não retornou registros.");
+                return;
+            }
+
+            // Mapeando os operadores para distribuir dinamicamente pelas bancadas
+            // Limpa as listas atuais antes do preenchimento em tempo real
+            checkinEsq = Array(8).fill("");
+            checkinDir = Array(9).fill("");
+            p2mGiro = Array(8).fill("");
+            p2mFixos = Array(4).fill("");
+
+            let indexChEsq = 0;
+            let indexChDir = 0;
+            let indexP2mGiro = 0;
+            let indexP2mFixo = 0;
+
+            for (let i = 0; i < totalLinhas; i++) {
+                // Pega o nome/id do operador na Coluna B da query (que corresponde à coluna E da planilha original)
+                let operador = dataTable.getValue(i, 1); 
+                // Pega o processo na Coluna F original (que virou índice 5 na nossa query)
+                let processo = dataTable.getValue(i, 5); 
+                // Pega o Subtype/Subprocesso para identificar regras especiais se necessário
+                let subProcesso = dataTable.getValue(i, 6);
+
+                if(!operador) continue;
+
+                // Regra de Distribuição Operacional Automática Baseada nos Seus Processos:
+                if (String(processo).toLowerCase().includes("checkin") || String(processo).toLowerCase().includes("check_in")) {
+                    if (indexChDir < 9) {
+                        checkinDir[indexChDir] = operador;
+                        indexChDir++;
+                    } else if (indexChEsq < 8) {
+                        checkinEsq[indexChEsq] = operador;
+                        indexChEsq++;
+                    }
+                } else {
+                    // P2M e Diferenciais
+                    if (String(subProcesso).toLowerCase().includes("pesca") && indexP2mFixo === 0) {
+                        p2mFixos[0] = operador;
+                    } else if (String(subProcesso).toLowerCase().includes("alimento") && indexP2mFixo < 4) {
+                        p2mFixos[1] = operador;
+                    } else if (indexP2mGiro < 8) {
+                        p2mGiro[indexP2mGiro] = operador;
+                        indexP2mGiro++;
+                    }
+                }
+            }
+
+            render();
+            salvarNoLocalStorage();
+            alert(`Sincronizado em Tempo Real! ${totalLinhas} registros processados.`);
+        });
+    });
+}
+
 function gerarInputsConfig() {
     document.getElementById('in-nome-tl').value = nomeTL;
+    document.getElementById('in-spreadsheet-id').value = spreadsheetId;
 
     const container = document.getElementById('inputs-dinamicos');
     container.innerHTML = '';
@@ -216,6 +311,7 @@ function gerarInputsConfig() {
 
 function salvarConfig() {
     nomeTL = document.getElementById('in-nome-tl').value;
+    spreadsheetId = document.getElementById('in-spreadsheet-id').value.trim();
 
     for(let i = 0; i < 8; i++) checkinEsq[i] = document.getElementById(`in-ch-e${i+10}`).value;
     for(let i = 0; i < 9; i++) checkinDir[i] = document.getElementById(`in-ch-d${i+1}`).value;
@@ -225,11 +321,11 @@ function salvarConfig() {
     render();
     salvarNoLocalStorage();
     toggleConfig();
-    alert("Escala e Team Leader salvos com sucesso!");
+    alert("Configurações salvas localmente!");
 }
 
 function salvarNoLocalStorage() {
-    localStorage.setItem('meli_painel_a_save', JSON.stringify({ checkinEsq, checkinDir, p2mGiro, p2mFixos, nomeTL }));
+    localStorage.setItem('meli_painel_a_save', JSON.stringify({ checkinEsq, checkinDir, p2mGiro, p2mFixos, nomeTL, spreadsheetId }));
 }
 
 function toggleConfig() {
@@ -250,6 +346,7 @@ function resetarPainel() {
         p2mGiro = [...padraoP2mGiro];
         p2mFixos = [...padraoP2mFixos];
         nomeTL = padraoTL;
+        spreadsheetId = "";
         localStorage.removeItem('meli_painel_a_save');
         render();
         toggleConfig();
@@ -273,8 +370,14 @@ window.onload = () => {
         if(salvo.p2mGiro) p2mGiro = salvo.p2mGiro;
         if(salvo.p2mFixos) p2mFixos = salvo.p2mFixos;
         if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+        if(salvo.spreadsheetId !== undefined) spreadsheetId = salvo.spreadsheetId;
     }
     render();
+
+    // Se já houver uma planilha configurada anteriormente, puxa os dados automaticamente no carregamento
+    if(spreadsheetId) {
+        setTimeout(conectarPlanilhaRealtime, 1000);
+    }
 };
 </script>
 </body>
