@@ -2,11 +2,11 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>CONTROLE OPERACIONAL - 3P</title>
+    <title>Controle Operacional - 3P (Check-in)</title>
     <meta name="viewport" content="width=1024">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .painel { background: white; width: 1200px; border-radius: 12px; padding: 20px; border: 1px solid #dcdcdc; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .painel { background: white; width: 1400px; border-radius: 12px; padding: 20px; border: 1px solid #dcdcdc; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
         /* Topo */
         .header-container { display: flex; align-items: center; justify-content: center; gap: 20px; border-bottom: 2px solid #2d3277; padding-bottom: 12px; margin-bottom: 15px; }
@@ -16,57 +16,41 @@
         .tl-nome { color: #2d3277; border-bottom: 2px solid #ffdb00; text-transform: uppercase; }
         #relogio { background: #2d3277; color: white; padding: 3px 10px; border-radius: 4px; font-family: monospace; }
 
-        /* Estrutura de Fluxo Espelhado */
-        .layout-esteira-unica { display: flex; justify-content: center; position: relative; margin-top: 10px; }
+        /* Container Principal das Linhas Lado a Lado */
+        .container-linhas { display: flex; justify-content: space-between; gap: 30px; width: 100%; }
+        .modulo-linha { flex: 1; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; }
+        .titulo-linha { text-align: center; color: white; background: #2d3277; margin: -15px -15px 15px -15px; padding: 10px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 800; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Estrutura de Fluxo Espelhado Mantida */
+        .layout-esteira-unica { display: flex; justify-content: center; position: relative; gap: 15px; }
+        .lado-esquerdo { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .lado-direito { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         
-        .lado-esquerdo { width: 450px; display: flex; flex-direction: column; justify-content: flex-start; gap: 4px; }
-        .lado-direito { width: 450px; display: flex; flex-direction: column; justify-content: flex-start; gap: 4px; }
-        
-        /* Esteira Central Unificada - Toda em Preto Forte */
-        .esteira-central { width: 60px; background: #111111; margin: 0 20px; border-radius: 6px; display: flex; flex-direction: column; color: white; font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); }
-        .secao-esteira { flex: 1; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; text-orientation: mixed; }
-        .secao-esteira.ch { background: #111111; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom: 4px dashed #fff; min-height: 400px; }
-        .secao-esteira.p2m { background: #111111; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; min-height: 380px; }
+        /* Esteira Central em Preto */
+        .esteira-central { width: 45px; background: #111111; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; letter-spacing: 2px; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); min-height: 340px; }
 
         /* Estilização dos Cards */
-        .card { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 6px 12px; min-height: 34px; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 6px 10px; min-height: 34px; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .card-info { font-size: 9px; color: #666; font-weight: 800; margin-bottom: 1px; text-transform: uppercase; }
         .nome-colaborador { color: #1a1a1a; font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-        /* Bordas de Identificação Padronizadas em Azul (Check-in e GM) */
         .card-ch { border-left: 6px solid #2d3277; }
-        .card-gm { border-left: 8px solid #2d3277; }
-        
-        /* Diferenciais: Categorias em Laranja */
-        .card-cat { border-left: 8px solid #f0ad4e; }
-        
-        /* Diferenciais: Destaque Vermelho Equilibrado na Pesca */
-        .card-pesca { border-left: 8px solid #b91c1c; background-color: #fef2f2; }
-        .tag-fixo-pesca { position: absolute; top: 3px; right: 6px; font-size: 7px; background: #b91c1c; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 800; }
-
-        /* Ajustes específicos para alinhar as alturas do Check-in */
-        .espacador-ch-esq { height: 38px; }
-
-        /* Tags e Detalhes */
-        .cat-tag { font-size: 8px; color: #d35400; font-weight: bold; border-top: 1px solid #eee; margin-top: 2px; padding-top: 1px; }
-
-        /* Botão Girar */
-        .btn-girar { background: #2d3277; color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
-        .btn-girar:hover { background: #1e2252; }
 
         /* Painel Administrativo Oculto */
-        .config-section { background: #eef2f7; border: 2px dashed #2d3277; border-radius: 8px; padding: 15px; margin-top: 20px; display: none; width: 1160px; }
-        .config-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .config-section { background: #eef2f7; border: 2px dashed #2d3277; border-radius: 8px; padding: 15px; margin-top: 20px; display: none; width: 1360px; }
+        .config-grid-container { display: flex; gap: 20px; }
+        .config-col-linha { flex: 1; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .config-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .config-group { display: flex; flex-direction: column; }
-        .config-group label { font-size: 11px; font-weight: bold; color: #333; margin-bottom: 2px; }
-        .config-group input { padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; }
+        .config-group label { font-size: 10px; font-weight: bold; color: #333; margin-bottom: 2px; }
+        .config-group input { padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px; }
         
-        /* Seção Especial para o TL na Configuração */
         .config-tl-section { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
-
         .btn-toggle-config { background: #666; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 12px; }
-        .btn-salvar { background: #27ae60; color: white; border: none; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; grid-column: span 4; text-transform: uppercase;}
-        .btn-reset { background: #c0392b; color: white; border: none; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 5px; grid-column: span 4; text-transform: uppercase;}
+        .btn-salvar { background: #27ae60; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 14px;}
+        .btn-reset { background: #c0392b; color: white; border: none; padding: 8px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 5px; width: 100%; text-transform: uppercase; font-size: 11px;}
+        
+        /* Indicadores */
+        .container-indicadores-rep { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; font-size: 11px; font-weight: bold; color: #444; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -78,254 +62,144 @@
     </div>
 
     <div class="info-topo">
-        <div>TEAM LEADER: <span class="tl-nome" id="nome-tl-display"></span></div>
+        <div>TEAM LEADER CHECK-IN: <span class="tl-nome" id="nome-tl-display">ARTUR</span></div>
         <div id="relogio">--/--/---- | --:--:--</div>
     </div>
 
-    <div class="layout-esteira-unica">
-        
-        <!-- COLUNA ESQUERDA (CHECK-IN 10-17 & P2M LADO ESQUERDO) -->
-        <div class="lado-esquerdo">
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 10</div><div class="nome-colaborador" id="ch-e10">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 11</div><div class="nome-colaborador" id="ch-e11">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 12</div><div class="nome-colaborador" id="ch-e12">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 13</div><div class="nome-colaborador" id="ch-e13">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 14</div><div class="nome-colaborador" id="ch-e14">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 15</div><div class="nome-colaborador" id="ch-e15">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 16</div><div class="nome-colaborador" id="ch-e16">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 17</div><div class="nome-colaborador" id="ch-e17">---</div></div>
-            <div class="espacador-ch-esq"></div>
-
-            <div style="height: 20px;"></div>
-            
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 01 (GM)</div><div class="nome-colaborador" id="e1">---</div></div>
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 02 (GM)</div><div class="nome-colaborador" id="e2">---</div></div>
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 03 (GM)</div><div class="nome-colaborador" id="e3">---</div></div>
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 04 (GM)</div><div class="nome-colaborador" id="e4">---</div></div>
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="e5">---</div></div>
+    <div class="container-linhas">
+        <!-- ================= LINHA A ================= -->
+        <div class="modulo-linha">
+            <div class="titulo-linha">Linha A</div>
+            <div class="layout-esteira-unica">
+                <div class="lado-esquerdo">
+                    <!-- 8 Bancadas Esquerdas (10 a 17) -->
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B10</div><div class="nome-colaborador" id="ch-A-10">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B11</div><div class="nome-colaborador" id="ch-A-11">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B12</div><div class="nome-colaborador" id="ch-A-12">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B13</div><div class="nome-colaborador" id="ch-A-13">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B14</div><div class="nome-colaborador" id="ch-A-14">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B15</div><div class="nome-colaborador" id="ch-A-15">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B16</div><div class="nome-colaborador" id="ch-A-16">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B17</div><div class="nome-colaborador" id="ch-A-17">---</div></div>
+                </div>
+                <div class="esteira-central">ESTEIRA</div>
+                <div class="lado-direito">
+                    <!-- 9 Bancadas Direitas (1 a 9) -->
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B1</div><div class="nome-colaborador" id="ch-A-1">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B2</div><div class="nome-colaborador" id="ch-A-2">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B3</div><div class="nome-colaborador" id="ch-A-3">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B4</div><div class="nome-colaborador" id="ch-A-4">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B5</div><div class="nome-colaborador" id="ch-A-5">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B6</div><div class="nome-colaborador" id="ch-A-6">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B7</div><div class="nome-colaborador" id="ch-A-7">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B8</div><div class="nome-colaborador" id="ch-A-8">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B9</div><div class="nome-colaborador" id="ch-A-9">---</div></div>
+                </div>
+            </div>
         </div>
 
-        <!-- ESTEIRA CENTRAL INTEIRA - PRETA -->
-        <div class="esteira-central">
-            <div class="secao-esteira ch">ESTEIRA CHECK-IN</div>
-            <div class="secao-esteira p2m">ESTEIRA P2M</div>
-        </div>
-
-        <!-- COLUNA DIREITA (CHECK-IN 1-9 & P2M LADO DIREITO) -->
-        <div class="lado-direito">
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 1</div><div class="nome-colaborador" id="ch-d1">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 2</div><div class="nome-colaborador" id="ch-d2">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 3</div><div class="nome-colaborador" id="ch-d3">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 4</div><div class="nome-colaborador" id="ch-d4">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 5</div><div class="nome-colaborador" id="ch-d5">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 6</div><div class="nome-colaborador" id="ch-d6">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 7</div><div class="nome-colaborador" id="ch-d7">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 8</div><div class="nome-colaborador" id="ch-d8">---</div></div>
-            <div class="card card-ch"><div class="card-info">CHECK-IN - BANCADA 9</div><div class="nome-colaborador" id="ch-d9">---</div></div>
-
-            <div style="height: 20px;"></div>
-
-            <div class="card card-pesca" style="min-height:44px;"><span class="tag-fixo-pesca">FIXO</span><div class="card-info">P2M - BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="p_pesca">---</div></div>
-            <div class="card card-cat" style="min-height:44px;"><div class="card-info">P2M - BANCADA 02 (CAT)</div><div class="nome-colaborador" id="cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div></div>
-            <div class="card card-cat" style="min-height:44px;"><div class="card-info">P2M - BANCADA 03 (CAT)</div><div class="nome-colaborador" id="cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div></div>
-            <div class="card card-cat" style="min-height:44px;"><div class="card-info">P2M - BANCADA 04 (CAT)</div><div class="nome-colaborador" id="cat3">---</div><div class="cat-tag">HV / SANEANTES</div></div>
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="d5">---</div></div>
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 06 (GM)</div><div class="nome-colaborador" id="d6">---</div></div>
-            <div class="card card-gm" style="min-height:44px;"><div class="card-info">P2M - BANCADA 07 (GM)</div><div class="nome-colaborador" id="d7">---</div></div>
+        <!-- ================= LINHA B ================= -->
+        <div class="modulo-linha">
+            <div class="titulo-linha">Linha B</div>
+            <div class="layout-esteira-unica">
+                <div class="lado-esquerdo">
+                    <!-- 8 Bancadas Esquerdas (10 a 17) -->
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B10</div><div class="nome-colaborador" id="ch-B-10">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B11</div><div class="nome-colaborador" id="ch-B-11">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B12</div><div class="nome-colaborador" id="ch-B-12">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B13</div><div class="nome-colaborador" id="ch-B-13">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B14</div><div class="nome-colaborador" id="ch-B-14">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B15</div><div class="nome-colaborador" id="ch-B-15">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B16</div><div class="nome-colaborador" id="ch-B-16">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B17</div><div class="nome-colaborador" id="ch-B-17">---</div></div>
+                </div>
+                <div class="esteira-central">ESTEIRA</div>
+                <div class="lado-direito">
+                    <!-- 9 Bancadas Direitas (1 a 9) -->
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B1</div><div class="nome-colaborador" id="ch-B-1">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B2</div><div class="nome-colaborador" id="ch-B-2">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B3</div><div class="nome-colaborador" id="ch-B-3">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B4</div><div class="nome-colaborador" id="ch-B-4">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B5</div><div class="nome-colaborador" id="ch-B-5">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B6</div><div class="nome-colaborador" id="ch-B-6">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B7</div><div class="nome-colaborador" id="ch-B-7">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B8</div><div class="nome-colaborador" id="ch-B-8">---</div></div>
+                    <div class="card card-ch"><div class="card-info">CHECK-IN - B9</div><div class="nome-colaborador" id="ch-B-9">---</div></div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <button class="btn-girar" onclick="gira()">Girar Rotatividade P2M 🔄</button>
 </div>
 
-<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração / Sincronizar</button>
+<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração (Líderes)</button>
 
 <div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277;">⚙️ Configuração da API do Google Sheets</h3>
+    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno (Check-in A & B)</h3>
     
-    <div class="config-tl-section">
-        <label style="font-size: 12px; font-weight: bold; color: #2d3277;">ID da sua Planilha Google:</label>
-        <input type="text" id="in-spreadsheet-id" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Cole aqui o ID longo da URL da planilha">
-        <button class="btn-salvar" style="margin-top:10px; grid-column:auto;" onclick="conectarPlanilhaRealtime()">⚡ Puxar Dados em Tempo Real</button>
-    </div>
-
-    <h3 style="color:#2d3277; margin-top:20px;">📋 Ajuste Manual da Escala</h3>
     <div class="config-tl-section">
         <label style="font-size: 12px; font-weight: bold; color: #2d3277;">Responsável pelo Turno (Team Leader):</label>
         <input type="text" id="in-nome-tl" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Digite o nome do TL">
     </div>
 
-    <div class="config-grid" id="inputs-dinamicos"></div>
+    <div class="config-grid-container">
+        <!-- Inputs Linha A -->
+        <div class="config-col-linha">
+            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha A</h4>
+            <div class="config-grid" id="inputs-linha-A"></div>
+        </div>
+        <!-- Inputs Linha B -->
+        <div class="config-col-linha">
+            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha B</h4>
+            <div class="config-grid" id="inputs-linha-B"></div>
+        </div>
+    </div>
+
     <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala no Painel</button>
     <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
 </div>
 
-<!-- Importando a biblioteca oficial de queries do Google Sheets -->
-<script src="https://www.gstatic.com/charts/loader.js"></script>
-
 <script>
-const padraoCheckinEsq = Array(8).fill(""); 
-const padraoCheckinDir = Array(9).fill(""); 
-const padraoP2mGiro = Array(8).fill("");
-const padraoP2mFixos = ["", "", "", ""]; 
-const padraoTL = "RAFAEL GUEDES";
-
-let checkinEsq = [...padraoCheckinEsq];
-let checkinDir = [...padraoCheckinDir];
-let p2mGiro = [...padraoP2mGiro];
-let p2mFixos = [...padraoP2mFixos];
-let nomeTL = padraoTL;
-let spreadsheetId = ""; // Guardará o ID da planilha do usuário
+let escalaA = Array(18).fill(""); // Index 1 a 17
+let escalaB = Array(18).fill(""); // Index 1 a 17
+let nomeTL = "ARTUR";
 
 function render() {
     document.getElementById('nome-tl-display').innerText = nomeTL || "---";
 
-    for(let i = 0; i < 8; i++) document.getElementById(`ch-e${i+10}`).innerText = checkinEsq[i] || "---";
-    for(let i = 0; i < 9; i++) document.getElementById(`ch-d${i+1}`).innerText = checkinDir[i] || "---";
-    
-    document.getElementById('p_pesca').innerText = p2mFixos[0] || "---";
-    document.getElementById('cat1').innerText = p2mFixos[1] || "---";
-    document.getElementById('cat2').innerText = p2mFixos[2] || "---";
-    document.getElementById('cat3').innerText = p2mFixos[3] || "---";
-
-    document.getElementById('e1').innerText = p2mGiro[0] || "---";
-    document.getElementById('e2').innerText = p2mGiro[1] || "---";
-    document.getElementById('e3').innerText = p2mGiro[2] || "---";
-    document.getElementById('e4').innerText = p2mGiro[3] || "---";
-    document.getElementById('e5').innerText = p2mGiro[4] || "---";
-    document.getElementById('d7').innerText = p2mGiro[5] || "---";
-    document.getElementById('d6').innerText = p2mGiro[6] || "---";
-    document.getElementById('d5').innerText = p2mGiro[7] || "---";
-}
-
-function gira() {
-    p2mGiro.unshift(p2mGiro.pop());
-    render();
-    salvarNoLocalStorage();
-}
-
-// ⚡ FUNÇÃO MASTER: Conecta e puxa as colunas selecionadas em tempo real sem quebrar
-function conectarPlanilhaRealtime() {
-    spreadsheetId = document.getElementById('in-spreadsheet-id').value.trim();
-    if(!spreadsheetId) {
-        alert("Por favor, insira o ID da sua planilha antes de conectar!");
-        return;
+    // Renderiza Linha A e Linha B
+    for(let i = 1; i <= 17; i++) {
+        document.getElementById(`ch-A-${i}`).innerText = escalaA[i] || "---";
+        document.getElementById(`ch-B-${i}`).innerText = escalaB[i] || "---";
     }
-
-    salvarNoLocalStorage();
-
-    // Carrega o pacote de visualização de dados do Google
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(() => {
-        // SQL-like query trazendo exatamente a lista de colunas solicitada
-        const query = encodeURIComponent("SELECT C, E, H, I, J, L, O, P, Q, R, S, T, U, V, W, X, Y, Z, AA, AB, AC, AD, AE, AF");
-        const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=Extração 1&tq=${query}`;
-        
-        const gq = new google.visualization.Query(url);
-        gq.send((response) => {
-            if (response.isError()) {
-                alert('Erro ao conectar com a planilha. Verifique se ela está compartilhada como "Qualquer pessoa com o link pode ler".');
-                console.error('Erro: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-                return;
-            }
-
-            const dataTable = response.getDataTable();
-            const totalLinhas = dataTable.getNumberOfRows();
-
-            if(totalLinhas === 0) {
-                alert("Conectado com sucesso, mas a aba 'Extração 1' não retornou registros.");
-                return;
-            }
-
-            // Mapeando os operadores para distribuir dinamicamente pelas bancadas
-            // Limpa as listas atuais antes do preenchimento em tempo real
-            checkinEsq = Array(8).fill("");
-            checkinDir = Array(9).fill("");
-            p2mGiro = Array(8).fill("");
-            p2mFixos = Array(4).fill("");
-
-            let indexChEsq = 0;
-            let indexChDir = 0;
-            let indexP2mGiro = 0;
-            let indexP2mFixo = 0;
-
-            for (let i = 0; i < totalLinhas; i++) {
-                // Pega o nome/id do operador na Coluna B da query (que corresponde à coluna E da planilha original)
-                let operador = dataTable.getValue(i, 1); 
-                // Pega o processo na Coluna F original (que virou índice 5 na nossa query)
-                let processo = dataTable.getValue(i, 5); 
-                // Pega o Subtype/Subprocesso para identificar regras especiais se necessário
-                let subProcesso = dataTable.getValue(i, 6);
-
-                if(!operador) continue;
-
-                // Regra de Distribuição Operacional Automática Baseada nos Seus Processos:
-                if (String(processo).toLowerCase().includes("checkin") || String(processo).toLowerCase().includes("check_in")) {
-                    if (indexChDir < 9) {
-                        checkinDir[indexChDir] = operador;
-                        indexChDir++;
-                    } else if (indexChEsq < 8) {
-                        checkinEsq[indexChEsq] = operador;
-                        indexChEsq++;
-                    }
-                } else {
-                    // P2M e Diferenciais
-                    if (String(subProcesso).toLowerCase().includes("pesca") && indexP2mFixo === 0) {
-                        p2mFixos[0] = operador;
-                    } else if (String(subProcesso).toLowerCase().includes("alimento") && indexP2mFixo < 4) {
-                        p2mFixos[1] = operador;
-                    } else if (indexP2mGiro < 8) {
-                        p2mGiro[indexP2mGiro] = operador;
-                        indexP2mGiro++;
-                    }
-                }
-            }
-
-            render();
-            salvarNoLocalStorage();
-            alert(`Sincronizado em Tempo Real! ${totalLinhas} registros processados.`);
-        });
-    });
 }
 
 function gerarInputsConfig() {
     document.getElementById('in-nome-tl').value = nomeTL;
-    document.getElementById('in-spreadsheet-id').value = spreadsheetId;
-
-    const container = document.getElementById('inputs-dinamicos');
-    container.innerHTML = '';
-
-    for(let i = 0; i < 8; i++) {
-        container.innerHTML += `<div class="config-group"><label>Check-in - Bancada ${i+10}</label><input type="text" id="in-ch-e${i+10}" value="${checkinEsq[i]}"></div>`;
-    }
-    for(let i = 0; i < 9; i++) {
-        container.innerHTML += `<div class="config-group"><label>Check-in - Bancada ${i+1}</label><input type="text" id="in-ch-d${i+1}" value="${checkinDir[i]}"></div>`;
-    }
     
-    const rotulosFixos = ["P2M - B01 PESCA (Fixo)", "P2M - B02 CAT (Alimento)", "P2M - B03 CAT (Cosmético)", "P2M - B04 CAT (HV)"];
-    for(let i = 0; i < 4; i++) container.innerHTML += `<div class="config-group"><label>${rotulosFixos[i]}</label><input type="text" id="in-p2m-fixo-${i}" value="${p2mFixos[i]}"></div>`;
-    
-    const rotulosGiro = ["P2M - B01 (E1)", "P2M - B02 (E2)", "P2M - B03 (E3)", "P2M - B04 (E4)", "P2M - B05 (E5)", "P2M - B07 (D7)", "P2M - B06 (D6)", "P2M - B05 (D5)"];
-    for(let i = 0; i < 8; i++) container.innerHTML += `<div class="config-group"><label>${rotulosGiro[i]}</label><input type="text" id="in-p2m-giro-${i}" value="${p2mGiro[i]}"></div>`;
+    const containerA = document.getElementById('inputs-linha-A');
+    const containerB = document.getElementById('inputs-linha-B');
+    containerA.innerHTML = '';
+    containerB.innerHTML = '';
+
+    // Gera de 1 a 17 para ambas as colunas na configuração
+    for(let i = 1; i <= 17; i++) {
+        containerA.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-A-${i}" value="${escalaA[i] || ''}"></div>`;
+        containerB.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-B-${i}" value="${escalaB[i] || ''}"></div>`;
+    }
 }
 
 function salvarConfig() {
     nomeTL = document.getElementById('in-nome-tl').value;
-    spreadsheetId = document.getElementById('in-spreadsheet-id').value.trim();
 
-    for(let i = 0; i < 8; i++) checkinEsq[i] = document.getElementById(`in-ch-e${i+10}`).value;
-    for(let i = 0; i < 9; i++) checkinDir[i] = document.getElementById(`in-ch-d${i+1}`).value;
-    for(let i = 0; i < 4; i++) p2mFixos[i] = document.getElementById(`in-p2m-fixo-${i}`).value;
-    for(let i = 0; i < 8; i++) p2mGiro[i] = document.getElementById(`in-p2m-giro-${i}`).value;
+    for(let i = 1; i <= 17; i++) {
+        escalaA[i] = document.getElementById(`in-A-${i}`).value;
+        escalaB[i] = document.getElementById(`in-B-${i}`).value;
+    }
 
     render();
-    salvarNoLocalStorage();
+    localStorage.setItem('meli_checkin_duplo_save', JSON.stringify({ escalaA, escalaB, nomeTL }));
     toggleConfig();
-    alert("Configurações salvas localmente!");
-}
-
-function salvarNoLocalStorage() {
-    localStorage.setItem('meli_painel_a_save', JSON.stringify({ checkinEsq, checkinDir, p2mGiro, p2mFixos, nomeTL, spreadsheetId }));
+    alert("Escala do Check-in salva com sucesso!");
 }
 
 function toggleConfig() {
@@ -340,14 +214,11 @@ function toggleConfig() {
 }
 
 function resetarPainel() {
-    if(confirm("Deseja zerar todos os nomes e voltar o TL padrão?")) {
-        checkinEsq = [...padraoCheckinEsq];
-        checkinDir = [...padraoCheckinDir];
-        p2mGiro = [...padraoP2mGiro];
-        p2mFixos = [...padraoP2mFixos];
-        nomeTL = padraoTL;
-        spreadsheetId = "";
-        localStorage.removeItem('meli_painel_a_save');
+    if(confirm("Deseja zerar todos os nomes das duas linhas?")) {
+        escalaA = Array(18).fill("");
+        escalaB = Array(18).fill("");
+        nomeTL = "ARTUR";
+        localStorage.removeItem('meli_checkin_duplo_save');
         render();
         toggleConfig();
         alert("Painel resetado!");
@@ -363,21 +234,13 @@ function relogio() {
 
 window.onload = () => {
     relogio();
-    const salvo = JSON.parse(localStorage.getItem('meli_painel_a_save'));
+    const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
     if (salvo) {
-        if(salvo.checkinEsq) checkinEsq = salvo.checkinEsq;
-        if(salvo.checkinDir) checkinDir = salvo.checkinDir;
-        if(salvo.p2mGiro) p2mGiro = salvo.p2mGiro;
-        if(salvo.p2mFixos) p2mFixos = salvo.p2mFixos;
+        if(salvo.escalaA) escalaA = salvo.escalaA;
+        if(salvo.escalaB) escalaB = salvo.escalaB;
         if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
-        if(salvo.spreadsheetId !== undefined) spreadsheetId = salvo.spreadsheetId;
     }
     render();
-
-    // Se já houver uma planilha configurada anteriormente, puxa os dados automaticamente no carregamento
-    if(spreadsheetId) {
-        setTimeout(conectarPlanilhaRealtime, 1000);
-    }
 };
 </script>
 </body>
