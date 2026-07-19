@@ -67,9 +67,9 @@
     </div>
 
     <div class="container-linhas">
-        <!-- ================= LINHA A ================= -->
+        <!-- ================= LINHA C ================= -->
         <div class="modulo-linha">
-            <div class="titulo-linha">Linha A</div>
+            <div class="titulo-linha">Linha C</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
                     <!-- 8 Bancadas Esquerdas (10 a 17) -->
@@ -98,9 +98,9 @@
             </div>
         </div>
 
-        <!-- ================= LINHA B ================= -->
+        <!-- ================= LINHA D ================= -->
         <div class="modulo-linha">
-            <div class="titulo-linha">Linha B</div>
+            <div class="titulo-linha">Linha D</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
                     <!-- 8 Bancadas Esquerdas (10 a 17) -->
@@ -134,7 +134,7 @@
 <button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração (Líderes)</button>
 
 <div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno (Check-in A & B)</h3>
+    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno (Check-in C & D)</h3>
     
     <div class="config-tl-section">
         <label style="font-size: 12px; font-weight: bold; color: #2d3277;">Responsável pelo Turno (Team Leader):</label>
@@ -142,15 +142,15 @@
     </div>
 
     <div class="config-grid-container">
-        <!-- Inputs Linha A -->
+        <!-- Inputs Linha C -->
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha A</h4>
-            <div class="config-grid" id="inputs-linha-A"></div>
+            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha C</h4>
+            <div class="config-grid" id="inputs-linha-C"></div>
         </div>
-        <!-- Inputs Linha B -->
+        <!-- Inputs Linha D -->
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha B</h4>
-            <div class="config-grid" id="inputs-linha-B"></div>
+            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha D</h4>
+            <div class="config-grid" id="inputs-linha-D"></div>
         </div>
     </div>
 
@@ -159,32 +159,32 @@
 </div>
 
 <script>
-let escalaA = Array(18).fill(""); // Index 1 a 17
-let escalaB = Array(18).fill(""); // Index 1 a 17
-let nomeTL = "ARTUR";
+let escalaC = Array(18).fill(""); // Index 1 a 17
+let escalaD = Array(18).fill(""); // Index 1 a 17
+let nomeTL = "";
 
 function render() {
     document.getElementById('nome-tl-display').innerText = nomeTL || "---";
 
-    // Renderiza Linha A e Linha B
+    // Renderiza Linha C e Linha D
     for(let i = 1; i <= 17; i++) {
-        document.getElementById(`ch-A-${i}`).innerText = escalaA[i] || "---";
-        document.getElementById(`ch-B-${i}`).innerText = escalaB[i] || "---";
+        document.getElementById(`ch-C-${i}`).innerText = escalaC[i] || "---";
+        document.getElementById(`ch-D-${i}`).innerText = escalaD[i] || "---";
     }
 }
 
 function gerarInputsConfig() {
     document.getElementById('in-nome-tl').value = nomeTL;
     
-    const containerA = document.getElementById('inputs-linha-A');
-    const containerB = document.getElementById('inputs-linha-B');
+    const containerC = document.getElementById('inputs-linha-C');
+    const containerD = document.getElementById('inputs-linha-D');
     containerA.innerHTML = '';
     containerB.innerHTML = '';
 
     // Gera de 1 a 17 para ambas as colunas na configuração
     for(let i = 1; i <= 17; i++) {
-        containerA.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-A-${i}" value="${escalaA[i] || ''}"></div>`;
-        containerB.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-B-${i}" value="${escalaB[i] || ''}"></div>`;
+        containerA.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-C-${i}" value="${escalaC[i] || ''}"></div>`;
+        containerB.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-D-${i}" value="${escalaD[i] || ''}"></div>`;
     }
 }
 
@@ -192,12 +192,12 @@ function salvarConfig() {
     nomeTL = document.getElementById('in-nome-tl').value;
 
     for(let i = 1; i <= 17; i++) {
-        escalaA[i] = document.getElementById(`in-A-${i}`).value;
-        escalaB[i] = document.getElementById(`in-B-${i}`).value;
+        escalaA[i] = document.getElementById(`in-C-${i}`).value;
+        escalaB[i] = document.getElementById(`in-D-${i}`).value;
     }
 
     render();
-    localStorage.setItem('meli_checkin_duplo_save', JSON.stringify({ escalaA, escalaB, nomeTL }));
+    localStorage.setItem('meli_checkin_duplo_save', JSON.stringify({ escalaC, escalaD, nomeTL }));
     toggleConfig();
     alert("Escala do Check-in salva com sucesso!");
 }
@@ -215,8 +215,8 @@ function toggleConfig() {
 
 function resetarPainel() {
     if(confirm("Deseja zerar todos os nomes das duas linhas?")) {
-        escalaA = Array(18).fill("");
-        escalaB = Array(18).fill("");
+        escalaC = Array(18).fill("");
+        escalaD = Array(18).fill("");
         nomeTL = "ARTUR";
         localStorage.removeItem('meli_checkin_duplo_save');
         render();
@@ -236,8 +236,8 @@ window.onload = () => {
     relogio();
     const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
     if (salvo) {
-        if(salvo.escalaA) escalaA = salvo.escalaA;
-        if(salvo.escalaB) escalaB = salvo.escalaB;
+        if(salvo.escalaC) escalaC = salvo.escalaC;
+        if(salvo.escalaD) escalaD = salvo.escalaD;
         if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
     }
     render();
