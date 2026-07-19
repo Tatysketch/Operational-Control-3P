@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>CONTROLE OPERACIONAL - P2M & SORTER C/D</title>
+    <meta name="viewport" content="width=1024">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .painel { background: white; width: 1550px; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        
+        /* Topo Limpo Estilo Check-in */
+        .header-container { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #2d3277; padding-bottom: 10px; margin-bottom: 20px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .logo-meli { width: 45px; height: auto; }
+        .header-titles h1 { color: #2d3277; margin: 0; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header-right { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; color: #475569; }
+        .tl-nome { color: #475569; font-weight: 700; text-transform: uppercase; }
+        #relogio { background: #2d3277; color: white; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+
+        /* Container Lado a Lado */
+        .container-linhas { display: flex; justify-content: space-between; gap: 20px; width: 100%; }
+        .modulo-linha { flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; display: flex; flex-direction: column; }
+        .titulo-linha { text-align: center; color: #2d3277; background: #f1f5f9; margin: -15px -15px 15px -15px; padding: 8px; border-top-left-radius: 5px; border-top-right-radius: 5px; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; }
+
+        /* Estrutura Vertical: P2M em cima, Sorter embaixo */
+        .conteudo-linha-flex { display: flex; flex-direction: column; gap: 15px; }
+        .layout-esteira-unica { display: flex; justify-content: center; gap: 10px; }
+        
+        .lado-esquerdo { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .lado-direito { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        
+        /* Esteira Central P2M */
+        .esteira-central { width: 35px; background: #1e293b; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; letter-spacing: 2px; min-height: 420px; box-shadow: inset 0 0 8px rgba(0,0,0,0.5); }
+
+        /* Sorter Horizontal Abaixo do P2M */
+        .sorter-container { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; display: flex; flex-direction: column; padding: 10px; margin-top: 5px; }
+        .sorter-titulo { text-align: left; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; }
+        .sorter-grid-canalizacoes { display: grid; grid-template-columns: repeat(11, 1fr); gap: 6px; margin-bottom: 10px; }
+        .canalizacao-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 10px; font-weight: 700; color: #475569; text-align: center; padding: 8px 0; text-transform: uppercase; }
+
+        /* Lista Enfileirada de Reps no Sorter - Sem Título Fixo */
+        .sorter-reps-container { display: flex; flex-direction: column; gap: 4px; }
+        .rep-sorter-item { background: white; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+
+        /* Cards P2M Limpos */
+        .card { background: white; border: 1px solid #e2e8f0; border-radius: 5px; padding: 6px 10px; min-height: 40px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .card-info { font-size: 9px; color: #64748b; font-weight: 700; margin-bottom: 2px; text-transform: uppercase; }
+        .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        .card-gm { border-left: 5px solid #2d3277; }
+        .card-cat { border-left: 5px solid #f59e0b; }
+        .card-pesca { border-left: 5px solid #ef4444; background-color: #fef2f2; }
+        .tag-fixo-pesca { position: absolute; top: 4px; right: 6px; font-size: 7px; background: #ef4444; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
+        .cat-tag { font-size: 8px; color: #b45309; font-weight: 700; margin-top: 2px; text-transform: uppercase; opacity: 0.8; }
+
+        /* Botão Girar Limpo */
+        .btn-container-central { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
+        .btn-girar { background: #2d3277; color: white; padding: 10px 24px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; }
+        .btn-girar:hover { background: #1e2252; }
+
+        /* Área de Configuração Oculta */
+        .config-section { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 20px; margin-top: 20px; display: none; width: 1510px; }
+        .config-grid-container { display: flex; gap: 20px; }
+        .config-col-linha { flex: 1; background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; }
+        .config-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .config-group { display: flex; flex-direction: column; }
+        .config-group label { font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
+        .config-group input, .config-group textarea { padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px; color: #1e293b; font-family: inherit; }
+        .config-group textarea { resize: vertical; min-height: 80px; }
+        
+        .config-tl-section { background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; }
+        .btn-toggle-config { background: #64748b; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-top: 15px; font-size: 11px; text-transform: uppercase; }
+        .btn-salvar { background: #10b981; color: white; border: none; padding: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
+        .btn-reset { background: #ef4444; color: white; border: none; padding: 8px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 8px; width: 100%; text-transform: uppercase; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+<div class="painel">
+    <div class="header-container">
+        <div class="header-left">
+            <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
+            <div class="header-titles"><h1>CONTROLE OPERACIONAL - P2M & SORTER</h1></div>
+        </div>
+        <div class="header-right">
+            <div>TL: <span class="tl-nome" id="nome-tl-display"></span></div>
+            <div id="relogio">--/--/---- | --:--:--</div>
+        </div>
+    </div>
+
+    <div class="container-linhas">
+        <!-- ================= LINHA C ================= -->
+        <div class="modulo-linha">
+            <div class="titulo-linha">Linha C</div>
+            <div class="conteudo-linha-flex">
+                <div class="layout-esteira-unica">
+                    <div class="lado-esquerdo">
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 01 (GM)</div><div class="nome-colaborador" id="p2m-C-e1">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 02 (GM)</div><div class="nome-colaborador" id="p2m-C-e2">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 03 (GM)</div><div class="nome-colaborador" id="p2m-C-e3">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 04 (GM)</div><div class="nome-colaborador" id="p2m-C-e4">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-C-e5">---</div></div>
+                    </div>
+                    
+                    <div class="esteira-central">P2M</div>
+                    
+                    <div class="lado-direito">
+                        <div class="card card-pesca"><span class="tag-fixo-pesca"></span><div class="card-info">P2M - BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="p2m-C-pesca">---</div></div>
+                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 02 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div></div>
+                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 03 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div></div>
+                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 04 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat3">---</div><div class="cat-tag">HV / SANEANTES</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-A-d5">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 06 (GM)</div><div class="nome-colaborador" id="p2m-A-d6">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 07 (GM)</div><div class="nome-colaborador" id="p2m-A-d7">---</div></div>
+                    </div>
+                </div>
+                
+                <div class="sorter-container">
+                    <div class="sorter-titulo">Sorter C</div>
+                    <div class="sorter-grid-canalizacoes">
+                        <div class="canalizacao-item">RJ02</div><div class="canalizacao-item">PE01</div>
+                        <div class="canalizacao-item">BA01</div><div class="canalizacao-item">SC02</div>
+                        <div class="canalizacao-item">PR01</div><div class="canalizacao-item">SP02</div>
+                        <div class="canalizacao-item">SP04</div><div class="canalizacao-item">SP11</div>
+                        <div class="canalizacao-item">SP15</div><div class="canalizacao-item">SP19</div>
+                        <div class="canalizacao-item">SP25</div>
+                    </div>
+                    <!-- Área enfileirada limpa para os nomes do Sorter C -->
+                    <div class="sorter-reps-container" id="lista-reps-sorter-C"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= LINHA D ================= -->
+        <div class="modulo-linha">
+            <div class="titulo-linha">Linha D</div>
+            <div class="conteudo-linha-flex">
+                <div class="layout-esteira-unica">
+                    <div class="lado-esquerdo">
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 01 (GM)</div><div class="nome-colaborador" id="p2m-D-e1">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 02 (GM)</div><div class="nome-colaborador" id="p2m-D-e2">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 03 (GM)</div><div class="nome-colaborador" id="p2m-D-e3">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 04 (GM)</div><div class="nome-colaborador" id="p2m-D-e4">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-D-e5">---</div></div>
+                    </div>
+                    
+                    <div class="esteira-central">P2M</div>
+                    
+                    <div class="lado-direito">
+                        <div class="card card-pesca"><span class="tag-fixo-pesca"></span><div class="card-info">P2M - BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="p2m-D-pesca">---</div></div>
+                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 02 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div></div>
+                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 03 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div></div>
+                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 04 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat3">---</div><div class="cat-tag">HV / SANEANTES</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-B-d5">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 06 (GM)</div><div class="nome-colaborador" id="p2m-B-d6">---</div></div>
+                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 07 (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div></div>
+                    </div>
+                </div>
+                
+                <div class="sorter-container">
+                    <div class="sorter-titulo">Sorter D</div>
+                    <div class="sorter-grid-canalizacoes">
+                        <div class="canalizacao-item">RJ02</div><div class="canalizacao-item">PE01</div>
+                        <div class="canalizacao-item">BA01</div><div class="canalizacao-item">SC02</div>
+                        <div class="canalizacao-item">PR01</div><div class="canalizacao-item">SP02</div>
+                        <div class="canalizacao-item">SP04</div><div class="canalizacao-item">SP11</div>
+                        <div class="canalizacao-item">SP15</div><div class="canalizacao-item">SP19</div>
+                        <div class="canalizacao-item">SP25</div>
+                    </div>
+                    <!-- Área enfileirada limpa para os nomes do Sorter D -->
+                    <div class="sorter-reps-container" id="lista-reps-sorter-D"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-container-central">
+        <button class="btn-girar" onclick="gira()">Girar Rotatividade</button>
+    </div>
+</div>
+
+<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
+
+<div class="config-section" id="aba-config">
+    <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas C & D)</h3>
+    
+    <div class="config-tl-section">
+        <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
+        <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder="Digite o nome do TL">
+    </div>
+
+    <div class="config-grid-container">
+        <div class="config-col-linha">
+            <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha C</h4>
+            <div class="config-grid" id="inputs-linha-C"></div>
+            <div class="config-group" style="margin-top: 15px;">
+                <label>Colaboradores do Sorter C (Um nome por linha)</label>
+                <textarea id="in-sorter-reps-C" placeholder="Digite os nomes aqui..."></textarea>
+            </div>
+        </div>
+        <div class="config-col-linha">
+            <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha D</h4>
+            <div class="config-grid" id="inputs-linha-D"></div>
+            <div class="config-group" style="margin-top: 15px;">
+                <label>Colaboradores do Sorter D (Um nome por linha)</label>
+                <textarea id="in-sorter-reps-D" placeholder="Digite os nomes aqui..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
+    <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
+</div>
+
+<script>
+let p2mGiro_C = Array(8).fill(""); 
+let p2mFixos_C = Array(4).fill(""); 
+let sorterReps_C = [];
+
+let p2mGiro_D = Array(8).fill(""); 
+let p2mFixos_D = Array(4).fill(""); 
+let sorterReps_D = [];
+
+let nomeTL = "";
+
+function render() {
+    document.getElementById('nome-tl-display').innerText = nomeTL || "---";
+
+    // Render P2M Linha C
+    document.getElementById('p2m-C-e1').innerText = p2mGiro_C[0] || "---";
+    document.getElementById('p2m-C-e2').innerText = p2mGiro_C[1] || "---";
+    document.getElementById('p2m-C-e3').innerText = p2mGiro_C[2] || "---";
+    document.getElementById('p2m-C-e4').innerText = p2mGiro_C[3] || "---";
+    document.getElementById('p2m-C-e5').innerText = p2mGiro_C[4] || "---";
+    document.getElementById('p2m-C-d7').innerText = p2mGiro_C[5] || "---";
+    document.getElementById('p2m-C-d6').innerText = p2mGiro_C[6] || "---";
+    document.getElementById('p2m-C-d5').innerText = p2mGiro_C[7] || "---";
+    
+    document.getElementById('p2m-C-pesca').innerText = p2mFixos_C[0] || "---";
+    document.getElementById('p2m-C-cat1').innerText = p2mFixos_C[1] || "---";
+    document.getElementById('p2m-C-cat2').innerText = p2mFixos_C[2] || "---";
+    document.getElementById('p2m-C-cat3').innerText = p2mFixos_C[3] || "---";
+
+    // Render P2M Linha D
+    document.getElementById('p2m-D-e1').innerText = p2mGiro_D[0] || "---";
+    document.getElementById('p2m-D-e2').innerText = p2mGiro_D[1] || "---";
+    document.getElementById('p2m-D-e3').innerText = p2mGiro_D[2] || "---";
+    document.getElementById('p2m-D-e4').innerText = p2mGiro_D[3] || "---";
+    document.getElementById('p2m-D-e5').innerText = p2mGiro_D[4] || "---";
+    document.getElementById('p2m-D-d7').innerText = p2mGiro_D[5] || "---";
+    document.getElementById('p2m-D-d6').innerText = p2mGiro_D[6] || "---";
+    document.getElementById('p2m-D-d5').innerText = p2mGiro_D[7] || "---";
+    
+    document.getElementById('p2m-D-pesca').innerText = p2mFixos_D[0] || "---";
+    document.getElementById('p2m-D-cat1').innerText = p2mFixos_D[1] || "---";
+    document.getElementById('p2m-D-cat2').innerText = p2mFixos_D[2] || "---";
+    document.getElementById('p2m-D-cat3').innerText = p2mFixos_D[3] || "---";
+
+    // Render Nomes Sorter C
+    const containerRepsC = document.getElementById('lista-reps-sorter-C');
+    if (sorterReps_C.length === 0 || (sorterReps_C.length === 1 && sorterReps_C[0] === "")) {
+        containerRepsC.innerHTML = '';
+    } else {
+        containerRepsC.innerHTML = sorterReps_C.map(nome => `<div class="rep-sorter-item">${nome}</div>`).join('');
+    }
+
+    // Render Nomes Sorter D
+    const containerRepsD = document.getElementById('lista-reps-sorter-D');
+    if (sorterReps_D.length === 0 || (sorterReps_D.length === 1 && sorterReps_D[0] === "")) {
+        containerRepsD.innerHTML = '';
+    } else {
+        containerRepsD.innerHTML = sorterReps_D.map(nome => `<div class="rep-sorter-item">${nome}</div>`).join('');
+    }
+}
+
+function gira() {
+    p2mGiro_C.unshift(p2mGiro_C.pop());
+    p2mGiro_D.unshift(p2mGiro_D.pop());
+    render();
+    salvarNoLocalStorage();
+}
+
+function gerarInputsConfig() {
+    document.getElementById('in-nome-tl').value = nomeTL;
+    document.getElementById('in-sorter-reps-C').value = sorterReps_C.join('\n');
+    document.getElementById('in-sorter-reps-D').value = sorterReps_D.join('\n');
+
+    const containerC = document.getElementById('inputs-linha-C');
+    const containerD = document.getElementById('inputs-linha-D');
+    containerC.innerHTML = '';
+    containerD.innerHTML = '';
+
+    const rotulosFixos = ["B01 PESCA (Fixo)", "B02 CAT (Alimento)", "B03 CAT (Cosmético)", "B04 CAT (HV)"];
+    const rotulosGiro = ["B01 (E1)", "B02 (E2)", "B03 (E3)", "B04 (E4)", "B05 (E5)", "B07 (D7)", "B06 (D6)", "B05 (D5)"];
+
+    for(let i = 0; i < 4; i++) containerC.innerHTML += `<div class="config-group"><label>${rotulosFixos[i]}</label><input type="text" id="in-C-fixo-${i}" value="${p2mFixos_C[i] || ''}"></div>`;
+    for(let i = 0; i < 8; i++) containerC.innerHTML += `<div class="config-group"><label>${rotulosGiro[i]}</label><input type="text" id="in-C-giro-${i}" value="${p2mGiro_C[i] || ''}"></div>`;
+
+    for(let i = 0; i < 4; i++) containerD.innerHTML += `<div class="config-group"><label>${rotulosFixos[i]}</label><input type="text" id="in-D-fixo-${i}" value="${p2mFixos_D[i] || ''}"></div>`;
+    for(let i = 0; i < 8; i++) containerD.innerHTML += `<div class="config-group"><label>${rotulosGiro[i]}</label><input type="text" id="in-D-giro-${i}" value="${p2mGiro_D[i] || ''}"></div>`;
+}
+
+function salvarConfig() {
+    nomeTL = document.getElementById('in-nome-tl').value;
+
+    for(let i = 0; i < 4; i++) {
+        p2mFixos_C[i] = document.getElementById(`in-C-fixo-${i}`).value;
+        p2mFixos_D[i] = document.getElementById(`in-D-fixo-${i}`).value;
+    }
+    for(let i = 0; i < 8; i++) {
+        p2mGiro_C[i] = document.getElementById(`in-C-giro-${i}`).value;
+        p2mGiro_D[i] = document.getElementById(`in-D-giro-${i}`).value;
+    }
+
+    sorterReps_C = document.getElementById('in-sorter-reps-C').value.split('\n').map(n => n.trim()).filter(n => n !== "");
+    sorterReps_D = document.getElementById('in-sorter-reps-D').value.split('\n').map(n => n.trim()).filter(n => n !== "");
+
+    render();
+    salvarNoLocalStorage();
+    toggleConfig();
+}
+
+function salvarNoLocalStorage() {
+    localStorage.setItem('meli_p2m_sorter_CD_save', JSON.stringify({ 
+        p2mGiro_C, p2mFixos_C, sorterReps_C,
+        p2mGiro_D, p2mFixos_D, sorterReps_D, 
+        nomeTL 
+    }));
+}
+
+function toggleConfig() {
+    const aba = document.getElementById('aba-config');
+    if(aba.style.display === 'block') {
+        aba.style.display = 'none';
+    } else {
+        gerarInputsConfig();
+        aba.style.display = 'block';
+        aba.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function resetarPainel() {
+    if(confirm("Deseja limpar as escalas e resetar o painel?")) {
+        p2mGiro_C = Array(8).fill("");
+        p2mFixos_C = Array(4).fill("");
+        sorterReps_C = [];
+        p2mGiro_D = Array(8).fill("");
+        p2mFixos_D = Array(4).fill("");
+        sorterReps_D = [];
+        nomeTL = "";
+        localStorage.removeItem('meli_p2m_sorter_CD_save');
+        render();
+        toggleConfig();
+    }
+}
+
+function relogio() {
+    setInterval(() => {
+        const agora = new Date();
+        document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
+    }, 1000);
+}
+
+window.onload = () => {
+    relogio();
+    const salvo = JSON.parse(localStorage.getItem('meli_p2m_sorter_CD_save'));
+    if (salvo) {
+        if(salvo.p2mGiro_C) p2mGiro_C = salvo.p2mGiro_C;
+        if(salvo.p2mFixos_C) p2mFixos_C = salvo.p2mFixos_C;
+        if(salvo.sorterReps_C) sorterReps_C = salvo.sorterReps_C;
+        if(salvo.p2mGiro_D) p2mGiro_D = salvo.p2mGiro_D;
+        if(salvo.p2mFixos_D) p2mFixos_D = salvo.p2mFixos_D;
+        if(salvo.sorterReps_D) sorterReps_D = salvo.sorterReps_D;
+        if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+    }
+    render();
+};
+</script>
+</body>
+</html>
