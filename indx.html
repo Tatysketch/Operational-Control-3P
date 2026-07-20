@@ -2,18 +2,60 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel Operacional 3P</title>
+    <title>Seleção de Painel - Operacional</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 50px; }
-        .btn-menu { display: block; width: 300px; padding: 20px; margin: 10px; text-align: center; background: #2d3277; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
-        .btn-menu:hover { background: #4a51a8; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 40px;
+            font-size: 28px;
+        }
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+            padding: 0 20px;
+        }
+        .btn-painel {
+            background-color: #2b3a67;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 18px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-painel:hover {
+            background-color: #1e2848;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
+
     <h1>Selecione o Painel:</h1>
-    <a class="btn-menu" href="check-in.html">Checkin-AB</a>
-    <a class="btn-menu" href="checkin-CD.html">Checkin-CD</a>
-    <a class="btn-menu" href="P2M-Sorter-AB.html">P2M_Sorter-AB</a>
-    <a class="btn-menu" href="P2M_SORTER-CD.html">P2M_Sorter-cd</a>
+
+    <div class="menu-container">
+        <a href="check-in.html" class="btn-painel">Check-in</a>
+        <a href="checkin-CD.html" class="btn-painel">Check-in CD</a>
+        <a href="P2M_Sorter-AB.html" class="btn-painel">P2M Sorter A/B</a>
+        <a href="P2M_SORTER-CD.html" class="btn-painel">P2M Sorter CD</a>
+    </div>
+
 </body>
 </html>
