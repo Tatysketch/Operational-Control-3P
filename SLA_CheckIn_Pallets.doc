@@ -5,3 +5,5 @@ CREATE OR REPLACE TABLE meli-sbox.RCDATAOPS.CT_RC03_SLA_CHECKIN_PALLETS AS (
 # Busca de pallet prioritário [BRRC03] - Ajustado
 
 https://docs.google.com/spreadsheets/d/1Qjmlzb2AdB4e2GhCGfevWIqFHyo7iC2ypXXyHgTlj5k/edit?usp=sharing
+
+visao de relogio na ociosidade, e cronometro no tempo do palete.
