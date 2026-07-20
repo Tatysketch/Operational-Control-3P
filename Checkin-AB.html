@@ -243,5 +243,29 @@ window.onload = () => {
     render();
 };
 </script>
+    render();
+};
+
+// Cole aqui o link que o Google te der ao implantar o Apps Script na planilha
+const URL_API_GOOGLE = "COLE_SEU_LINK_DO_APPS_SCRIPT_AQUI";
+
+function carregarDadosTempoReal() {
+    fetch(URL_API_GOOGLE)
+        .then(response => response.json())
+        .then(registros => {
+            // Aqui você recebe os dados atualizados da planilha
+            console.log("Dados atualizados!", registros);
+        })
+        .catch(erro => console.error("Erro na sincronização:", erro));
+}
+
+// Faz a página buscar novos dados da planilha automaticamente a cada 5 segundos
+setInterval(carregarDadosTempoReal, 5000);
+
+// Executa assim que a página é aberta
+window.onload = () => {
+    carregarDadosTempoReal();
+};
+</script>
 </body>
 </html>
