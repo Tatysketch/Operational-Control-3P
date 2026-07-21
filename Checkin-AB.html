@@ -218,10 +218,11 @@
     }
 
     // Função de sincronização com o Google Apps Script (para usar amanhã)
-    const URL_API_GOOGLE = "COLE_SEU_LINK_DO_APPS_SCRIPT_AQUI";
+    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbyPUfbiUAk2AxcQlG_EHikFq0xoLOMfc69okU4o3EBb5wnCkct3Xa07MqZv3jtOKvlP/exec";
 
     function carregarDadosTempoReal() {
-        if (URL_API_GOOGLE.includes("COLE_SEU_LINK")) return;
+        if (URL_API_GOOGLE.includes("AKfycbyPUfbiUAk2AxcQlG_EHikFq0xoLOMfc69okU4o3EBb5wnCkct3Xa07MqZv3jtOKvlP
+")) return;
 
         fetch(URL_API_GOOGLE)
             .then(response => response.json())
