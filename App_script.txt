@@ -1,0 +1,32 @@
+function doGet() {
+  var aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Extração 1"); // Ou o nome exato da aba onde os dados atualizam
+  var ultimaLinha = aba.getLastRow();
+  
+  // Pega os dados a partir da linha 2 até a última preenchida
+  // Considerando as colunas padrão da sua extração
+  var dados = aba.getRange(2, 1, Math.min(ultimaLinha - 1, 500), 32).getValues();
+  
+  var listaOperadores = [];
+
+  for (var i = 0; i < dados.length; i++) {
+    var linha = dados[i];
+    
+    // Mapeando as colunas conforme a estrutura da sua base
+    listaOperadores.push({
+      site_id: linha[0],
+      start_date: linha[2],
+      operator_id: linha[4],
+      process: linha[5],
+      subprocess: linha[7],
+      meli_user_ldap: linha[8],
+      team_leader: linha[9],
+      process_duration: linha[15],
+      total_units: linha[21],
+      prod_liquida: linha[22],
+      idle_time: linha[24]
+    });
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(listaOperadores))
+    .setMimeType(ContentService.MimeType.JSON);
+}
