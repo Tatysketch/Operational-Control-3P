@@ -48,9 +48,6 @@
         .btn-toggle-config { background: #666; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 12px; }
         .btn-salvar { background: #27ae60; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 14px;}
         .btn-reset { background: #c0392b; color: white; border: none; padding: 8px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 5px; width: 100%; text-transform: uppercase; font-size: 11px;}
-        
-        /* Indicadores */
-        .container-indicadores-rep { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; font-size: 11px; font-weight: bold; color: #444; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -72,7 +69,6 @@
             <div class="titulo-linha">Linha A</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <!-- 8 Bancadas Esquerdas (10 a 17) -->
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B10</div><div class="nome-colaborador" id="ch-A-10">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B11</div><div class="nome-colaborador" id="ch-A-11">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B12</div><div class="nome-colaborador" id="ch-A-12">---</div></div>
@@ -84,7 +80,6 @@
                 </div>
                 <div class="esteira-central">ESTEIRA</div>
                 <div class="lado-direito">
-                    <!-- 9 Bancadas Direitas (1 a 9) -->
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B1</div><div class="nome-colaborador" id="ch-A-1">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B2</div><div class="nome-colaborador" id="ch-A-2">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B3</div><div class="nome-colaborador" id="ch-A-3">---</div></div>
@@ -103,7 +98,6 @@
             <div class="titulo-linha">Linha B</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <!-- 8 Bancadas Esquerdas (10 a 17) -->
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B10</div><div class="nome-colaborador" id="ch-B-10">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B11</div><div class="nome-colaborador" id="ch-B-11">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B12</div><div class="nome-colaborador" id="ch-B-12">---</div></div>
@@ -115,7 +109,6 @@
                 </div>
                 <div class="esteira-central">ESTEIRA</div>
                 <div class="lado-direito">
-                    <!-- 9 Bancadas Direitas (1 a 9) -->
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B1</div><div class="nome-colaborador" id="ch-B-1">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B2</div><div class="nome-colaborador" id="ch-B-2">---</div></div>
                     <div class="card card-ch"><div class="card-info">CHECK-IN - B3</div><div class="nome-colaborador" id="ch-B-3">---</div></div>
@@ -142,12 +135,10 @@
     </div>
 
     <div class="config-grid-container">
-        <!-- Inputs Linha A -->
         <div class="config-col-linha">
             <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha A</h4>
             <div class="config-grid" id="inputs-linha-A"></div>
         </div>
-        <!-- Inputs Linha B -->
         <div class="config-col-linha">
             <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha B</h4>
             <div class="config-grid" id="inputs-linha-B"></div>
@@ -159,113 +150,103 @@
 </div>
 
 <script>
-let escalaA = Array(18).fill(""); // Index 1 a 17
-let escalaB = Array(18).fill(""); // Index 1 a 17
-let nomeTL = "ARTUR";
+    let escalaA = Array(18).fill(""); 
+    let escalaB = Array(18).fill(""); 
+    let nomeTL = "ARTUR";
 
-function render() {
-    document.getElementById('nome-tl-display').innerText = nomeTL || "---";
-
-    // Renderiza Linha A e Linha B
-    for(let i = 1; i <= 17; i++) {
-        document.getElementById(`ch-A-${i}`).innerText = escalaA[i] || "---";
-        document.getElementById(`ch-B-${i}`).innerText = escalaB[i] || "---";
-    }
-}
-
-function gerarInputsConfig() {
-    document.getElementById('in-nome-tl').value = nomeTL;
-    
-    const containerA = document.getElementById('inputs-linha-A');
-    const containerB = document.getElementById('inputs-linha-B');
-    containerA.innerHTML = '';
-    containerB.innerHTML = '';
-
-    // Gera de 1 a 17 para ambas as colunas na configuração
-    for(let i = 1; i <= 17; i++) {
-        containerA.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-A-${i}" value="${escalaA[i] || ''}"></div>`;
-        containerB.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-B-${i}" value="${escalaB[i] || ''}"></div>`;
-    }
-}
-
-function salvarConfig() {
-    nomeTL = document.getElementById('in-nome-tl').value;
-
-    for(let i = 1; i <= 17; i++) {
-        escalaA[i] = document.getElementById(`in-A-${i}`).value;
-        escalaB[i] = document.getElementById(`in-B-${i}`).value;
+    function render() {
+        document.getElementById('nome-tl-display').innerText = nomeTL || "---";
+        for(let i = 1; i <= 17; i++) {
+            document.getElementById(`ch-A-${i}`).innerText = escalaA[i] || "---";
+            document.getElementById(`ch-B-${i}`).innerText = escalaB[i] || "---";
+        }
     }
 
-    render();
-    localStorage.setItem('meli_checkin_duplo_save', JSON.stringify({ escalaA, escalaB, nomeTL }));
-    toggleConfig();
-    alert("Escala do Check-in salva com sucesso!");
-}
+    function gerarInputsConfig() {
+        document.getElementById('in-nome-tl').value = nomeTL;
+        const containerA = document.getElementById('inputs-linha-A');
+        const containerB = document.getElementById('inputs-linha-B');
+        containerA.innerHTML = '';
+        containerB.innerHTML = '';
 
-function toggleConfig() {
-    const aba = document.getElementById('aba-config');
-    if(aba.style.display === 'block') {
-        aba.style.display = 'none';
-    } else {
-        gerarInputsConfig();
-        aba.style.display = 'block';
-        aba.scrollIntoView({ behavior: 'smooth' });
+        for(let i = 1; i <= 17; i++) {
+            containerA.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-A-${i}" value="${escalaA[i] || ''}"></div>`;
+            containerB.innerHTML += `<div class="config-group"><label>Bancada ${i}</label><input type="text" id="in-B-${i}" value="${escalaB[i] || ''}"></div>`;
+        }
     }
-}
 
-function resetarPainel() {
-    if(confirm("Deseja zerar todos os nomes das duas linhas?")) {
-        escalaA = Array(18).fill("");
-        escalaB = Array(18).fill("");
-        nomeTL = "ARTUR";
-        localStorage.removeItem('meli_checkin_duplo_save');
+    function salvarConfig() {
+        nomeTL = document.getElementById('in-nome-tl').value;
+        for(let i = 1; i <= 17; i++) {
+            escalaA[i] = document.getElementById(`in-A-${i}`).value;
+            escalaB[i] = document.getElementById(`in-B-${i}`).value;
+        }
         render();
+        localStorage.setItem('meli_checkin_duplo_save', JSON.stringify({ escalaA, escalaB, nomeTL }));
         toggleConfig();
-        alert("Painel resetado!");
+        alert("Escala do Check-in salva com sucesso!");
     }
-}
 
-function relogio() {
-    setInterval(() => {
-        const agora = new Date();
-        document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
-    }, 1000);
-}
-
-window.onload = () => {
-    relogio();
-    const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
-    if (salvo) {
-        if(salvo.escalaA) escalaA = salvo.escalaA;
-        if(salvo.escalaB) escalaB = salvo.escalaB;
-        if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+    function toggleConfig() {
+        const aba = document.getElementById('aba-config');
+        if(aba.style.display === 'block') {
+            aba.style.display = 'none';
+        } else {
+            gerarInputsConfig();
+            aba.style.display = 'block';
+            aba.scrollIntoView({ behavior: 'smooth' });
+        }
     }
-    render();
-};
+
+    function resetarPainel() {
+        if(confirm("Deseja zerar todos os nomes das duas linhas?")) {
+            escalaA = Array(18).fill("");
+            escalaB = Array(18).fill("");
+            nomeTL = "ARTUR";
+            localStorage.removeItem('meli_checkin_duplo_save');
+            render();
+            toggleConfig();
+            alert("Painel resetado!");
+        }
+    }
+
+    function iniciarRelogio() {
+        setInterval(() => {
+            const agora = new Date();
+            document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
+        }, 1000);
+    }
+
+    // Função de sincronização com o Google Apps Script (para usar amanhã)
+    const URL_API_GOOGLE = "COLE_SEU_LINK_DO_APPS_SCRIPT_AQUI";
+
+    function carregarDadosTempoReal() {
+        if (URL_API_GOOGLE.includes("COLE_SEU_LINK")) return;
+
+        fetch(URL_API_GOOGLE)
+            .then(response => response.json())
+            .then(registros => {
+                console.log("Dados atualizados da planilha:", registros);
+                // Amanhã mapearemos aqui a inserção automática nas bancadas A e B se necessário!
+            })
+            .catch(erro => console.error("Erro na sincronização:", erro));
+    }
+
+    // Inicialização da página sem conflitos
+    window.onload = () => {
+        iniciarRelogio();
+        const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
+        if (salvo) {
+            if(salvo.escalaA) escalaA = salvo.escalaA;
+            if(salvo.escalaB) escalaB = salvo.escalaB;
+            if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+        }
+        render();
+        
+        // Ativa a busca em tempo real a cada 5 segundos
+        setInterval(carregarDadosTempoReal, 5000);
+    };
 </script>
-    render();
-};
 
-// Cole aqui o link que o Google te der ao implantar o Apps Script na planilha
-const URL_API_GOOGLE = "COLE_SEU_LINK_DO_APPS_SCRIPT_AQUI";
-
-function carregarDadosTempoReal() {
-    fetch(URL_API_GOOGLE)
-        .then(response => response.json())
-        .then(registros => {
-            // Aqui você recebe os dados atualizados da planilha
-            console.log("Dados atualizados!", registros);
-        })
-        .catch(erro => console.error("Erro na sincronização:", erro));
-}
-
-// Faz a página buscar novos dados da planilha automaticamente a cada 5 segundos
-setInterval(carregarDadosTempoReal, 5000);
-
-// Executa assim que a página é aberta
-window.onload = () => {
-    carregarDadosTempoReal();
-};
-</script>
 </body>
 </html>
