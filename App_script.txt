@@ -27,4 +27,13 @@ prod_liquida
 idle_time
 process_duration
 
-A gente continua a partir daí e fecha essa integração. 👍
+A gente continua a partir daí e fecha essa integração. 
+
+
+informações necessarias:
+
+LDPD
+PRODUTIVIDADE 
+TEAM LEADER
+OCIOSIDADE
+TEMPO DE PALETE EM BANCADA.
