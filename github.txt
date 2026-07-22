@@ -1,0 +1,11 @@
+Meli_user - identificação do rep
+team leader - líder 
+process_durationn - produtividade 
+NONSYSTEMIC_PROCESS_DURATION - ociosidade 
+
+
+
+URL APP WEB: https://script.google.com/a/macros/mercadolivre.com/s/AKfycbxfTYtxOf0AFoedhaB0HaSMZxfD64Me7_PY-sGgDOWloPgzpA0kSSv0vg_iWcUewSdx/exec
+
+
+CODIGO DE IMPLEMENTAÇÃO: AKfycbxfTYtxOf0AFoedhaB0HaSMZxfD64Me7_PY-sGgDOWloPgzpA0kSSv0vg_iWcUewSdx
