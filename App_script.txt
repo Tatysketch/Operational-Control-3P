@@ -1,40 +1,74 @@
-Pelo que já vimos, o caminho está bem definido:
+function doGet() {
+  var aba = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Extração 1"); // Ou o nome exato da aba onde os dados atualizam
+  var ultimaLinha = aba.getLastRow();
+  
+  // Pega os dados a partir da linha 2 até a última preenchida
+  // Considerando as colunas padrão da sua extração
+  var dados = aba.getRange(2, 1, Math.min(ultimaLinha - 1, 500), 32).getValues();
+  
+  var listaOperadores = [];
 
-Apps Script
-Ajustar o limite de leitura (500 → 5.000).
-Confirmar se os índices das colunas estão batendo com a planilha.
-Validar se o JSON está saindo corretamente.
-HTML
-Conferir como ele chama o Apps Script.
-Fazer a separação dos operadores por team_leader.
-Alimentar o layout da bancada com os dados reais.
+  for (var i = 0; i < dados.length; i++) {
+    var linha = dados[i];
+    
+    // Mapeando as colunas conforme a estrutura da sua base
+    listaOperadores.push({
+      site_id: linha[0],
+      start_date: linha[2],
+      operator_id: linha[4],
+      process: linha[5],
+      subprocess: linha[7],
+      meli_user_ldap: linha[8],
+      team_leader: linha[9],
+      process_duration: linha[15],
+      total_units: linha[21],
+      prod_liquida: linha[22],
+      idle_time: linha[24]
+    });
+  }
 
-Quando voltar, pode mandar:
-
-o código HTML;
-os nomes das colunas da planilha;
-ou até somente uma descrição de onde parou.
-
-Se quiser facilitar para a próxima conversa, guarde principalmente estas informações:
-
-aba da planilha: "Extração 1"
-campo que identifica o TL: linha[9]
-limite desejado: 5.000 registros
-campos principais usados:
-team_leader
-operator_id
-prod_liquida
-idle_time
-process_duration
-
-A gente continua a partir daí e fecha essa integração. 
+  return ContentService.createTextOutput(JSON.stringify(listaOperadores))
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
 
-informações necessarias:
 
-LDPD
-PRODUTIVIDADE 
-TEAM LEADER
-OCIOSIDADE
-TEMPO DE PALETE EM BANCADA
-VALIDAR TAMBEM SE CONSEGUE ACESSAR EM TODOS OS TURNOS.
+📋 Resumo Técnico e Guia de Verificação para o Painel Operacional
+1. Contexto e Objetivo Atual
+Escala Fixa e Autonomia do TL: As estruturas das bancadas (Linhas A, B, C e D) e a ordem dos colaboradores configuradas manualmente pelo Team Leader continuam salvas no navegador (localStorage), garantindo que a rotação e a organização do turno não se percam a cada atualização de página.
+
+Dados em Tempo Real: O painel faz requisições automáticas via fetch em um script do Google Apps Script (doGet) para puxar as métricas operacionais atualizadas diretamente da aba "Extração 1" da planilha corporativa.
+
+2. O que o Apps Script está fazendo (Estrutura Atual)
+O script lê a planilha linha por linha (até 5.000 linhas) e converte todas as entradas em objetos JSON contendo os seguintes campos principais:
+
+site_id, start_date, operator_id, meli_user, team_leader
+
+process, subprocess
+
+produtividade (mapeado de PROCESS_DURATION)
+
+ociosidade (mapeado de NONSYSTEMIC_PROCESS_DURATION)
+
+total_units, prod_liquida
+
+🔍 Passo a Passo para Diagnóstico e Resolução (Caso os dados não apareçam amanhã)
+Se ao chegar na empresa os dados não refletirem no painel ou se ocorrer falha na sincronização, verifique os seguintes pontos críticos:
+
+Acesso à Rede Corporativa / Permissões:
+
+Como o script roda vinculado a uma conta institucional do Mercado Livre (@mercadolivre.com), garanta que o navegador utilizado esteja logado na conta corporativa correta para evitar erros de CORS ou bloqueio de permissão no Apps Script.
+
+Correspondência Exata dos Nomes (MELI_USER):
+
+O painel cruza o nome do colaborador inserido nas bancadas com a coluna MELI_USER que vem da planilha.
+
+Importante: O nome digitado na configuração da bancada precisa ser exatamente idêntico (respeitando letras maiúsculas/minúsculas e espaços) ao ID/usuário que consta na coluna MELI_USER da extração. Se houver divergência, o painel não conseguirá vincular a produtividade/ociosidade daquele operador.
+
+Validação do Console do Navegador (F12):
+
+Se a interface não atualizar, aperte F12 no teclado (ou clique com o botão direito e vá em Inspecionar), abra a aba Console e verifique se há algum erro em vermelho (como falha no fetch da URL da API do Google Apps Script ou erro de JSON).
+
+Atualização da Planilha (Turno T3):
+
+Confirme se a aba "Extração 1" foi de fato preenchida com a carga de dados atualizada do turno da noite e se as colunas de duração de processo (PROCESS_DURATION) contêm valores numéricos válidos.
