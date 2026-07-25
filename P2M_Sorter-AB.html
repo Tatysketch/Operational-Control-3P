@@ -34,10 +34,12 @@
         .canalizacao-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 10px; font-weight: 700; color: #475569; text-align: center; padding: 8px 0; text-transform: uppercase; }
 
         .sorter-reps-container { display: flex; flex-direction: column; gap: 4px; }
-        .rep-sorter-item { background: white; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .rep-sorter-item { background: white; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.02); position: relative; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
 
-        .card { background: white; border: 1px solid #e2e8f0; border-radius: 5px; padding: 6px 10px; min-height: 40px; display: flex; flex-direction: column; justify-content: center; position: relative; }
-        .card-info { font-size: 9px; color: #64748b; font-weight: 700; margin-bottom: 2px; text-transform: uppercase; }
+        .card { background: white; border: 1px solid #e2e8f0; border-radius: 5px; padding: 6px 10px; min-height: 42px; display: flex; flex-direction: column; justify-content: center; position: relative; cursor: pointer; }
+        .card-topo-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+        .card-info { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; }
+        
         .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
         .card-gm { border-left: 5px solid #2d3277; }
@@ -45,6 +47,50 @@
         .card-pesca { border-left: 5px solid #ef4444; background-color: #fef2f2; }
         .tag-fixo-pesca { position: absolute; top: 4px; right: 6px; font-size: 7px; background: #ef4444; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
         .cat-tag { font-size: 8px; color: #b45309; font-weight: 700; margin-top: 2px; text-transform: uppercase; opacity: 0.8; }
+
+        .status-bolinha { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+        .bolinha-verde { background-color: #10b981; }
+        .bolinha-vermelha { background-color: #ef4444; }
+
+        .tooltip-info {
+            visibility: hidden;
+            width: 190px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 8px 10px;
+            position: absolute;
+            z-index: 100;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            font-size: 11px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            pointer-events: none;
+        }
+        .tooltip-info::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+        .card:hover .tooltip-info, .rep-sorter-item:hover .tooltip-info {
+            visibility: visible;
+            opacity: 1;
+        }
+        .tooltip-linha-detalhe { display: flex; justify-content: space-between; margin-bottom: 3px; align-items: center; }
+        .tooltip-linha-detalhe span:last-child { font-weight: 700; color: #38bdf8; }
+
+        .prod-verde { background-color: #d1fae5 !important; border-color: #10b981 !important; }
+        .prod-amarela { background-color: #fef3c7 !important; border-color: #f59e0b !important; }
+        .prod-vermelha { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
 
         .btn-container-central { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
         .btn-girar { background: #2d3277; color: white; padding: 10px 24px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; }
@@ -71,10 +117,10 @@
     <div class="header-container">
         <div class="header-left">
             <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
-            <div class="header-titles"><h1>CONTROLE OPERACIONAL - P2M & SORTER</h1></div>
+            <div class="header-titles"><h1>CONTROLE OPERACIONAL </h1></div>
         </div>
         <div class="header-right">
-            <div>TL: <span class="tl-nome" id="nome-tl-display">OSEIAS BUENO</span></div>
+            <div>TL: <span class="tl-nome" id="nome-tl-display"></span></div>
             <div id="relogio">--/--/---- | --:--:--</div>
         </div>
     </div>
@@ -86,23 +132,23 @@
             <div class="conteudo-linha-flex">
                 <div class="layout-esteira-unica">
                     <div class="lado-esquerdo">
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 01 (GM)</div><div class="nome-colaborador" id="p2m-A-e1">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 02 (GM)</div><div class="nome-colaborador" id="p2m-A-e2">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 03 (GM)</div><div class="nome-colaborador" id="p2m-A-e3">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 04 (GM)</div><div class="nome-colaborador" id="p2m-A-e4">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-A-e5">---</div></div>
+                        <div class="card card-gm" id="card-p2m-A-e1"><div class="card-topo-info"><div class="card-info">Bancada 01 (GM)</div></div><div class="nome-colaborador" id="p2m-A-e1">---</div><div class="tooltip-info" id="tip-p2m-A-e1"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e2"><div class="card-topo-info"><div class="card-info">Bancada 02 (GM)</div></div><div class="nome-colaborador" id="p2m-A-e2">---</div><div class="tooltip-info" id="tip-p2m-A-e2"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e3"><div class="card-topo-info"><div class="card-info">Bancada 03 (GM)</div></div><div class="nome-colaborador" id="p2m-A-e3">---</div><div class="tooltip-info" id="tip-p2m-A-e3"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e4"><div class="card-topo-info"><div class="card-info">Bancada 04 (GM)</div></div><div class="nome-colaborador" id="p2m-A-e4">---</div><div class="tooltip-info" id="tip-p2m-A-e4"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e5"><div class="card-topo-info"><div class="card-info">Bancada 05 (GM)</div></div><div class="nome-colaborador" id="p2m-A-e5">---</div><div class="tooltip-info" id="tip-p2m-A-e5"></div></div>
                     </div>
                     
                     <div class="esteira-central">P2M</div>
                     
                     <div class="lado-direito">
-                        <div class="card card-pesca"><span class="tag-fixo-pesca"></span><div class="card-info">P2M - BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="p2m-A-pesca">---</div></div>
-                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 02 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div></div>
-                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 03 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div></div>
-                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 04 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat3">---</div><div class="cat-tag">HV / SANEANTES</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-A-d5">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 06 (GM)</div><div class="nome-colaborador" id="p2m-A-d6">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 07 (GM)</div><div class="nome-colaborador" id="p2m-A-d7">---</div></div>
+                        <div class="card card-pesca" id="card-p2m-A-pesca"><span class="tag-fixo-pesca"></span><div class="card-topo-info"><div class="card-info">Bancada 01 (PESCA)</div></div><div class="nome-colaborador" id="p2m-A-pesca">---</div><div class="tooltip-info" id="tip-p2m-A-pesca"></div></div>
+                        <div class="card card-cat" id="card-p2m-A-cat1"><div class="card-topo-info"><div class="card-info">Bancada 02 (CAT)</div></div><div class="nome-colaborador" id="p2m-A-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div><div class="tooltip-info" id="tip-p2m-A-cat1"></div></div>
+                        <div class="card card-cat" id="card-p2m-A-cat2"><div class="card-topo-info"><div class="card-info">Bancada 03 (CAT)</div></div><div class="nome-colaborador" id="p2m-A-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div><div class="tooltip-info" id="tip-p2m-A-cat2"></div></div>
+                        <div class="card card-cat" id="card-p2m-A-cat3"><div class="card-topo-info"><div class="card-info">Bancada 04 (CAT)</div></div><div class="nome-colaborador" id="p2m-A-cat3">---</div><div class="cat-tag">HV / SANEANTES</div><div class="tooltip-info" id="tip-p2m-A-cat3"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-d5"><div class="card-topo-info"><div class="card-info">Bancada 05 (GM)</div></div><div class="nome-colaborador" id="p2m-A-d5">---</div><div class="tooltip-info" id="tip-p2m-A-d5"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-d6"><div class="card-topo-info"><div class="card-info">Bancada 06 (GM)</div></div><div class="nome-colaborador" id="p2m-A-d6">---</div><div class="tooltip-info" id="tip-p2m-A-d6"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-d7"><div class="card-topo-info"><div class="card-info">Bancada 07 (GM)</div></div><div class="nome-colaborador" id="p2m-A-d7">---</div><div class="tooltip-info" id="tip-p2m-A-d7"></div></div>
                     </div>
                 </div>
                 
@@ -127,23 +173,23 @@
             <div class="conteudo-linha-flex">
                 <div class="layout-esteira-unica">
                     <div class="lado-esquerdo">
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 01 (GM)</div><div class="nome-colaborador" id="p2m-B-e1">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 02 (GM)</div><div class="nome-colaborador" id="p2m-B-e2">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 03 (GM)</div><div class="nome-colaborador" id="p2m-B-e3">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 04 (GM)</div><div class="nome-colaborador" id="p2m-B-e4">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-B-e5">---</div></div>
+                        <div class="card card-gm" id="card-p2m-B-e1"><div class="card-topo-info"><div class="card-info">Bancada 01 (GM)</div></div><div class="nome-colaborador" id="p2m-B-e1">---</div><div class="tooltip-info" id="tip-p2m-B-e1"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e2"><div class="card-topo-info"><div class="card-info">Bancada 02 (GM)</div></div><div class="nome-colaborador" id="p2m-B-e2">---</div><div class="tooltip-info" id="tip-p2m-B-e2"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e3"><div class="card-topo-info"><div class="card-info">Bancada 03 (GM)</div></div><div class="nome-colaborador" id="p2m-B-e3">---</div><div class="tooltip-info" id="tip-p2m-B-e3"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e4"><div class="card-topo-info"><div class="card-info">Bancada 04 (GM)</div></div><div class="nome-colaborador" id="p2m-B-e4">---</div><div class="tooltip-info" id="tip-p2m-B-e4"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e5"><div class="card-topo-info"><div class="card-info">Bancada 05 (GM)</div></div><div class="nome-colaborador" id="p2m-B-e5">---</div><div class="tooltip-info" id="tip-p2m-B-e5"></div></div>
                     </div>
                     
                     <div class="esteira-central">P2M</div>
                     
                     <div class="lado-direito">
-                        <div class="card card-pesca"><span class="tag-fixo-pesca"></span><div class="card-info">P2M - BANCADA 01 (PESCA)</div><div class="nome-colaborador" id="p2m-B-pesca">---</div></div>
-                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 02 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div></div>
-                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 03 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div></div>
-                        <div class="card card-cat"><div class="card-info">P2M - BANCADA 04 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat3">---</div><div class="cat-tag">HV / SANEANTES</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 05 (GM)</div><div class="nome-colaborador" id="p2m-B-d5">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 06 (GM)</div><div class="nome-colaborador" id="p2m-B-d6">---</div></div>
-                        <div class="card card-gm"><div class="card-info">P2M - BANCADA 07 (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div></div>
+                        <div class="card card-pesca" id="card-p2m-B-pesca"><span class="tag-fixo-pesca"></span><div class="card-topo-info"><div class="card-info">Bancada 01 (PESCA)</div></div><div class="nome-colaborador" id="p2m-B-pesca">---</div><div class="tooltip-info" id="tip-p2m-B-pesca"></div></div>
+                        <div class="card card-cat" id="card-p2m-B-cat1"><div class="card-topo-info"><div class="card-info">Bancada 02 (CAT)</div></div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div><div class="tooltip-info" id="tip-p2m-B-cat1"></div></div>
+                        <div class="card card-cat" id="card-p2m-B-cat2"><div class="card-topo-info"><div class="card-info">Bancada 03 (CAT)</div></div><div class="nome-colaborador" id="p2m-B-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div><div class="tooltip-info" id="tip-p2m-B-cat2"></div></div>
+                        <div class="card card-cat" id="card-p2m-B-cat3"><div class="card-topo-info"><div class="card-info">Bancada 04 (CAT)</div></div><div class="nome-colaborador" id="p2m-B-cat3">---</div><div class="cat-tag">HV / SANEANTES</div><div class="tooltip-info" id="tip-p2m-B-cat3"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d5"><div class="card-topo-info"><div class="card-info">Bancada 05 (GM)</div></div><div class="nome-colaborador" id="p2m-B-d5">---</div><div class="tooltip-info" id="tip-p2m-B-d5"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d6"><div class="card-topo-info"><div class="card-info">Bancada 06 (GM)</div></div><div class="nome-colaborador" id="p2m-B-d6">---</div><div class="tooltip-info" id="tip-p2m-B-d6"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d7"><div class="card-topo-info"><div class="card-info">Bancada 07 (GM)</div></div><div class="nome-colaborador" id="p2m-B-d7">---</div><div class="tooltip-info" id="tip-p2m-B-d7"></div></div>
                     </div>
                 </div>
                 
@@ -210,48 +256,117 @@
     let p2mFixos_B = Array(4).fill(""); 
     let sorterReps_B = [];
 
-    let nomeTL = "OSEIAS BUENO";
+    let nomeTL = "";
+    let dadosOperacionais = {}; 
+
+    function atualizarCardComTooltip(cardId, tooltipId, nomeColaborador) {
+        const cardEl = document.getElementById(cardId);
+        const tipEl = document.getElementById(tooltipId);
+        if (!cardEl || !tipEl) return;
+
+        cardEl.classList.remove('prod-verde', 'prod-amarela', 'prod-vermelha');
+
+        if (!nomeColaborador || nomeColaborador === "---") {
+            tipEl.innerHTML = `<div class="tooltip-linha-detalhe"><span>Status:</span><span>Vazio</span></div>`;
+            return;
+        }
+
+        const nomeUpper = nomeColaborador.trim().toUpperCase();
+        const dados = dadosOperacionais[nomeUpper];
+
+        let prod = dados ? dados.produtividade : undefined;
+        let ociosidadeStr = dados && dados.ociosidade !== undefined ? String(dados.ociosidade).trim() : "0";
+        
+        let ociNum = parseFloat(ociosidadeStr.replace('%', '').replace(',', '.')) || 0;
+        let ociDisplay = ociNum + "%";
+
+        if (prod !== undefined && prod !== null) {
+            if (prod >= 1900) {
+                cardEl.classList.add('prod-verde');
+            } else if (prod >= 1500) {
+                cardEl.classList.add('prod-amarela');
+            } else if (prod <= 900) {
+                cardEl.classList.add('prod-vermelha');
+            }
+        }
+
+        let bolinhaHtml = '';
+        if (ociNum <= 10) {
+            bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-verde"></span>${ociDisplay}</span>`;
+        } else if (ociNum >= 12) {
+            bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-vermelha"></span>${ociDisplay}</span>`;
+        } else {
+            bolinhaHtml = `<span>${ociDisplay}</span>`;
+        }
+
+        tipEl.innerHTML = `
+            <div style="font-weight:700; margin-bottom:5px; border-bottom:1px solid #475569; padding-bottom:3px; color:#cbd5e1;">${nomeColaborador}</div>
+            <div class="tooltip-linha-detalhe"><span>Produtividade:</span><span>${prod !== undefined ? prod : '---'}</span></div>
+            <div class="tooltip-linha-detalhe"><span>Ociosidade:</span>${bolinhaHtml}</div>
+        `;
+    }
 
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
 
-        document.getElementById('p2m-A-e1').innerText = p2mGiro_A[0] || "---";
-        document.getElementById('p2m-A-e2').innerText = p2mGiro_A[1] || "---";
-        document.getElementById('p2m-A-e3').innerText = p2mGiro_A[2] || "---";
-        document.getElementById('p2m-A-e4').innerText = p2mGiro_A[3] || "---";
-        document.getElementById('p2m-A-e5').innerText = p2mGiro_A[4] || "---";
-        document.getElementById('p2m-A-d7').innerText = p2mGiro_A[5] || "---";
-        document.getElementById('p2m-A-d6').innerText = p2mGiro_A[6] || "---";
-        document.getElementById('p2m-A-d5').innerText = p2mGiro_A[7] || "---";
-        
-        document.getElementById('p2m-A-pesca').innerText = p2mFixos_A[0] || "---";
-        document.getElementById('p2m-A-cat1').innerText = p2mFixos_A[1] || "---";
-        document.getElementById('p2m-A-cat2').innerText = p2mFixos_A[2] || "---";
-        document.getElementById('p2m-A-cat3').innerText = p2mFixos_A[3] || "---";
+        // Linha A - Giro
+        const idsGiroA = ['e1', 'e2', 'e3', 'e4', 'e5', 'd7', 'd6', 'd5'];
+        idsGiroA.forEach((pos, index) => {
+            document.getElementById(`p2m-A-${pos}`).innerText = p2mGiro_A[index] || "---";
+            atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mGiro_A[index]);
+        });
 
-        document.getElementById('p2m-B-e1').innerText = p2mGiro_B[0] || "---";
-        document.getElementById('p2m-B-e2').innerText = p2mGiro_B[1] || "---";
-        document.getElementById('p2m-B-e3').innerText = p2mGiro_B[2] || "---";
-        document.getElementById('p2m-B-e4').innerText = p2mGiro_B[3] || "---";
-        document.getElementById('p2m-B-e5').innerText = p2mGiro_B[4] || "---";
-        document.getElementById('p2m-B-d7').innerText = p2mGiro_B[5] || "---";
-        document.getElementById('p2m-B-d6').innerText = p2mGiro_B[6] || "---";
-        document.getElementById('p2m-B-d5').innerText = p2mGiro_B[7] || "---";
-        
-        document.getElementById('p2m-B-pesca').innerText = p2mFixos_B[0] || "---";
-        document.getElementById('p2m-B-cat1').innerText = p2mFixos_B[1] || "---";
-        document.getElementById('p2m-B-cat2').innerText = p2mFixos_B[2] || "---";
-        document.getElementById('p2m-B-cat3').innerText = p2mFixos_B[3] || "---";
+        // Linha A - Fixos
+        const idsFixosA = ['pesca', 'cat1', 'cat2', 'cat3'];
+        idsFixosA.forEach((pos, index) => {
+            document.getElementById(`p2m-A-${pos}`).innerText = p2mFixos_A[index] || "---";
+            atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mFixos_A[index]);
+        });
 
-        const containerRepsA = document.getElementById('lista-reps-sorter-A');
-        containerRepsA.innerHTML = (sorterReps_A.length === 0 || (sorterReps_A.length === 1 && sorterReps_A[0] === "")) 
-            ? '' 
-            : sorterReps_A.map(nome => `<div class="rep-sorter-item">${nome}</div>`).join('');
+        // Linha B - Giro
+        const idsGiroB = ['e1', 'e2', 'e3', 'e4', 'e5', 'd7', 'd6', 'd5'];
+        idsGiroB.forEach((pos, index) => {
+            document.getElementById(`p2m-B-${pos}`).innerText = p2mGiro_B[index] || "---";
+            atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mGiro_B[index]);
+        });
 
-        const containerRepsB = document.getElementById('lista-reps-sorter-B');
-        containerRepsB.innerHTML = (sorterReps_B.length === 0 || (sorterReps_B.length === 1 && sorterReps_B[0] === "")) 
-            ? '' 
-            : sorterReps_B.map(nome => `<div class="rep-sorter-item">${nome}</div>`).join('');
+        // Linha B - Fixos
+        const idsFixosB = ['pesca', 'cat1', 'cat2', 'cat3'];
+        idsFixosB.forEach((pos, index) => {
+            document.getElementById(`p2m-B-${pos}`).innerText = p2mFixos_B[index] || "---";
+            atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mFixos_B[index]);
+        });
+
+        const renderSorterReps = (reps) => {
+            if (reps.length === 0 || (reps.length === 1 && reps[0] === "")) return '';
+            return reps.map(nome => {
+                const dados = dadosOperacionais[nome.trim().toUpperCase()];
+                const ociStr = dados && dados.ociosidade !== undefined ? String(dados.ociosidade).trim() : "0";
+                const ociNum = parseFloat(ociStr.replace('%', '').replace(',', '.')) || 0;
+                const prd = dados && dados.produtividade !== undefined ? dados.produtividade : '---';
+                
+                let bolinhaHtml = '';
+                if (ociNum <= 10) {
+                    bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-verde"></span>${ociNum}%</span>`;
+                } else if (ociNum >= 12) {
+                    bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-vermelha"></span>${ociNum}%</span>`;
+                } else {
+                    bolinhaHtml = `<span>${ociNum}%</span>`;
+                }
+
+                return `<div class="rep-sorter-item">
+                    <span>${nome}</span>
+                    <div class="tooltip-info">
+                        <div style="font-weight:700; margin-bottom:5px; border-bottom:1px solid #475569; padding-bottom:3px; color:#cbd5e1;">${nome}</div>
+                        <div class="tooltip-linha-detalhe"><span>Produtividade:</span><span>${prd}</span></div>
+                        <div class="tooltip-linha-detalhe"><span>Ociosidade:</span>${bolinhaHtml}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        };
+
+        document.getElementById('lista-reps-sorter-A').innerHTML = renderSorterReps(sorterReps_A);
+        document.getElementById('lista-reps-sorter-B').innerHTML = renderSorterReps(sorterReps_B);
     }
 
     function gira() {
@@ -352,6 +467,17 @@
                     if (registros[0].team_leader) {
                         nomeTL = registros[0].team_leader;
                     }
+                    
+                    registros.forEach(reg => {
+                        if (reg.colaborador) {
+                            const nomeUpper = reg.colaborador.trim().toUpperCase();
+                            dadosOperacionais[nomeUpper] = {
+                                produtividade: reg.produtividade !== undefined ? parseFloat(reg.produtividade) : undefined,
+                                ociosidade: reg.ociosidade !== undefined ? reg.ociosidade : 0
+                            };
+                        }
+                    });
+
                     render();
                 }
             })
