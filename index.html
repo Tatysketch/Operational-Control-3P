@@ -19,6 +19,8 @@
             color: #1f2937;
             margin-bottom: 30px;
             font-size: 28px;
+            cursor: pointer; 
+            user-select: none; 
         }
         .menu-container {
             display: flex;
@@ -96,7 +98,8 @@
 </head>
 <body>
 
-    <h1>Selecione o Painel:</h1>
+   
+    <h1 ondblclick="resetarTestes()">Selecione o Painel:</h1>
 
     <div class="menu-container">
         <!-- Check-in -->
@@ -189,9 +192,16 @@
             }
 
             localStorage.setItem("duplo_bloqueio_" + setorId, inputLogin);
-            localStorage.setItem("sessao_atual_tl", inputLogin);
-
             window.location.href = urlDestino;
+        }
+
+        function resetarTestes() {
+            if (confirm("Deseja limpar todos os bloqueios dos setores para reiniciar os testes?")) {
+                setores.forEach(s => {
+                    localStorage.removeItem("duplo_bloqueio_" + s);
+                });
+                location.reload();
+            }
         }
     </script>
 
