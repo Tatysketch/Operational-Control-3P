@@ -142,7 +142,6 @@
 </div>
 
 <script>
-    // Variáveis Globais de Estado
     let escalaA = Array(18).fill(null);
     let escalaB = Array(18).fill(null);
     let nomeTL = "";
@@ -195,7 +194,6 @@ function classeProdutividade(val) {
                 elA.innerHTML = "---";
             }
 
-            // Renderiza Linha B
             let elB = document.getElementById(`ch-B-${i}`);
             if (colB && colB.nome) {
                 let pClass = classeProdutividade(colB.produtividade);
@@ -308,7 +306,6 @@ function classeProdutividade(val) {
                     let nomeMeli = (item.meli_user || "").trim().toLowerCase();
                     if(!nomeMeli) return;
 
-                    // Procura na Linha A
                     for(let i = 1; i <= 17; i++) {
                         if(escalaA[i] && escalaA[i].nome && escalaA[i].nome.trim().toLowerCase() === nomeMeli) {
                             escalaA[i].produtividade = item.produtividade;
@@ -316,7 +313,6 @@ function classeProdutividade(val) {
                         }
                     }
 
-                    // Procura na Linha B
                     for(let i = 1; i <= 17; i++) {
                         if(escalaB[i] && escalaB[i].nome && escalaB[i].nome.trim().toLowerCase() === nomeMeli) {
                             escalaB[i].produtividade = item.produtividade;
