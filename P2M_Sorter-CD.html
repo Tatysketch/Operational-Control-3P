@@ -117,7 +117,7 @@
     <div class="header-container">
         <div class="header-left">
             <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
-            <div class="header-titles"><h1>CONTROLE OPERACIONAL - LINHA C & D</h1></div>
+            <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P</h1></div>
         </div>
         <div class="header-right">
             <div>TL: <span class="tl-nome" id="nome-tl-display"></span></div>
@@ -309,28 +309,24 @@
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
 
-        // Linha C - Giro
         const idsGiroC = ['e1', 'e2', 'e3', 'e4', 'e5', 'd7', 'd6', 'd5'];
         idsGiroC.forEach((pos, index) => {
             document.getElementById(`p2m-C-${pos}`).innerText = p2mGiro_C[index] || "---";
             atualizarCardComTooltip(`card-p2m-C-${pos}`, `tip-p2m-C-${pos}`, p2mGiro_C[index]);
         });
 
-        // Linha C - Fixos
         const idsFixosC = ['pesca', 'cat1', 'cat2', 'cat3'];
         idsFixosC.forEach((pos, index) => {
             document.getElementById(`p2m-C-${pos}`).innerText = p2mFixos_C[index] || "---";
             atualizarCardComTooltip(`card-p2m-C-${pos}`, `tip-p2m-C-${pos}`, p2mFixos_C[index]);
         });
 
-        // Linha D - Giro
         const idsGiroD = ['e1', 'e2', 'e3', 'e4', 'e5', 'd7', 'd6', 'd5'];
         idsGiroD.forEach((pos, index) => {
             document.getElementById(`p2m-D-${pos}`).innerText = p2mGiro_D[index] || "---";
             atualizarCardComTooltip(`card-p2m-D-${pos}`, `tip-p2m-D-${pos}`, p2mGiro_D[index]);
         });
 
-        // Linha D - Fixos
         const idsFixosD = ['pesca', 'cat1', 'cat2', 'cat3'];
         idsFixosD.forEach((pos, index) => {
             document.getElementById(`p2m-D-${pos}`).innerText = p2mFixos_D[index] || "---";
