@@ -12,163 +12,186 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
         }
         h1 {
             color: #1f2937;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-size: 28px;
         }
         .menu-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
             max-width: 400px;
             padding: 0 20px;
         }
+        .painel-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
         .btn-painel {
             background-color: #2b3a67;
             color: white;
-            text-decoration: none;
-            text-align: center;
+            width: 100%;
+            border: none;
+            text-align: left;
             padding: 18px 20px;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.2s, transform 0.1s;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
         }
         .btn-painel:hover {
             background-color: #1e2848;
-            transform: translateY(-2px);
         }
-        /* Estilo da tela de login */
-        #login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .submenu-login {
+            display: none;
+            padding: 15px 20px;
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+        .submenu-login input {
             width: 100%;
-            height: 100%;
-            background-color: #f4f6f9;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .login-box {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 350px;
-            text-align: center;
-        }
-        .login-box h2 {
-            margin-bottom: 20px;
-            color: #1f2937;
-            font-size: 22px;
-        }
-        .login-box input, .login-box select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 15px;
             box-sizing: border-box;
         }
-        .login-box button {
+        .submenu-login button {
             width: 100%;
-            padding: 12px;
-            background-color: #2b3a67;
+            padding: 10px;
+            background-color: #10b981;
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
         }
-        .login-box button:hover {
-            background-color: #1e2848;
+        .submenu-login button:hover {
+            background-color: #059669;
         }
-        .user-info {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 14px;
-            color: #4b5563;
-            background: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .painel-bloqueado {
+            background-color: #94a3b8 !important;
+            cursor: not-allowed !important;
         }
-        .user-info button {
-            background: none;
-            border: none;
-            color: #ef4444;
+        .status-bloqueio {
+            font-size: 12px;
+            color: #d97706;
+            margin-top: 5px;
             font-weight: bold;
-            cursor: pointer;
-            margin-left: 8px;
         }
     </style>
 </head>
 <body>
 
-    
-    <div id="login-overlay">
-        <div class="login-box">
-            <h2>Identificação do TL</h2>
-            <input type="text" id="input-tl" placeholder="Digite seu usuário ou nome..." autocomplete="off">
-            <button onclick="fazerLogin()">Acessar Painéis</button>
-        </div>
-    </div>
-
-    
-    <div id="user-display" class="user-info" style="display: none;">
-        Logado como: <strong id="nome-tl-ativo"></strong> <button onclick="fazerLogout()">Sair</button>
-    </div>
-
     <h1>Selecione o Painel:</h1>
 
     <div class="menu-container">
-        <a href="Checkin-AB.html" class="btn-painel">Check-in</a>
-        <a href="checkin-CD.html" class="btn-painel">Check-in CD</a>
-        <a href="P2M_Sorter-AB.html" class="btn-painel">P2M Sorter A/B</a>
-        <a href="P2M_Sorter-CD.html" class="btn-painel">P2M Sorter CD</a>
+        <!-- Check-in -->
+        <div class="painel-card" id="card-checkin">
+            <button class="btn-painel" onclick="toggleSubmenu('checkin')">
+                Check-in <span>▼</span>
+            </button>
+            <div id="sub-checkin" class="submenu-login">
+                <input type="text" id="login-checkin" placeholder="Digite seu login (Ex: Nome/ID)..." autocomplete="off">
+                <button onclick="acessarPainel('checkin', 'Checkin-AB.html')">Entrar no Setor</button>
+                <div id="aviso-checkin" class="status-bloqueio"></div>
+            </div>
+        </div>
+
+        <!-- Check-in CD -->
+        <div class="painel-card" id="card-checkincd">
+            <button class="btn-painel" onclick="toggleSubmenu('checkincd')">
+                Check-in CD <span>▼</span>
+            </button>
+            <div id="sub-checkincd" class="submenu-login">
+                <input type="text" id="login-checkincd" placeholder="Digite seu login..." autocomplete="off">
+                <button onclick="acessarPainel('checkincd', 'checkin-CD.html')">Entrar no Setor</button>
+                <div id="aviso-checkincd" class="status-bloqueio"></div>
+            </div>
+        </div>
+
+        <!-- P2M Sorter A/B -->
+        <div class="painel-card" id="card-p2mab">
+            <button class="btn-painel" onclick="toggleSubmenu('p2mab')">
+                P2M Sorter A/B <span>▼</span>
+            </button>
+            <div id="sub-p2mab" class="submenu-login">
+                <input type="text" id="login-p2mab" placeholder="Digite seu login..." autocomplete="off">
+                <button onclick="acessarPainel('p2mab', 'P2M_Sorter-AB.html')">Entrar no Setor</button>
+                <div id="aviso-p2mab" class="status-bloqueio"></div>
+            </div>
+        </div>
+
+        <!-- P2M Sorter CD -->
+        <div class="painel-card" id="card-p2mcd">
+            <button class="btn-painel" onclick="toggleSubmenu('p2mcd')">
+                P2M Sorter CD <span>▼</span>
+            </button>
+            <div id="sub-p2mcd" class="submenu-login">
+                <input type="text" id="login-p2mcd" placeholder="Digite seu login..." autocomplete="off">
+                <button onclick="acessarPainel('p2mcd', 'P2M_Sorter-CD.html')">Entrar no Setor</button>
+                <div id="aviso-p2mcd" class="status-bloqueio"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-      
+        const setores = ['checkin', 'checkincd', 'p2mab', 'p2mcd'];
+
         window.onload = function() {
-            const tlSalvo = localStorage.getItem("meli_tl_logado");
-            if (tlSalvo) {
-                document.getElementById("login-overlay").style.display = "none";
-                document.getElementById("nome-tl-ativo").innerText = tlSalvo;
-                document.getElementById("user-display").style.display = "block";
-            }
+            setores.forEach(setor => {
+                const donoSetor = localStorage.getItem("duplo_bloqueio_" + setor);
+                if (donoSetor) {
+                    const card = document.getElementById("card-" + setor);
+                    const btn = card.querySelector(".btn-painel");
+                    btn.classList.add("painel-bloqueado");
+                    document.getElementById("aviso-" + setor).innerText = "Setor em uso por: " + donoSetor;
+                }
+            });
         };
 
-        function fazerLogin() {
-            const input = document.getElementById("input-tl").value.trim();
-            if (input === "") {
-                alert("Por favor, digite seu nome ou usuário para continuar.");
+        function toggleSubmenu(setorId) {
+            const donoSetor = localStorage.getItem("duplo_bloqueio_" + setorId);
+            if (donoSetor) {
+                alert("Este setor já está sob a responsabilidade de outro Team Leader (" + donoSetor + ") e encontra-se bloqueado para acesso externo.");
                 return;
             }
-            localStorage.setItem("meli_tl_logado", input);
-            
-            
-            document.getElementById("login-overlay").style.display = "none";
-            document.getElementById("nome-tl-ativo").innerText = input;
-            document.getElementById("user-display").style.display = "block";
+
+            setores.forEach(s => {
+                const sub = document.getElementById("sub-" + s);
+                if (s === setorId) {
+                    sub.style.display = sub.style.display === "block" ? "none" : "block";
+                } else {
+                    sub.style.display = "none";
+                }
+            });
         }
 
-        function fazerLogout() {
-            localStorage.removeItem("meli_tl_logado");
-            location.reload(); 
+        function acessarPainel(setorId, urlDestino) {
+            const inputLogin = document.getElementById("login-" + setorId).value.trim();
+            
+            if (inputLogin === "") {
+                alert("Por favor, digite seu login para prosseguir.");
+                return;
+            }
+
+            localStorage.setItem("duplo_bloqueio_" + setorId, inputLogin);
+            localStorage.setItem("sessao_atual_tl", inputLogin);
+
+            window.location.href = urlDestino;
         }
     </script>
 
