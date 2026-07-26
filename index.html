@@ -44,9 +44,93 @@
             background-color: #1e2848;
             transform: translateY(-2px);
         }
+        /* Estilo da tela de login */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f6f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #1f2937;
+            font-size: 22px;
+        }
+        .login-box input, .login-box select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2b3a67;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-box button:hover {
+            background-color: #1e2848;
+        }
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #4b5563;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .user-info button {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 8px;
+        }
     </style>
 </head>
 <body>
+
+    
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>Identificação do TL</h2>
+            <input type="text" id="input-tl" placeholder="Digite seu usuário ou nome..." autocomplete="off">
+            <button onclick="fazerLogin()">Acessar Painéis</button>
+        </div>
+    </div>
+
+    
+    <div id="user-display" class="user-info" style="display: none;">
+        Logado como: <strong id="nome-tl-ativo"></strong> <button onclick="fazerLogout()">Sair</button>
+    </div>
 
     <h1>Selecione o Painel:</h1>
 
@@ -56,6 +140,37 @@
         <a href="P2M_Sorter-AB.html" class="btn-painel">P2M Sorter A/B</a>
         <a href="P2M_Sorter-CD.html" class="btn-painel">P2M Sorter CD</a>
     </div>
+
+    <script>
+      
+        window.onload = function() {
+            const tlSalvo = localStorage.getItem("meli_tl_logado");
+            if (tlSalvo) {
+                document.getElementById("login-overlay").style.display = "none";
+                document.getElementById("nome-tl-ativo").innerText = tlSalvo;
+                document.getElementById("user-display").style.display = "block";
+            }
+        };
+
+        function fazerLogin() {
+            const input = document.getElementById("input-tl").value.trim();
+            if (input === "") {
+                alert("Por favor, digite seu nome ou usuário para continuar.");
+                return;
+            }
+            localStorage.setItem("meli_tl_logado", input);
+            
+            
+            document.getElementById("login-overlay").style.display = "none";
+            document.getElementById("nome-tl-ativo").innerText = input;
+            document.getElementById("user-display").style.display = "block";
+        }
+
+        function fazerLogout() {
+            localStorage.removeItem("meli_tl_logado");
+            location.reload(); 
+        }
+    </script>
 
 </body>
 </html>
