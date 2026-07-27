@@ -147,11 +147,12 @@
         .mind-modal-content button:hover {
             background-color: #1e2848;
         }
-        .painel-botoes-inferiores {
+        /* Painel inferior invisível por padrão para os TLs */
+        #painel-admin {
+            display: none; 
             position: fixed;
             bottom: 15px;
             right: 15px;
-            display: flex;
             gap: 8px;
             z-index: 9999;
         }
@@ -176,7 +177,7 @@
 <body>
 
     <h1>Selecione o Painel:</h1>
-    <div id="banner-modo-demo">✨ Modo Apresentação Ativo (Acesso Direto Liberado)</div>
+    <div id="banner-modo-demo">✨ Modo Apresentação Ativo</div>
 
     <div class="menu-container">
         <!-- Check-in -->
@@ -228,6 +229,7 @@
         </div>
     </div>
 
+    <!-- Modal do Time MIND -->
     <div id="mind-modal">
         <div class="mind-modal-content">
             <h3>Time MIND - Operacional</h3>
@@ -236,7 +238,7 @@
         </div>
     </div>
 
-    <div class="painel-botoes-inferiores">
+    <div id="painel-admin">
         <button class="btn-acao" onclick="alternarModoApresentacao()">🎬 Modo Apresentação</button>
         <button class="btn-acao" onclick="resetarTestes()">⚙️ Reset</button>
     </div>
@@ -246,6 +248,12 @@
         const PREFIXO = "p2m_v3_bloqueio_";
 
         window.onload = function() {
+            // VERIFICA SE É VOCÊ ACESSANDO COM O LINK SECRETO DE ADMIN
+            const parametros = new URLSearchParams(window.location.search);
+            if (parametros.get('admin') === 'mind') {
+                document.getElementById("painel-admin").style.display = "flex";
+            }
+
             if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
                 document.getElementById("banner-modo-demo").style.display = "block";
             }
@@ -274,7 +282,6 @@
                 return;
             }
 
-            // Comportamento normal: abre o menu de login
             setores.forEach(s => {
                 const sub = document.getElementById("sub-" + s);
                 if (s === setorId) {
@@ -312,10 +319,10 @@
             const ativoAtual = localStorage.getItem("modo_apresentacao_ativo") === "true";
             if (ativoAtual) {
                 localStorage.removeItem("modo_apresentacao_ativo");
-                alert("Modo Apresentação desativado. O sistema voltou ao controle de login por Team Leader.");
+                alert("Modo Apresentação desativado.");
             } else {
                 localStorage.setItem("modo_apresentacao_ativo", "true");
-                alert("Modo Apresentação ativado! Agora você pode clicar direto em qualquer setor para mostrar as telas durante a apresentação.");
+                alert("Modo Apresentação ativado!");
             }
             location.reload();
         }
