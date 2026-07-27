@@ -92,7 +92,6 @@
             margin-top: 5px;
             font-weight: bold;
         }
-
         .btn-reset-discreto {
             position: fixed;
             bottom: 15px;
@@ -100,12 +99,13 @@
             background: #e2e8f0;
             color: #475569;
             border: none;
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 20px;
             font-size: 12px;
+            font-weight: bold;
             cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.2s;
+            opacity: 0.8;
+            z-index: 9999;
         }
         .btn-reset-discreto:hover {
             opacity: 1;
@@ -167,27 +167,37 @@
         </div>
     </div>
 
-    <button class="btn-reset-discreto" onclick="resetarTestes()">⚙️ Resetar</button>
+    <button class="btn-reset-discreto" onclick="resetarTestes()">⚙️ Destravar Tudo</button>
 
     <script>
         const setores = ['checkin', 'checkincd', 'p2mab', 'p2mcd'];
+        const PREFIXO = "p2m_v2_bloqueio_";
 
         window.onload = function() {
-            setores.forEach(setor => {
-                const donoSetor = localStorage.getItem("duplo_bloqueio_" + setor);
-                if (donoSetor) {
-                    const card = document.getElementById("card-" + setor);
-                    const btn = card.querySelector(".btn-painel");
-                    btn.classList.add("painel-bloqueado");
-                    document.getElementById("aviso-" + setor).innerText = "Setor em uso por: " + donoSetor;
-                }
-            });
+            setores.forEach(s => localStorage.removeItem("duplo_bloqueio_" + s));
+            atualizarInterface();
         };
 
+        function atualizarInterface() {
+            setores.forEach(setor => {
+                const donoSetor = localStorage.getItem(PREFIXO + setor);
+                const card = document.getElementById("card-" + setor);
+                const btn = card.querySelector(".btn-painel");
+
+                if (donoSetor) {
+                    btn.classList.add("painel-bloqueado");
+                    document.getElementById("aviso-" + setor).innerText = "Setor em uso por outro Team Leader.";
+                } else {
+                    btn.classList.remove("painel-bloqueado");
+                    document.getElementById("aviso-" + setor).innerText = "";
+                }
+            });
+        }
+
         function toggleSubmenu(setorId) {
-            const donoSetor = localStorage.getItem("duplo_bloqueio_" + setorId);
+            const donoSetor = localStorage.getItem(PREFIXO + setorId);
             if (donoSetor) {
-                alert("Este setor já está sob a responsabilidade de outro Team Leader (" + donoSetor + ") e encontra-se bloqueado para acesso externo.");
+                alert("Este setor já está sob a responsabilidade de outro Team Leader e encontra-se bloqueado para acesso externo.");
                 return;
             }
 
@@ -209,17 +219,17 @@
                 return;
             }
 
-            localStorage.setItem("duplo_bloqueio_" + setorId, inputLogin);
+            localStorage.setItem(PREFIXO + setorId, inputLogin);
             window.location.href = urlDestino;
         }
 
         function resetarTestes() {
-            if (confirm("Deseja limpar todos os bloqueios dos setores?")) {
-                setores.forEach(s => {
-                    localStorage.removeItem("duplo_bloqueio_" + s);
-                });
-                location.reload();
-            }
+            setores.forEach(s => {
+                localStorage.removeItem(PREFIXO + s);
+                localStorage.removeItem("duplo_bloqueio_" + s);
+            });
+            alert("Todos os setores foram destravados com sucesso!");
+            location.reload();
         }
     </script>
 
