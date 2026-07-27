@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Seleção de Painel</title>
+    <title>Seleção de Painel - Operacional</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -17,8 +17,19 @@
         }
         h1 {
             color: #1f2937;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 28px;
+        }
+        #banner-modo-demo {
+            display: none;
+            background-color: #10b981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .menu-container {
             display: flex;
@@ -82,9 +93,8 @@
         .submenu-login button:hover {
             background-color: #059669;
         }
-        .painel-bloqueado {
-            background-color: #94a3b8 !important;
-            cursor: not-allowed !important;
+        .painel-em-uso {
+            background-color: #d97706 !important;
         }
         .status-bloqueio {
             font-size: 12px;
@@ -92,6 +102,7 @@
             margin-top: 5px;
             font-weight: bold;
         }
+        /* Modal do Time MIND */
         #mind-modal {
             display: none;
             position: fixed;
@@ -136,11 +147,15 @@
         .mind-modal-content button:hover {
             background-color: #1e2848;
         }
-
-        .btn-reset-discreto {
+        .painel-botoes-inferiores {
             position: fixed;
             bottom: 15px;
             right: 15px;
+            display: flex;
+            gap: 8px;
+            z-index: 9999;
+        }
+        .btn-acao {
             background: #e2e8f0;
             color: #475569;
             border: none;
@@ -150,9 +165,9 @@
             font-weight: bold;
             cursor: pointer;
             opacity: 0.8;
-            z-index: 9999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .btn-reset-discreto:hover {
+        .btn-acao:hover {
             opacity: 1;
             background: #cbd5e1;
         }
@@ -161,11 +176,12 @@
 <body>
 
     <h1>Selecione o Painel:</h1>
+    <div id="banner-modo-demo">✨ Modo Apresentação Ativo (Acesso Direto Liberado)</div>
 
     <div class="menu-container">
         <!-- Check-in -->
         <div class="painel-card" id="card-checkin">
-            <button class="btn-painel" onclick="toggleSubmenu('checkin')">
+            <button class="btn-painel" onclick="toggleSubmenu('checkin', 'Checkin-AB.html')">
                 Check-in <span>▼</span>
             </button>
             <div id="sub-checkin" class="submenu-login">
@@ -177,7 +193,7 @@
 
         <!-- Check-in CD -->
         <div class="painel-card" id="card-checkincd">
-            <button class="btn-painel" onclick="toggleSubmenu('checkincd')">
+            <button class="btn-painel" onclick="toggleSubmenu('checkincd', 'checkin-CD.html')">
                 Check-in CD <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
@@ -189,7 +205,7 @@
 
         <!-- P2M Sorter A/B -->
         <div class="painel-card" id="card-p2mab">
-            <button class="btn-painel" onclick="toggleSubmenu('p2mab')">
+            <button class="btn-painel" onclick="toggleSubmenu('p2mab', 'P2M_Sorter-AB.html')">
                 P2M Sorter A/B <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
@@ -201,7 +217,7 @@
 
         <!-- P2M Sorter CD -->
         <div class="painel-card" id="card-p2mcd">
-            <button class="btn-painel" onclick="toggleSubmenu('p2mcd')">
+            <button class="btn-painel" onclick="toggleSubmenu('p2mcd', 'P2M_Sorter-CD.html')">
                 P2M Sorter CD <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
@@ -214,20 +230,25 @@
 
     <div id="mind-modal">
         <div class="mind-modal-content">
-            <h3>Time MIND</h3>
-            <p>Acesso negado! Este setor já está sob a responsabilidade de outro Team Leader e encontra-se bloqueado.</p>
+            <h3>Time MIND - Operacional</h3>
+            <p>Este setor já está sob a responsabilidade de outro Team Leader e encontra-se bloqueado para novos acessos.</p>
             <button onclick="fecharModal()">OK</button>
         </div>
     </div>
 
-    <button class="btn-reset-discreto" onclick="resetarTestes()">⚙️ Reset</button>
+    <div class="painel-botoes-inferiores">
+        <button class="btn-acao" onclick="alternarModoApresentacao()">🎬 Modo Apresentação</button>
+        <button class="btn-acao" onclick="resetarTestes()">⚙️ Reset</button>
+    </div>
 
     <script>
         const setores = ['checkin', 'checkincd', 'p2mab', 'p2mcd'];
-        const PREFIXO = "p2m_v2_bloqueio_";
+        const PREFIXO = "p2m_v3_bloqueio_";
 
         window.onload = function() {
-            setores.forEach(s => localStorage.removeItem("duplo_bloqueio_" + s));
+            if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
+                document.getElementById("banner-modo-demo").style.display = "block";
+            }
             atualizarInterface();
         };
 
@@ -238,22 +259,22 @@
                 const btn = card.querySelector(".btn-painel");
 
                 if (donoSetor) {
-                    btn.classList.add("painel-bloqueado");
-                    document.getElementById("aviso-" + setor).innerText = "Setor em uso por outro Team Leader.";
+                    btn.classList.add("painel-em-uso");
+                    document.getElementById("aviso-" + setor).innerText = "Setor em uso por: " + donoSetor;
                 } else {
-                    btn.classList.remove("painel-bloqueado");
+                    btn.classList.remove("painel-em-uso");
                     document.getElementById("aviso-" + setor).innerText = "";
                 }
             });
         }
 
-        function toggleSubmenu(setorId) {
-            const donoSetor = localStorage.getItem(PREFIXO + setorId);
-            if (donoSetor) {
-                document.getElementById("mind-modal").style.display = "flex";
+        function toggleSubmenu(setorId, urlDestino) {
+            if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
+                window.location.href = urlDestino;
                 return;
             }
 
+            // Comportamento normal: abre o menu de login
             setores.forEach(s => {
                 const sub = document.getElementById("sub-" + s);
                 if (s === setorId) {
@@ -276,8 +297,27 @@
                 return;
             }
 
+            const donoAtual = localStorage.getItem(PREFIXO + setorId);
+
+            if (donoAtual && donoAtual.toLowerCase() !== inputLogin.toLowerCase()) {
+                document.getElementById("mind-modal").style.display = "flex";
+                return;
+            }
+
             localStorage.setItem(PREFIXO + setorId, inputLogin);
             window.location.href = urlDestino;
+        }
+
+        function alternarModoApresentacao() {
+            const ativoAtual = localStorage.getItem("modo_apresentacao_ativo") === "true";
+            if (ativoAtual) {
+                localStorage.removeItem("modo_apresentacao_ativo");
+                alert("Modo Apresentação desativado. O sistema voltou ao controle de login por Team Leader.");
+            } else {
+                localStorage.setItem("modo_apresentacao_ativo", "true");
+                alert("Modo Apresentação ativado! Agora você pode clicar direto em qualquer setor para mostrar as telas durante a apresentação.");
+            }
+            location.reload();
         }
 
         function resetarTestes() {
