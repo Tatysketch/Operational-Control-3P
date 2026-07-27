@@ -94,15 +94,15 @@
             background-color: #059669;
         }
         .painel-em-uso {
-            background-color: #d97706 !important;
+            background-color: #3b82f6 !important; 
         }
         .status-bloqueio {
             font-size: 12px;
-            color: #d97706;
+            color: #2563eb;
             margin-top: 5px;
             font-weight: bold;
         }
-        /* Modal do Time MIND */
+
         #mind-modal {
             display: none;
             position: fixed;
@@ -147,7 +147,7 @@
         .mind-modal-content button:hover {
             background-color: #1e2848;
         }
-        /* Painel inferior invisível por padrão para os TLs */
+
         #painel-admin {
             display: none; 
             position: fixed;
@@ -176,7 +176,7 @@
 </head>
 <body>
 
-    <h1>Selecione o Painel:</h1>
+    <h1>Seleção de Painel:</h1>
     <div id="banner-modo-demo">✨ Modo Apresentação Ativo</div>
 
     <div class="menu-container">
@@ -229,7 +229,6 @@
         </div>
     </div>
 
-    <!-- Modal do Time MIND -->
     <div id="mind-modal">
         <div class="mind-modal-content">
             <h3>Time MIND - Operacional</h3>
@@ -238,6 +237,7 @@
         </div>
     </div>
 
+    <!-- Controles de Administrador -->
     <div id="painel-admin">
         <button class="btn-acao" onclick="alternarModoApresentacao()">🎬 Modo Apresentação</button>
         <button class="btn-acao" onclick="resetarTestes()">⚙️ Reset</button>
@@ -248,9 +248,8 @@
         const PREFIXO = "p2m_v3_bloqueio_";
 
         window.onload = function() {
-            // VERIFICA SE É VOCÊ ACESSANDO COM O LINK SECRETO DE ADMIN
-            const parametros = new URLSearchParams(window.location.search);
-            if (parametros.get('admin') === 'mind') {
+            const urlCompleta = window.location.href;
+            if (urlCompleta.includes("admin=mind")) {
                 document.getElementById("painel-admin").style.display = "flex";
             }
 
@@ -334,8 +333,7 @@
             });
             alert("Reset realizado com sucesso!");
             location.reload();
-        }
-    </script>
+        }    </script>
 
 </body>
 </html>
