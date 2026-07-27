@@ -94,15 +94,19 @@
             background-color: #059669;
         }
         .painel-em-uso {
-            background-color: #3b82f6 !important; 
+            background-color: #cbd5e1 !important; 
+            color: #1f2937 !important;
+        }
+        .painel-em-uso span {
+            color: #1f2937 !important;
         }
         .status-bloqueio {
             font-size: 12px;
-            color: #2563eb;
+            color: #475569;
             margin-top: 5px;
             font-weight: bold;
         }
-
+        /* Modal do Time MIND */
         #mind-modal {
             display: none;
             position: fixed;
@@ -125,7 +129,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .mind-modal-content h3 {
-            color: #3b82f6;
+            color: #2b3a67;
             margin-top: 0;
             margin-bottom: 10px;
         }
@@ -147,7 +151,7 @@
         .mind-modal-content button:hover {
             background-color: #1e2848;
         }
-
+        /* Painel admin oculto por padrão */
         #painel-admin {
             display: none; 
             position: fixed;
@@ -176,7 +180,7 @@
 </head>
 <body>
 
-    <h1>Seleção de Painel:</h1>
+    <h1>Selecione o Painel:</h1>
     <div id="banner-modo-demo">✨ Modo Apresentação Ativo</div>
 
     <div class="menu-container">
@@ -229,6 +233,7 @@
         </div>
     </div>
 
+    <!-- Modal do Time MIND -->
     <div id="mind-modal">
         <div class="mind-modal-content">
             <h3>Time MIND - Operacional</h3>
@@ -333,7 +338,8 @@
             });
             alert("Reset realizado com sucesso!");
             location.reload();
-        }    </script>
+        }
+    </script>
 
 </body>
 </html>
