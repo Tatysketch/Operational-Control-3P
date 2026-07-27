@@ -93,18 +93,13 @@
         .submenu-login button:hover {
             background-color: #059669;
         }
+        /* Cor cinza claro quando o setor estiver em uso */
         .painel-em-uso {
             background-color: #cbd5e1 !important; 
             color: #1f2937 !important;
         }
         .painel-em-uso span {
             color: #1f2937 !important;
-        }
-        .status-bloqueio {
-            font-size: 12px;
-            color: #475569;
-            margin-top: 5px;
-            font-weight: bold;
         }
         /* Modal do Time MIND */
         #mind-modal {
@@ -192,7 +187,6 @@
             <div id="sub-checkin" class="submenu-login">
                 <input type="text" id="login-checkin" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('checkin', 'Checkin-AB.html')">Entrar no Setor</button>
-                <div id="aviso-checkin" class="status-bloqueio"></div>
             </div>
         </div>
 
@@ -202,9 +196,8 @@
                 Check-in CD <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
-                <input type="text" id="login-checkincd" placeholder="Digite seu login..." autocomplete="off">
+                <input type="text" id="login-checkincd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('checkincd', 'checkin-CD.html')">Entrar no Setor</button>
-                <div id="aviso-checkincd" class="status-bloqueio"></div>
             </div>
         </div>
 
@@ -214,9 +207,8 @@
                 P2M Sorter A/B <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
-                <input type="text" id="login-p2mab" placeholder="Digite seu login..." autocomplete="off">
+                <input type="text" id="login-p2mab" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('p2mab', 'P2M_Sorter-AB.html')">Entrar no Setor</button>
-                <div id="aviso-p2mab" class="status-bloqueio"></div>
             </div>
         </div>
 
@@ -226,9 +218,8 @@
                 P2M Sorter CD <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
-                <input type="text" id="login-p2mcd" placeholder="Digite seu login..." autocomplete="off">
+                <input type="text" id="login-p2mcd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('p2mcd', 'P2M_Sorter-CD.html')">Entrar no Setor</button>
-                <div id="aviso-p2mcd" class="status-bloqueio"></div>
             </div>
         </div>
     </div>
@@ -270,12 +261,11 @@
                 const card = document.getElementById("card-" + setor);
                 const btn = card.querySelector(".btn-painel");
 
+                // Apenas muda a cor do botão se estiver em uso, sem exibir o nome de quem é em baixo
                 if (donoSetor) {
                     btn.classList.add("painel-em-uso");
-                    document.getElementById("aviso-" + setor).innerText = "Setor em uso por: " + donoSetor;
                 } else {
                     btn.classList.remove("painel-em-uso");
-                    document.getElementById("aviso-" + setor).innerText = "";
                 }
             });
         }
@@ -310,11 +300,13 @@
 
             const donoAtual = localStorage.getItem(PREFIXO + setorId);
 
+            // Se o setor já tem dono e o login digitado é diferente, bloqueia e avisa
             if (donoAtual && donoAtual.toLowerCase() !== inputLogin.toLowerCase()) {
                 document.getElementById("mind-modal").style.display = "flex";
                 return;
             }
 
+            // Salva o login e libera o acesso
             localStorage.setItem(PREFIXO + setorId, inputLogin);
             window.location.href = urlDestino;
         }
