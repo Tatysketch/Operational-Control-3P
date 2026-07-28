@@ -291,7 +291,7 @@ function classeProdutividade(val) {
         }, 1000);
     }
 
-    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbx58z1ZKNnp5pqL5zFvnGZZz_AkNJQdEwrE_8LzyRT_aNneZHo7NOw7NiX2ipPIqOU/exec";
+    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbzD_j8gop20vXauHnntkEueMsOl_x7qXDpGZyyizo9-gJlmZud30Xq7Cf2bh8Ql8LSU/exec";
 
     function carregarDadosTempoReal() {
         fetch(URL_API_GOOGLE)
@@ -339,7 +339,7 @@ function classeProdutividade(val) {
 
         render();
         carregarDadosTempoReal();
-        setInterval(carregarDadosTempoReal, 5000);
+        setInterval(carregarDadosTempoReal, 25.000);
     };
 </script>
 
