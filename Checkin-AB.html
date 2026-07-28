@@ -145,18 +145,16 @@
     let escalaA = Array(18).fill(null);
     let escalaB = Array(18).fill(null);
     let nomeTL = "";
-    
-function classeProdutividade(val) {
-    if (val === undefined || val === null || val === "") return "bolinha-amarela";
-    let num = parseFloat(val);
-    if (isNaN(num)) return "bolinha-amarela";
-    
-    if (num >= 260) return "bolinha-verde";
-    if (num >= 200) return "bolinha-amarela";
-    if (num <= 170) return "bolinha-vermelha"; 
-    
-    return "bolinha-vermelha"; 
-}
+
+    function classeProdutividade(val) {
+        if (val === undefined || val === null || val === "") return "bolinha-amarela";
+        let num = parseFloat(val);
+        if (isNaN(num)) return "bolinha-amarela";
+        
+        if (num >= 260) return "bolinha-verde";
+        if (num >= 200) return "bolinha-amarela";
+        return "bolinha-vermelha"; 
+    }
 
     function classeOciosidade(val) {
         if (val === undefined || val === null || val === "") return "bolinha-amarela";
@@ -165,10 +163,8 @@ function classeProdutividade(val) {
         
         if (num <= 10) return "bolinha-verde";
         if (num >= 12) return "bolinha-vermelha";
-        
         return "bolinha-amarela";
     }
-
 
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
@@ -179,35 +175,38 @@ function classeProdutividade(val) {
 
             // Renderiza Linha A
             let elA = document.getElementById(`ch-A-${i}`);
-            if (colA && colA.nome) {
-                let pClass = classeProdutividade(colA.produtividade);
-                let oClass = classeOciosidade(colA.ociosidade);
-                elA.innerHTML = `
-                    <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
-                        <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colA.nome}
-                    </span>
-                    <span class="info-metricas">
-                        <span title="Produtividade">P: ${colA.produtividade ?? '-'}</span>
-                        <span title="Ociosidade">O: ${colA.ociosidade ?? '-'}</span>
-                    </span>`;
-            } else {
-                elA.innerHTML = "---";
+            if (elA) {
+                if (colA && colA.nome) {
+                    let pClass = classeProdutividade(colA.produtividade);
+                    elA.innerHTML = `
+                        <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
+                            <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colA.nome}
+                        </span>
+                        <span class="info-metricas">
+                            <span title="Produtividade">P: ${colA.produtividade ?? '-'}</span>
+                            <span title="Ociosidade">O: ${colA.ociosidade ?? '-'}</span>
+                        </span>`;
+                } else {
+                    elA.innerHTML = "---";
+                }
             }
 
+            // Renderiza Linha B
             let elB = document.getElementById(`ch-B-${i}`);
-            if (colB && colB.nome) {
-                let pClass = classeProdutividade(colB.produtividade);
-                let oClass = classeOciosidade(colB.ociosidade);
-                elB.innerHTML = `
-                    <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
-                        <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colB.nome}
-                    </span>
-                    <span class="info-metricas">
-                        <span title="Produtividade">P: ${colB.produtividade ?? '-'}</span>
-                        <span title="Ociosidade">O: ${colB.ociosidade ?? '-'}</span>
-                    </span>`;
-            } else {
-                elB.innerHTML = "---";
+            if (elB) {
+                if (colB && colB.nome) {
+                    let pClass = classeProdutividade(colB.produtividade);
+                    elB.innerHTML = `
+                        <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
+                            <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colB.nome}
+                        </span>
+                        <span class="info-metricas">
+                            <span title="Produtividade">P: ${colB.produtividade ?? '-'}</span>
+                            <span title="Ociosidade">O: ${colB.ociosidade ?? '-'}</span>
+                        </span>`;
+                } else {
+                    elB.innerHTML = "---";
+                }
             }
         }
     }
@@ -291,7 +290,8 @@ function classeProdutividade(val) {
         }, 1000);
     }
 
-    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
+    // URL do Apps Script
+    const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
 
     function carregarDadosTempoReal() {
         fetch(URL_API_GOOGLE)
@@ -306,18 +306,19 @@ function classeProdutividade(val) {
                     let nomeMeli = (item.meli_user || "").trim().toLowerCase();
                     if(!nomeMeli) return;
 
+                    // Atualiza dados na Linha A
                     for(let i = 1; i <= 17; i++) {
                         if(escalaA[i] && escalaA[i].nome && escalaA[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaA[i].produtividade = item.produtividade;
-                            console.log(item);
-                            escalaA[i].ociosidade = item.ociosidade;
+                            escalaA[i].produtividade = item.produtividade || item.process_duration || '-';
+                            escalaA[i].ociosidade = item.ociosidade || item.idle_time || '-';
                         }
                     }
 
+                    // Atualiza dados na Linha B
                     for(let i = 1; i <= 17; i++) {
                         if(escalaB[i] && escalaB[i].nome && escalaB[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaB[i].produtividade = item.produtividade;
-                            escalaB[i].ociosidade = item.ociosidade;
+                            escalaB[i].produtividade = item.produtividade || item.process_duration || '-';
+                            escalaB[i].ociosidade = item.ociosidade || item.idle_time || '-';
                         }
                     }
                 });
@@ -325,7 +326,7 @@ function classeProdutividade(val) {
                 render();
             }
         })
-        .catch(erro => console.error("Erro na sincronização:", erro));
+        .catch(erro => console.error("Erro na sincronização dos dados:", erro));
     }
 
     window.onload = () => {
@@ -340,7 +341,9 @@ function classeProdutividade(val) {
 
         render();
         carregarDadosTempoReal();
-        setInterval(carregarDadosTempoReal, 25.000);
+        
+        // Corrigido para 25000 ms (25 segundos)
+        setInterval(carregarDadosTempoReal, 25000);
     };
 </script>
 
