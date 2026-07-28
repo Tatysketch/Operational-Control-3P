@@ -309,6 +309,7 @@ function classeProdutividade(val) {
                     for(let i = 1; i <= 17; i++) {
                         if(escalaA[i] && escalaA[i].nome && escalaA[i].nome.trim().toLowerCase() === nomeMeli) {
                             escalaA[i].produtividade = item.produtividade;
+                            console.log(item);
                             escalaA[i].ociosidade = item.ociosidade;
                         }
                     }
