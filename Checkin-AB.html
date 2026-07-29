@@ -29,59 +29,6 @@
         .bolinha-amarela { background: #f1c40f; }
         .bolinha-vermelha { background: #c0392b; }
         .card-ch { border-left: 6px solid #2d3277; }
-        
-        .card { position: relative; }
-        .card .custom-tooltip {
-            visibility: hidden;
-            background-color: #1a2234;
-            color: #fff;
-            text-align: left;
-            border-radius: 6px;
-            padding: 8px 12px;
-            position: absolute;
-            z-index: 100;
-            bottom: 115%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 170px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 11px;
-            font-weight: normal;
-            border: 1px solid rgba(255,255,255,0.1);
-            pointer-events: none;
-        }
-        .card .custom-tooltip::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #1a2234 transparent transparent transparent;
-        }
-        .card:hover .custom-tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
-        .tooltip-nome {
-            font-weight: bold;
-            margin-bottom: 4px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            display: block;
-            color: #fff;
-        }
-        .tooltip-linha-item {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 3px;
-        }
-        .tooltip-val-p { color: #fff; }
-        .tooltip-val-o { color: #38bdf8; display: flex; align-items: center; gap: 4px; }
-
         .config-section { background: #eef2f7; border: 2px dashed #2d3277; border-radius: 8px; padding: 15px; margin-top: 20px; display: none; width: 1360px; }
         .config-grid-container { display: flex; gap: 20px; }
         .config-col-linha { flex: 1; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
@@ -231,9 +178,6 @@
             if (elA) {
                 if (colA && colA.nome) {
                     let pClass = classeProdutividade(colA.produtividade);
-                    let oClass = classeOciosidade(colA.ociosidade);
-                    let oValStr = colA.ociosidade !== undefined && colA.ociosidade !== null && colA.ociosidade !== '-' ? colA.ociosidade + '%' : '-';
-                    
                     elA.innerHTML = `
                         <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
                             <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colA.nome}
@@ -241,12 +185,7 @@
                         <span class="info-metricas">
                             <span title="Produtividade">P: ${colA.produtividade ?? '-'}</span>
                             <span title="Ociosidade">O: ${colA.ociosidade ?? '-'}</span>
-                        </span>
-                        <div class="custom-tooltip">
-                            <span class="tooltip-nome">${colA.nome}</span>
-                            <div class="tooltip-linha-item"><span>Produtividade:</span> <span class="tooltip-val-p">${colA.produtividade ?? '---'}</span></div>
-                            <div class="tooltip-linha-item"><span>Ociosidade:</span> <span class="tooltip-val-o"><span class="status-bolinha ${oClass}" style="width:8px;height:8px;margin-right:2px;"></span>${oValStr}</span></div>
-                        </div>`;
+                        </span>`;
                 } else {
                     elA.innerHTML = "---";
                 }
@@ -257,9 +196,6 @@
             if (elB) {
                 if (colB && colB.nome) {
                     let pClass = classeProdutividade(colB.produtividade);
-                    let oClass = classeOciosidade(colB.ociosidade);
-                    let oValStr = colB.ociosidade !== undefined && colB.ociosidade !== null && colB.ociosidade !== '-' ? colB.ociosidade + '%' : '-';
-                    
                     elB.innerHTML = `
                         <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
                             <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colB.nome}
@@ -267,12 +203,7 @@
                         <span class="info-metricas">
                             <span title="Produtividade">P: ${colB.produtividade ?? '-'}</span>
                             <span title="Ociosidade">O: ${colB.ociosidade ?? '-'}</span>
-                        </span>
-                        <div class="custom-tooltip">
-                            <span class="tooltip-nome">${colB.nome}</span>
-                            <div class="tooltip-linha-item"><span>Produtividade:</span> <span class="tooltip-val-p">${colB.produtividade ?? '---'}</span></div>
-                            <div class="tooltip-linha-item"><span>Ociosidade:</span> <span class="tooltip-val-o"><span class="status-bolinha ${oClass}" style="width:8px;height:8px;margin-right:2px;"></span>${oValStr}</span></div>
-                        </div>`;
+                        </span>`;
                 } else {
                     elB.innerHTML = "---";
                 }
