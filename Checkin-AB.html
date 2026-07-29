@@ -238,14 +238,19 @@
         nomeTL = document.getElementById('in-nome-tl').value;
 
         for(let i = 1; i <= 17; i++) {
-            let nomeA = document.getElementById(`in-A-${i}`).value.trim();
-            let nomeB = document.getElementById(`in-B-${i}`).value.trim();
+            let inputA = document.getElementById(`in-A-${i}`);
+            let inputB = document.getElementById(`in-B-${i}`);
 
-            if(!escalaA[i]) escalaA[i] = {};
-            escalaA[i].nome = nomeA;
+            if (inputA && inputB) {
+                let nomeA = inputA.value.trim();
+                let nomeB = inputB.value.trim();
 
-            if(!escalaB[i]) escalaB[i] = {};
-            escalaB[i].nome = nomeB;
+                if(!escalaA[i]) escalaA[i] = {};
+                escalaA[i].nome = nomeA;
+
+                if(!escalaB[i]) escalaB[i] = {};
+                escalaB[i].nome = nomeB;
+            }
         }
 
         render();
@@ -290,7 +295,6 @@
         }, 1000);
     }
 
-    // URL do Apps Script
     const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
 
     function carregarDadosTempoReal() {
@@ -306,20 +310,23 @@
                     let nomeMeli = (item.meli_user || "").trim().toLowerCase();
                     if(!nomeMeli) return;
 
-                    // Atualiza dados na Linha A
                     for(let i = 1; i <= 17; i++) {
                         if(escalaA[i] && escalaA[i].nome && escalaA[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaA[i].produtividade = item.produtividade || item.process_duration || '-';
-                            escalaA[i].ociosidade = item.ociosidade || item.idle_time || '-';
+                            let pValA = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
+                            let oValA = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
+
+                            escalaA[i].produtividade = pValA;
+                            escalaA[i].ociosidade = oValA;
                         }
                     }
 
-                    // Atualiza dados na Linha B
                     for(let i = 1; i <= 17; i++) {
                         if(escalaB[i] && escalaB[i].nome && escalaB[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaB[i].produtividade = item.produtividade || item.process_duration || '-';
-                            escalaB[i].ociosidade = item.ociosidade || item.idle_time || '-';
-                        }
+                            let pValB = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
+                            let oValB = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
+
+                            escalaB[i].produtividade = pValB;
+                            escalaB[i].ociosidade = oValB;
                     }
                 });
 
@@ -342,7 +349,6 @@
         render();
         carregarDadosTempoReal();
         
-        // Corrigido para 25000 ms (25 segundos)
         setInterval(carregarDadosTempoReal, 25000);
     };
 </script>
