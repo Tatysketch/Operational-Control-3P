@@ -310,23 +310,18 @@
                     let nomeMeli = (item.meli_user || "").trim().toLowerCase();
                     if(!nomeMeli) return;
 
+                    let pVal = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
+                    let oVal = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
+
                     for(let i = 1; i <= 17; i++) {
                         if(escalaA[i] && escalaA[i].nome && escalaA[i].nome.trim().toLowerCase() === nomeMeli) {
-                            let pValA = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
-                            let oValA = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
-
-                            escalaA[i].produtividade = pValA;
-                            escalaA[i].ociosidade = oValA;
+                            escalaA[i].produtividade = pVal;
+                            escalaA[i].ociosidade = oVal;
                         }
-                    }
-
-                    for(let i = 1; i <= 17; i++) {
                         if(escalaB[i] && escalaB[i].nome && escalaB[i].nome.trim().toLowerCase() === nomeMeli) {
-                            let pValB = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
-                            let oValB = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
-
-                            escalaB[i].produtividade = pValB;
-                            escalaB[i].ociosidade = oValB;
+                            escalaB[i].produtividade = pVal;
+                            escalaB[i].ociosidade = oVal;
+                        }
                     }
                 });
 
