@@ -4,3 +4,6 @@ idle_time
 hh_systemic
 hh_non_systemic
 hh_efetctive
+
+
+SQL VIEWS ( estude )
