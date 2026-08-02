@@ -116,32 +116,74 @@
     </div>
 </div>
 
-<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração (Líderes)</button>
-
-<div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno (Check-in A & B)</h3>
-    
-    <div class="config-tl-section">
-        <label style="font-size: 12px; font-weight: bold; color: #2d3277;">Responsável pelo Turno (Team Leader):</label>
-        <input type="text" id="in-nome-tl" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Digite o nome do TL">
-    </div>
-
-    <div class="config-grid-container">
-        <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha A</h4>
-            <div class="config-grid" id="inputs-linha-A"></div>
-        </div>
-        <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha B</h4>
-            <div class="config-grid" id="inputs-linha-B"></div>
-        </div>
-    </div>
-
-    <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala no Painel</button>
-    <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
+<div style="text-align: center; margin-top: 20px; background: #eef2f7; padding: 15px; border-radius: 8px; border: 1px solid #dcdcdc; width: 1360px; margin-left: auto; margin-right: auto;">
+  <label for="inputTlLdap" style="font-weight: bold; color: #2d3277; margin-right: 10px; font-size: 14px;">LDAP DO TEAM LEADER:</label>
+  <input type="text" id="inputTlLdap" placeholder="Digite seu LDAP (ex: oserias)" style="padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; margin-right: 10px;">
+  <button onclick="sincronizarEquipeDoDia()" style="padding: 9px 18px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; text-transform: uppercase;">
+    🔄 Sincronizar Equipe do Dia
+  </button>
 </div>
 
 <script>
+  function sincronizarEquipeDoDia() {
+    var tlLdap = document.getElementById('inputTlLdap').value.trim();
+    
+    if (!tlLdap) {
+      alert("Por favor, digite o seu LDAP.");
+      return;
+    }
+
+    google.script.run
+      .withSuccessHandler(function(listaOperadores) {
+        if (!listaOperadores || listaOperadores.length === 0) {
+          alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
+          return;
+        }
+
+        nomeTL = tlLdap.toUpperCase();
+        document.getElementById('nome-tl-display').innerText = nomeTL;
+
+        escalaA = Array(18).fill(null);
+        escalaB = Array(18).fill(null);
+
+        let indexA = 1;
+        let indexB = 1;
+
+        listaOperadores.forEach((op, idx) => {
+          let dadosOp = {
+            nome: op.meli_user,
+            produtividade: op.produtividade || '-',
+            ociosidade: op.ociosidade || '-'
+          };
+
+          if (idx % 2 === 0) {
+            if (indexA <= 17) {
+              escalaA[indexA] = dadosOp;
+              indexA++;
+            }
+          } else {
+            if (indexB <= 17) {
+              escalaB[indexB] = dadosOp;
+              indexB++;
+            }
+          }
+        });
+
+        render();
+
+        localStorage.setItem(
+          'meli_checkin_duplo_save',
+          JSON.stringify({ escalaA, escalaB, nomeTL })
+        );
+        
+        alert("Sucesso! " + listaOperadores.length + " operadores sincronizados para as bancadas.");
+      })
+      .withFailureHandler(function(erro) {
+        console.error("Erro ao sincronizar: ", erro);
+        alert("Erro ao conectar com o Apps Script. Verifique se a aplicação está publicada corretamente.");
+      })
+      .getOperadoresPorTL(tlLdap);
+  }
     let escalaA = Array(18).fill(null);
     let escalaB = Array(18).fill(null);
     let nomeTL = "";
