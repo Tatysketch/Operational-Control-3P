@@ -293,112 +293,118 @@
     }
 
     function sincronizarEquipeDoDia() {
-        var tlLdap = document.getElementById('inputTlLdap').value.trim();
-        
-        if (!tlLdap) {
-            alert("Por favor, digite o seu LDAP.");
-            return;
-        }
-
-        google.script.run
-            .withSuccessHandler(function(listaOperadores) {
-                if (!listaOperadores || listaOperadores.length === 0) {
-                    alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
-                    return;
-                }
-
-                nomeTL = tlLdap.toUpperCase();
-                document.getElementById('in-nome-tl').value = nomeTL;
-
-                escalaA = Array(18).fill(null);
-                escalaB = Array(18).fill(null);
-
-                let indexA = 1;
-                let indexB = 1;
-
-                listaOperadores.forEach((op, idx) => {
-                    let dadosOp = {
-                        nome: op.meli_user,
-                        produtividade: op.produtividade || '-',
-                        ociosidade: op.ociosidade || '-'
-                    };
-
-                    if (idx % 2 === 0) {
-                        if (indexA <= 17) {
-                            escalaA[indexA] = dadosOp;
-                            indexA++;
-                        }
-                    } else {
-                        if (indexB <= 17) {
-                            escalaB[indexB] = dadosOp;
-                            indexB++;
-                        }
-                    }
-                });
-
-                gerarInputsConfig();
-                
-                alert("Sucesso! " + listaOperadores.length + " operadores sincronizados. Revise as posições se necessário e clique em 'Salvar Escala no Painel'.");
-            })
-            .withFailureHandler(function(erro) {
-                console.error("Erro ao sincronizar: ", erro);
-                alert("Erro ao conectar com o Apps Script.");
-            })
-            .getOperadoresPorTL(tlLdap);
+    var tlLdap = document.getElementById('inputTlLdap').value.trim();
+    
+    if (!tlLdap) {
+        alert("Por favor, digite o seu LDAP.");
+        return;
     }
 
-    const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
+    const urlAppScript = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec?tl=" + encodeURIComponent(tlLdap);
 
-    function carregarDadosTempoReal() {
-        fetch(URL_API_GOOGLE)
+    alert("Buscando equipe para o LDAP: " + tlLdap + "...");
+
+    fetch(urlAppScript)
         .then(response => response.json())
-        .then(registros => {
-            if(registros && registros.length > 0) {
-                if(registros[0].team_leader && !nomeTL) {
-                    nomeTL = registros[0].team_leader;
-                }
-
-                registros.forEach(item => {
-                    let nomeMeli = (item.meli_user || "").trim().toLowerCase();
-                    if(!nomeMeli) return;
-
-                    let pVal = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
-                    let oVal = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
-
-                    for(let i = 1; i <= 17; i++) {
-                        if(escalaA[i] && escalaA[i].nome && escalaA[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaA[i].produtividade = pVal;
-                            escalaA[i].ociosidade = oVal;
-                        }
-                        if(escalaB[i] && escalaB[i].nome && escalaB[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaB[i].produtividade = pVal;
-                            escalaB[i].ociosidade = oVal;
-                        }
-                    }
-                });
-
-                render();
+        .then(listaOperadores => {
+            if (!listaOperadores || listaOperadores.length === 0) {
+                alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
+                return;
             }
+
+            nomeTL = tlLdap.toUpperCase();
+            document.getElementById('in-nome-tl').value = nomeTL;
+
+            escalaA = Array(18).fill(null);
+            escalaB = Array(18).fill(null);
+
+            let indexA = 1;
+            let indexB = 1;
+
+            listaOperadores.forEach((op, idx) => {
+                let dadosOp = {
+                    nome: op.meli_user,
+                    produtividade: op.produtividade || '-',
+                    ociosidade: op.ociosidade || '-'
+                };
+
+                if (idx % 2 === 0) {
+                    if (indexA <= 17) {
+                        escalaA[indexA] = dadosOp;
+                        indexA++;
+                    }
+                } else {
+                    if (indexB <= 17) {
+                        escalaB[indexB] = dadosOp;
+                        indexB++;
+                    }
+                }
+            });
+
+            gerarInputsConfig();
+            alert("Sucesso! " + listaOperadores.length + " operadores sincronizados. Revise as posições se necessário e clique em 'Salvar Escala no Painel'.");
         })
-        .catch(erro => console.error("Erro na sincronização dos dados:", erro));
+        .catch(erro => {
+            console.error("Erro ao sincronizar: ", erro);
+            alert("Erro de conexão com o Apps Script. Verifique se o Web App está publicado para 'Qualquer pessoa'.");
+        });
+}
+
+const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
+
+function carregarDadosTempoReal() {
+    fetch(URL_API_GOOGLE)
+    .then(response => response.json())
+    .then(registros => {
+        if(registros && registros.length > 0) {
+            if(registros[0].team_leader && !nomeTL) {
+                nomeTL = registros[0].team_leader;
+            }
+
+            registros.forEach(item => {
+                let nomeMeli = (item.meli_user || "").trim().toLowerCase();
+                if(!nomeMeli) return;
+
+                let pVal = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
+                let oVal = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
+
+                for(let i = 1; i <= 17; i++) {
+                    if(escalaA[i] && escalaA[i].nome && escalaA[i].nome.trim().toLowerCase() === nomeMeli) {
+                        escalaA[i].produtividade = pVal;
+                        escalaA[i].ociosidade = oVal;
+                    }
+                    if(escalaB[i] && escalaB[i].nome && escalaB[i].nome.trim().toLowerCase() === nomeMeli) {
+                        escalaB[i].produtividade = pVal;
+                        escalaB[i].ociosidade = oVal;
+                    }
+                }
+            });
+
+            render();
+        }
+    })
+    .catch(erro => console.error("Erro na sincronização dos dados:", erro));
+}
+
+window.onload = () => {
+    iniciarRelogio();
+
+    const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
+    if(salvo) {
+        if(salvo.escalaA) escalaA = salvo.escalaA;
+        if(salvo.escalaB) escalaB = salvo.escalaB;
+        if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
     }
 
-    window.onload = () => {
-        iniciarRelogio();
-
-        const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
-        if(salvo) {
-            if(salvo.escalaA) escalaA = salvo.escalaA;
-            if(salvo.escalaB) escalaB = salvo.escalaB;
-            if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
-        }
-
-        render();
-        carregarDadosTempoReal();
-        
-        setInterval(carregarDadosTempoReal, 25000);
-    };
+    render();
+    carregarDadosTempoReal();
+    
+    setInterval(carregarDadosTempoReal, 25000);
+};
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
