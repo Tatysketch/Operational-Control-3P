@@ -122,36 +122,37 @@
 <div class="config-section" id="aba-config">
     <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno (Check-in C & D)</h3>
     
-    <div class="config-tl-section">
-        <label style="font-size: 12px; font-weight: bold; color: #2d3277;">Digite seu LDAP (Ex: seu.usuario):</label>
-        <input type="text" id="inputTlLdap" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; margin-bottom: 8px;" placeholder="Digite seu LDAP">
-        <button class="btn-sincronizar" onclick="sincronizarEquipeDoDia()">🔄 Sincronizar Equipe do Dia (Google Sheets)</button>
+    <div class="sync-box">
+        <label for="inputTlLdap" style="font-size: 12px; font-weight: bold; color: #2d3277;">LDAP DO TEAM LEADER:</label>
+        <input type="text" id="inputTlLdap" placeholder="Digite seu LDAP (ex: oserias)" style="padding: 6px; width: 220px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+        <button onclick="sincronizarEquipeDoDia()" style="padding: 7px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; text-transform: uppercase;">
+            🔄 Sincronizar Equipe do Dia
+        </button>
+    </div>
 
-        <label style="font-size: 12px; font-weight: bold; color: #2d3277; margin-top: 5px;">Responsável pelo Turno (Team Leader):</label>
-        <input type="text" id="in-nome-tl" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" placeholder="Nome do TL">
+    <div class="config-tl-section">
+        <label style="font-size: 11px; font-weight: bold; color: #333;">Responsável pelo Turno (Team Leader):</label>
+        <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;" placeholder="Nome do TL">
     </div>
 
     <div class="config-grid-container">
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha C</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha C</h4>
             <div class="config-grid" id="inputs-linha-C"></div>
         </div>
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277;">Escala Linha D</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha D</h4>
             <div class="config-grid" id="inputs-linha-D"></div>
         </div>
     </div>
 
     <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala no Painel</button>
-    <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
 </div>
 
 <script>
     let escalaC = Array(18).fill(null);
     let escalaD = Array(18).fill(null);
     let nomeTL = "";
-
-    const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
 
     function classeProdutividade(val) {
         if (val === undefined || val === null || val === "") return "bolinha-amarela";
@@ -160,9 +161,7 @@
         
         if (num >= 260) return "bolinha-verde";
         if (num >= 200) return "bolinha-amarela";
-        if (num <= 170) return "bolinha-vermelha";
-        
-        return "bolinha-amarela";
+        return "bolinha-vermelha"; 
     }
 
     function classeOciosidade(val) {
@@ -172,7 +171,6 @@
         
         if (num <= 10) return "bolinha-verde";
         if (num >= 12) return "bolinha-vermelha";
-        
         return "bolinha-amarela";
     }
 
@@ -185,47 +183,49 @@
 
             // Renderiza Linha C
             let elC = document.getElementById(`ch-C-${i}`);
-            if (colC && colC.nome) {
-                let pClass = classeProdutividade(colC.produtividade);
-                let oClass = classeOciosidade(colC.ociosidade);
-                elC.innerHTML = `
-                    <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
-                        <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colC.nome}
-                    </span>
-                    <span class="info-metricas">
-                        <span title="Produtividade">P: ${colC.produtividade ?? '-'}</span>
-                        <span title="Ociosidade">O: ${colC.ociosidade ?? '-'}</span>
-                    </span>`;
-            } else {
-                elC.innerHTML = "---";
+            if (elC) {
+                if (colC && colC.nome) {
+                    let pClass = classeProdutividade(colC.produtividade);
+                    elC.innerHTML = `
+                        <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
+                            <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colC.nome}
+                        </span>
+                        <span class="info-metricas">
+                            <span title="Produtividade">P: ${colC.produtividade ?? '-'}</span>
+                            <span title="Ociosidade">O: ${colC.ociosidade ?? '-'}</span>
+                        </span>`;
+                } else {
+                    elC.innerHTML = "---";
+                }
             }
 
             // Renderiza Linha D
             let elD = document.getElementById(`ch-D-${i}`);
-            if (colD && colD.nome) {
-                let pClass = classeProdutividade(colD.produtividade);
-                let oClass = classeOciosidade(colD.ociosidade);
-                elD.innerHTML = `
-                    <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
-                        <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colD.nome}
-                    </span>
-                    <span class="info-metricas">
-                        <span title="Produtividade">P: ${colD.produtividade ?? '-'}</span>
-                        <span title="Ociosidade">O: ${colD.ociosidade ?? '-'}</span>
-                    </span>`;
-            } else {
-                elD.innerHTML = "---";
+            if (elD) {
+                if (colD && colD.nome) {
+                    let pClass = classeProdutividade(colD.produtividade);
+                    elD.innerHTML = `
+                        <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
+                            <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colD.nome}
+                        </span>
+                        <span class="info-metricas">
+                            <span title="Produtividade">P: ${colD.produtividade ?? '-'}</span>
+                            <span title="Ociosidade">O: ${colD.ociosidade ?? '-'}</span>
+                        </span>`;
+                } else {
+                    elD.innerHTML = "---";
+                }
             }
         }
     }
 
     function gerarInputsConfig() {
         document.getElementById('in-nome-tl').value = nomeTL;
-        const containerC = document.getElementById('inputs-linha-C');
-        const containerD = document.getElementById('inputs-linha-D');
+        const containerA = document.getElementById('inputs-linha-C');
+        const containerB = document.getElementById('inputs-linha-D');
 
-        containerC.innerHTML = '';
-        containerD.innerHTML = '';
+        containerA.innerHTML = '';
+        containerB.innerHTML = '';
 
         for(let i = 1; i <= 17; i++) {
             containerC.innerHTML += `
@@ -242,87 +242,34 @@
         }
     }
 
-    function sincronizarEquipeDoDia() {
-        var tlLdap = document.getElementById('inputTlLdap').value.trim();
-        
-        if (!tlLdap) {
-            alert("Por favor, digite o seu LDAP.");
-            return;
-        }
-
-        const urlAppScript = URL_API_GOOGLE + "?tl=" + encodeURIComponent(tlLdap);
-
-        alert("Buscando equipe para o LDAP: " + tlLdap + "...");
-
-        fetch(urlAppScript)
-            .then(response => response.json())
-            .then(listaOperadores => {
-                if (!listaOperadores || listaOperadores.length === 0) {
-                    alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
-                    return;
-                }
-
-                nomeTL = tlLdap.toUpperCase();
-                document.getElementById('in-nome-tl').value = nomeTL;
-
-                escalaC = Array(18).fill(null);
-                escalaD = Array(18).fill(null);
-
-                let indexC = 1;
-                let indexD = 1;
-
-                listaOperadores.forEach((op, idx) => {
-                    let dadosOp = {
-                        nome: op.meli_user,
-                        produtividade: op.produtividade || '-',
-                        ociosidade: op.ociosidade || '-'
-                    };
-
-                    if (idx % 2 === 0) {
-                        if (indexC <= 17) {
-                            escalaC[indexC] = dadosOp;
-                            indexC++;
-                        }
-                    } else {
-                        if (indexD <= 17) {
-                            escalaD[indexD] = dadosOp;
-                            indexD++;
-                        }
-                    }
-                });
-
-                gerarInputsConfig();
-                alert("Sucesso! " + listaOperadores.length + " operadores sincronizados. Revise as posições se necessário e clique em 'Salvar Escala no Painel'.");
-            })
-            .catch(erro => {
-                console.error("Erro ao sincronizar: ", erro);
-                alert("Erro de conexão com o Apps Script. Verifique se o Web App está publicado para 'Qualquer pessoa'.");
-            });
-    }
-
     function salvarConfig() {
         nomeTL = document.getElementById('in-nome-tl').value;
 
         for(let i = 1; i <= 17; i++) {
-            let nomeC = document.getElementById(`in-C-${i}`).value.trim();
-            let nomeD = document.getElementById(`in-D-${i}`).value.trim();
+            let inputC = document.getElementById(`in-C-${i}`);
+            let inputD = document.getElementById(`in-D-${i}`);
 
-            if(!escalaC[i]) escalaC[i] = {};
-            escalaC[i].nome = nomeC;
+            if (inputC && inputD) {
+                let nomeC = inputC.value.trim();
+                let nomeD = inputD.value.trim();
 
-            if(!escalaD[i]) escalaD[i] = {};
-            escalaD[i].nome = nomeD;
+                if(!escalaC[i]) escalaC[i] = {};
+                escalaC[i].nome = nomeC;
+
+                if(!escalaD[i]) escalaD[i] = {};
+                escalaD[i].nome = nomeD;
+            }
         }
 
         render();
 
         localStorage.setItem(
-            'meli_checkin_cd_save',
+            'meli_checkin_duplo_save',
             JSON.stringify({ escalaC, escalaD, nomeTL })
         );
 
         toggleConfig();
-        alert("Escala do Check-in C/D salva com sucesso!");
+        alert("Escala do Check-in salva com sucesso!");
     }
 
     function toggleConfig() {
@@ -336,18 +283,6 @@
         }
     }
 
-    function resetarPainel() {
-        if(confirm("Deseja zerar todos os nomes das linhas C e D?")) {
-            escalaC = Array(18).fill(null);
-            escalaD = Array(18).fill(null);
-            nomeTL = "";
-            localStorage.removeItem('meli_checkin_cd_save');
-            render();
-            toggleConfig();
-            alert("Painel C/D resetado!");
-        }
-    }
-
     function iniciarRelogio() {
         setInterval(() => {
             const agora = new Date();
@@ -356,57 +291,119 @@
         }, 1000);
     }
 
-    function carregarDadosTempoReal() {
-        fetch(URL_API_GOOGLE)
-        .then(response => response.json())
-        .then(registros => {
-            if(registros && registros.length > 0) {
-                if(registros[0].team_leader && !nomeTL) {
-                    nomeTL = registros[0].team_leader;
-                }
-
-                registros.forEach(item => {
-                    let nomeMeli = (item.meli_user || "").trim().toLowerCase();
-                    if(!nomeMeli) return;
-
-                    // Procura na Linha C
-                    for(let i = 1; i <= 17; i++) {
-                        if(escalaC[i] && escalaC[i].nome && escalaC[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaC[i].produtividade = item.produtividade;
-                            escalaC[i].ociosidade = item.ociosidade;
-                        }
-                    }
-
-                    // Procura na Linha D
-                    for(let i = 1; i <= 17; i++) {
-                        if(escalaD[i] && escalaD[i].nome && escalaD[i].nome.trim().toLowerCase() === nomeMeli) {
-                            escalaD[i].produtividade = item.produtividade;
-                            escalaD[i].ociosidade = item.ociosidade;
-                        }
-                    }
-                });
-
-                render();
-            }
-        })
-        .catch(erro => console.error("Erro na sincronização:", erro));
+    function sincronizarEquipeDoDia() {
+    var tlLdap = document.getElementById('inputTlLdap').value.trim();
+    
+    if (!tlLdap) {
+        alert("Por favor, digite o seu LDAP.");
+        return;
     }
 
-    window.onload = () => {
-        iniciarRelogio();
+    const urlAppScript = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec?tl=" + encodeURIComponent(tlLdap);
 
-        const salvo = JSON.parse(localStorage.getItem('meli_checkin_cd_save'));
-        if(salvo) {
-            if(salvo.escalaC) escalaC = salvo.escalaC;
-            if(salvo.escalaD) escalaD = salvo.escalaD;
-            if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+    alert("Buscando equipe para o LDAP: " + tlLdap + "...");
+
+    fetch(urlAppScript)
+        .then(response => response.json())
+        .then(listaOperadores => {
+            if (!listaOperadores || listaOperadores.length === 0) {
+                alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
+                return;
+            }
+
+            nomeTL = tlLdap.toUpperCase();
+            document.getElementById('in-nome-tl').value = nomeTL;
+
+            escalaC = Array(18).fill(null);
+            escalaD = Array(18).fill(null);
+
+            let indexC = 1;
+            let indexD = 1;
+
+            listaOperadores.forEach((op, idx) => {
+                let dadosOp = {
+                    nome: op.meli_user,
+                    produtividade: op.produtividade || '-',
+                    ociosidade: op.ociosidade || '-'
+                };
+
+                if (idx % 2 === 0) {
+                    if (indexC <= 17) {
+                        escalaC[indexC] = dadosOp;
+                        indexC++;
+                    }
+                } else {
+                    if (indexD <= 17) {
+                        escalaD[indexD] = dadosOp;
+                        indexD++;
+                    }
+                }
+            });
+
+            gerarInputsConfig();
+            alert("Sucesso! " + listaOperadores.length + " operadores sincronizados. Revise as posições se necessário e clique em 'Salvar Escala no Painel'.");
+        })
+        .catch(erro => {
+            console.error("Erro ao sincronizar: ", erro);
+            alert("Erro de conexão com o Apps Script. Verifique se o Web App está publicado para 'Qualquer pessoa'.");
+        });
+}
+
+const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
+
+function carregarDadosTempoReal() {
+    fetch(URL_API_GOOGLE)
+    .then(response => response.json())
+    .then(registros => {
+        if(registros && registros.length > 0) {
+            if(registros[0].team_leader && !nomeTL) {
+                nomeTL = registros[0].team_leader;
+            }
+
+            registros.forEach(item => {
+                let nomeMeli = (item.meli_user || "").trim().toLowerCase();
+                if(!nomeMeli) return;
+
+                let pVal = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
+                let oVal = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
+
+                for(let i = 1; i <= 17; i++) {
+                    if(escalaC[i] && escalaC[i].nome && escalaC[i].nome.trim().toLowerCase() === nomeMeli) {
+                        escalaC[i].produtividade = pVal;
+                        escalaC[i].ociosidade = oVal;
+                    }
+                    if(escalaD[i] && escalaD[i].nome && escalaD[i].nome.trim().toLowerCase() === nomeMeli) {
+                        escalaD[i].produtividade = pVal;
+                        escalaD[i].ociosidade = oVal;
+                    }
+                }
+            });
+
+            render();
         }
+    })
+    .catch(erro => console.error("Erro na sincronização dos dados:", erro));
+}
 
-        render();
-        carregarDadosTempoReal();
-        setInterval(carregarDadosTempoReal, 5000);
-    };
+window.onload = () => {
+    iniciarRelogio();
+
+    const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
+    if(salvo) {
+        if(salvo.escalaC) escalaC = salvo.escalaC;
+        if(salvo.escalaD) escalaD = salvo.escalaD;
+        if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+    }
+
+    render();
+    carregarDadosTempoReal();
+    
+    setInterval(carregarDadosTempoReal, 25000);
+};
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
