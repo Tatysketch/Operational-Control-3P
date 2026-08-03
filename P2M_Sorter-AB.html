@@ -92,13 +92,11 @@
         .prod-amarela { background-color: #fef3c7 !important; border-color: #f59e0b !important; }
         .prod-vermelha { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
 
-        .btn-container-central { width: 100%; display: flex; justify-content: center; margin-top: 20px; gap: 15px; }
+        .btn-container-central { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
         .btn-girar { background: #23285c; color: white; padding: 10px 24px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; }
         .btn-girar:hover { background: #1a1e47; }
-        
-        .btn-toggle-config { background: #64748b; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .config-section { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 20px; margin-top: 20px; display: none; width: 1510px; }
+        .config-section { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 20px; margin-top: 20px; width: 1510px; }
         .config-grid-container { display: flex; gap: 20px; }
         .config-col-linha { flex: 1; background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; }
         .config-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -108,7 +106,7 @@
         .config-group textarea { resize: vertical; min-height: 80px; }
         
         .config-tl-section { background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; }
-        .btn-sincronizar { background: #2980b9; color: white; border: none; padding: 10px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-bottom: 10px; width: 100%; text-transform: uppercase; font-size: 12px; }
+        .btn-toggle-config { background: #64748b; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-top: 15px; font-size: 11px; text-transform: uppercase; }
         .btn-salvar { background: #10b981; color: white; border: none; padding: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
     </style>
 </head>
@@ -212,45 +210,56 @@
 
     <div class="btn-container-central">
         <button class="btn-girar" onclick="gira()">Girar Rotatividade</button>
-        <button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
     </div>
+</div>
 
-    <!-- SEÇÃO DE CONFIGURAÇÃO (Oculta por padrão) -->
-    <div class="config-section" id="aba-config">
-        <h3 style="margin-top:0; color:#23285c; font-size:15px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas A & B)</h3>
-        
-        <div class="config-tl-section">
-            <label style="font-size: 11px; font-weight: 700; color: #475569;">Digite seu LDAP (Sincronização Apps Script):</label>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="inputTlLdap" style="flex: 1; padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px;" placeholder="Ex: seu.usuario">
-                <button class="btn-sincronizar" style="width: auto; margin-bottom:0;" onclick="sincronizarEquipeDoDia()">🔄 Sincronizar Equipe</button>
-            </div>
-
-            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-top: 5px;">Responsável pelo Turno (Team Leader):</label>
-            <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px;" placeholder="Nome do TL">
+<div class="config-section" id="painel-config" style="display: block;">
+    <div class="config-tl-section">
+        <div class="config-group">
+            <label for="input-tl">LDAP / Nome do Team Leader (TL)</label>
+            <input type="text" id="input-tl" placeholder="Digite o seu LDAP ou Nome...">
         </div>
-
-        <div class="config-grid-container">
-            <div class="config-col-linha">
-                <h4 style="margin:0 0 10px 0; color:#23285c; font-size:12px; text-transform:uppercase;">Escala - Linha A</h4>
-                <div class="config-grid" id="inputs-linha-A"></div>
-                <div class="config-group" style="margin-top: 10px;">
-                    <label>Colaboradores do Sorter A (Um nome por linha)</label>
-                    <textarea id="in-sorter-reps-A"></textarea>
+    </div>
+    
+    <div class="config-grid-container">
+        <div class="config-col-linha">
+            <h3 style="font-size: 12px; color: #23285c; margin-top: 0; text-transform: uppercase;">Configuração Linha A</h3>
+            <div class="config-grid">
+                <div class="config-group">
+                    <label>P2M Giro (1 por linha)</label>
+                    <textarea id="cfg-giro-A" placeholder="Colaboradores da rotação..."></textarea>
+                </div>
+                <div class="config-group">
+                    <label>P2M Fixos (Pesca/Cat)</label>
+                    <textarea id="cfg-fixos-A" placeholder="Pesca e Categorizados..."></textarea>
                 </div>
             </div>
-            <div class="config-col-linha">
-                <h4 style="margin:0 0 10px 0; color:#23285c; font-size:12px; text-transform:uppercase;">Escala - Linha B</h4>
-                <div class="config-grid" id="inputs-linha-B"></div>
-                <div class="config-group" style="margin-top: 10px;">
-                    <label>Colaboradores do Sorter B (Um nome por linha)</label>
-                    <textarea id="in-sorter-reps-B"></textarea>
-                </div>
+            <div class="config-group" style="margin-top: 10px;">
+                <label>Sorter A (Reps)</label>
+                <textarea id="cfg-sorter-A" placeholder="Colaboradores do Sorter A..."></textarea>
             </div>
         </div>
 
-        <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
+        <div class="config-col-linha">
+            <h3 style="font-size: 12px; color: #23285c; margin-top: 0; text-transform: uppercase;">Configuração Linha B</h3>
+            <div class="config-grid">
+                <div class="config-group">
+                    <label>P2M Giro (1 por linha)</label>
+                    <textarea id="cfg-giro-B" placeholder="Colaboradores da rotação..."></textarea>
+                </div>
+                <div class="config-group">
+                    <label>P2M Fixos (Pesca/Cat)</label>
+                    <textarea id="cfg-fixos-B" placeholder="Pesca e Categorizados..."></textarea>
+                </div>
+            </div>
+            <div class="config-group" style="margin-top: 10px;">
+                <label>Sorter B (Reps)</label>
+                <textarea id="cfg-sorter-B" placeholder="Colaboradores do Sorter B..."></textarea>
+            </div>
+        </div>
     </div>
+
+    <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala</button>
 </div>
 
 <script>
@@ -266,6 +275,19 @@
     let dadosOperacionais = {}; 
 
     const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbxdgcyi3Nh8bpnauxu5WttBvbYLwPmQ_p9sqM2CNopzbyfx46LVjzUYfYgXOFu9_DMG/exec";
+
+    function gira() {
+        if (p2mGiro_A.length > 0) {
+            const primeiroA = p2mGiro_A.shift();
+            p2mGiro_A.push(primeiroA);
+        }
+        if (p2mGiro_B.length > 0) {
+            const primeiroB = p2mGiro_B.shift();
+            p2mGiro_B.push(primeiroB);
+        }
+        render();
+        salvarNoLocalStorage();
+    }
 
     function atualizarCardComTooltip(cardId, tooltipId, nomeColaborador) {
         const cardEl = document.getElementById(cardId);
@@ -380,101 +402,54 @@
         if (sorterBEl) sorterBEl.innerHTML = renderSorterReps(sorterReps_B);
     }
 
-    function gerarInputsConfig() {
-        document.getElementById('in-nome-tl').value = nomeTL;
-        document.getElementById('in-sorter-reps-A').value = sorterReps_A.join('\n');
-        document.getElementById('in-sorter-reps-B').value = sorterReps_B.join('\n');
+    function preencherTextareasDeConfig() {
+        const inputTl = document.getElementById('input-tl');
+        if (inputTl) inputTl.value = nomeTL || "";
 
-        const containerA = document.getElementById('inputs-linha-A');
-        const containerB = document.getElementById('inputs-linha-B');
-        containerA.innerHTML = '';
-        containerB.innerHTML = '';
+        const cfgGiroA = document.getElementById('cfg-giro-A');
+        if (cfgGiroA) cfgGiroA.value = p2mGiro_A.join('\n');
 
-        const rotulosFixos = ["B01 PESCA (Fixo)", "B02 CAT (Alimento)", "B03 CAT (Cosmético)", "B04 CAT (HV)"];
-        const rotulosGiro = ["B01 (E1)", "B02 (E2)", "B03 (E3)", "B04 (E4)", "B05 (E5)", "B07 (D7)", "B06 (D6)", "B05 (D5)"];
+        const cfgFixosA = document.getElementById('cfg-fixos-A');
+        if (cfgFixosA) cfgFixosA.value = p2mFixos_A.join('\n');
 
-        for(let i = 0; i < 4; i++) containerA.innerHTML += `<div class="config-group"><label>${rotulosFixos[i]}</label><input type="text" id="in-A-fixo-${i}" value="${p2mFixos_A[i] || ''}"></div>`;
-        for(let i = 0; i < 8; i++) containerA.innerHTML += `<div class="config-group"><label>${rotulosGiro[i]}</label><input type="text" id="in-A-giro-${i}" value="${p2mGiro_A[i] || ''}"></div>`;
+        const cfgSorterA = document.getElementById('cfg-sorter-A');
+        if (cfgSorterA) cfgSorterA.value = sorterReps_A.join('\n');
 
-        for(let i = 0; i < 4; i++) containerB.innerHTML += `<div class="config-group"><label>${rotulosFixos[i]}</label><input type="text" id="in-B-fixo-${i}" value="${p2mFixos_B[i] || ''}"></div>`;
-        for(let i = 0; i < 8; i++) containerB.innerHTML += `<div class="config-group"><label>${rotulosGiro[i]}</label><input type="text" id="in-B-giro-${i}" value="${p2mGiro_B[i] || ''}"></div>`;
-    }
+        const cfgGiroB = document.getElementById('cfg-giro-B');
+        if (cfgGiroB) cfgGiroB.value = p2mGiro_B.join('\n');
 
-    function sincronizarEquipeDoDia() {
-        var tlLdap = document.getElementById('inputTlLdap').value.trim();
-        if (!tlLdap) {
-            alert("Por favor, digite o seu LDAP.");
-            return;
-        }
+        const cfgFixosB = document.getElementById('cfg-fixos-B');
+        if (cfgFixosB) cfgFixosB.value = p2mFixos_B.join('\n');
 
-        const urlAppScript = URL_API_GOOGLE + "?tl=" + encodeURIComponent(tlLdap);
-        alert("Buscando equipe para o LDAP: " + tlLdap + "...");
-
-        fetch(urlAppScript)
-            .then(response => response.json())
-            .then(listaOperadores => {
-                if (!listaOperadores || listaOperadores.length === 0) {
-                    alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
-                    return;
-                }
-
-                nomeTL = tlLdap.toUpperCase();
-                document.getElementById('in-nome-tl').value = nomeTL;
-
-                p2mFixos_A = Array(4).fill("");
-                p2mGiro_A = Array(8).fill("");
-                sorterReps_A = [];
-
-                p2mFixos_B = Array(4).fill("");
-                p2mGiro_B = Array(8).fill("");
-                sorterReps_B = [];
-
-                let idxFixA = 0, idxGiroA = 0;
-                let idxFixB = 0, idxGiroB = 0;
-
-                listaOperadores.forEach((op, idx) => {
-                    let nomeOp = op.meli_user || op.colaborador || "";
-                    if (!nomeOp) return;
-
-                    if (idx % 2 === 0) {
-                        if (idxFixA < 4) p2mFixos_A[idxFixA++] = nomeOp;
-                        else if (idxGiroA < 8) p2mGiro_A[idxGiroA++] = nomeOp;
-                        else sorterReps_A.push(nomeOp);
-                    } else {
-                        if (idxFixB < 4) p2mFixos_B[idxFixB++] = nomeOp;
-                        else if (idxGiroB < 8) p2mGiro_B[idxGiroB++] = nomeOp;
-                        else sorterReps_B.push(nomeOp);
-                    }
-                });
-
-                gerarInputsConfig();
-                alert("Sucesso! " + listaOperadores.length + " operadores sincronizados.");
-            })
-            .catch(erro => {
-                console.error("Erro ao sincronizar: ", erro);
-                alert("Erro de conexão com o Apps Script.");
-            });
+        const cfgSorterB = document.getElementById('cfg-sorter-B');
+        if (cfgSorterB) cfgSorterB.value = sorterReps_B.join('\n');
     }
 
     function salvarConfig() {
-        nomeTL = document.getElementById('in-nome-tl').value;
+        const inputTl = document.getElementById('input-tl');
+        if (inputTl) nomeTL = inputTl.value.trim();
 
-        for(let i = 0; i < 4; i++) {
-            p2mFixos_A[i] = document.getElementById(`in-A-fixo-${i}`).value;
-            p2mFixos_B[i] = document.getElementById(`in-B-fixo-${i}`).value;
-        }
-        for(let i = 0; i < 8; i++) {
-            p2mGiro_A[i] = document.getElementById(`in-A-giro-${i}`).value;
-            p2mGiro_B[i] = document.getElementById(`in-B-giro-${i}`).value;
-        }
+        const cfgGiroA = document.getElementById('cfg-giro-A');
+        if (cfgGiroA) p2mGiro_A = cfgGiroA.value.split('\n').map(s => s.trim()).filter(Boolean);
 
-        sorterReps_A = document.getElementById('in-sorter-reps-A').value.split('\n').map(n => n.trim()).filter(n => n !== "");
-        sorterReps_B = document.getElementById('in-sorter-reps-B').value.split('\n').map(n => n.trim()).filter(n => n !== "");
+        const cfgFixosA = document.getElementById('cfg-fixos-A');
+        if (cfgFixosA) p2mFixos_A = cfgFixosA.value.split('\n').map(s => s.trim()).filter(Boolean);
+
+        const cfgSorterA = document.getElementById('cfg-sorter-A');
+        if (cfgSorterA) sorterReps_A = cfgSorterA.value.split('\n').map(s => s.trim()).filter(Boolean);
+
+        const cfgGiroB = document.getElementById('cfg-giro-B');
+        if (cfgGiroB) p2mGiro_B = cfgGiroB.value.split('\n').map(s => s.trim()).filter(Boolean);
+
+        const cfgFixosB = document.getElementById('cfg-fixos-B');
+        if (cfgFixosB) p2mFixos_B = cfgFixosB.value.split('\n').map(s => s.trim()).filter(Boolean);
+
+        const cfgSorterB = document.getElementById('cfg-sorter-B');
+        if (cfgSorterB) sorterReps_B = cfgSorterB.value.split('\n').map(s => s.trim()).filter(Boolean);
 
         render();
         salvarNoLocalStorage();
-        toggleConfig();
-        alert("Escala salva com sucesso!");
+        alert('Escala salva e aplicada com sucesso!');
     }
 
     function salvarNoLocalStorage() {
@@ -485,22 +460,6 @@
         }));
     }
 
-    function toggleConfig() {
-        const aba = document.getElementById('aba-config');
-        if(aba.style.display === 'block') {
-            aba.style.display = 'none';
-        } else {
-            gerarInputsConfig();
-            aba.style.display = 'block';
-            aba.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
-    function gira() {
-        // Função de rotação das bancadas de giro se aplicável
-        alert("Rotatividade girada!");
-    }
-
     function relogio() {
         setInterval(() => {
             const agora = new Date();
@@ -509,32 +468,6 @@
                 relogioEl.innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
             }
         }, 1000);
-    }
-
-    function carregarDadosTempoReal() {
-        fetch(URL_API_GOOGLE)
-            .then(response => response.json())
-            .then(registros => {
-                if (registros && registros.length > 0) {
-                    if (registros[0].team_leader && !nomeTL) {
-                        nomeTL = registros[0].team_leader;
-                    }
-                    
-                    registros.forEach(reg => {
-                        let nomeCol = reg.colaborador || reg.meli_user;
-                        if (nomeCol) {
-                            const nomeUpper = nomeCol.trim().toUpperCase();
-                            dadosOperacionais[nomeUpper] = {
-                                produtividade: reg.produtividade !== undefined ? parseFloat(reg.produtividade) : undefined,
-                                ociosidade: reg.ociosidade !== undefined ? reg.ociosidade : 0
-                            };
-                        }
-                    });
-
-                    render();
-                }
-            })
-            .catch(erro => console.error("Erro na sincronização:", erro));
     }
 
     window.onload = () => {
@@ -550,9 +483,8 @@
             if(salvo.nomeTL) nomeTL = salvo.nomeTL;
         }
         render();
-        carregarDadosTempoReal();
-    };
+        preencherTextareasDeConfig();
+    }
 </script>
-
 </body>
 </html>
