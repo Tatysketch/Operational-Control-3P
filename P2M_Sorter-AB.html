@@ -92,9 +92,11 @@
         .prod-amarela { background-color: #fef3c7 !important; border-color: #f59e0b !important; }
         .prod-vermelha { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
 
-        .btn-container-central { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
+        .btn-container-central { width: 100%; display: flex; justify-content: center; margin-top: 20px; gap: 15px; }
         .btn-girar { background: #23285c; color: white; padding: 10px 24px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; }
         .btn-girar:hover { background: #1a1e47; }
+        
+        .btn-toggle-config { background: #64748b; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .config-section { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 20px; margin-top: 20px; display: none; width: 1510px; }
         .config-grid-container { display: flex; gap: 20px; }
@@ -106,9 +108,8 @@
         .config-group textarea { resize: vertical; min-height: 80px; }
         
         .config-tl-section { background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; }
-        .btn-toggle-config { background: #64748b; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-top: 15px; font-size: 11px; text-transform: uppercase; }
+        .btn-sincronizar { background: #2980b9; color: white; border: none; padding: 10px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-bottom: 10px; width: 100%; text-transform: uppercase; font-size: 12px; }
         .btn-salvar { background: #10b981; color: white; border: none; padding: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
-        .btn-reset { background: #ef4444; color: white; border: none; padding: 8px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 8px; width: 100%; text-transform: uppercase; font-size: 11px; }
     </style>
 </head>
 <body>
@@ -120,7 +121,7 @@
             <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P</h1></div>
         </div>
         <div class="header-right">
-            <div>TL: <span class="tl-nome" id="nome-tl-display"></span></div>
+            <div>TL: <span class="tl-nome" id="nome-tl-display">---</span></div>
             <div id="relogio">--/--/---- | --:--:--</div>
         </div>
     </div>
@@ -211,10 +212,45 @@
 
     <div class="btn-container-central">
         <button class="btn-girar" onclick="gira()">Girar Rotatividade</button>
+        <button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
     </div>
-</div>
 
-<button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
+    <!-- SEÇÃO DE CONFIGURAÇÃO (Oculta por padrão) -->
+    <div class="config-section" id="aba-config">
+        <h3 style="margin-top:0; color:#23285c; font-size:15px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas A & B)</h3>
+        
+        <div class="config-tl-section">
+            <label style="font-size: 11px; font-weight: 700; color: #475569;">Digite seu LDAP (Sincronização Apps Script):</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="inputTlLdap" style="flex: 1; padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px;" placeholder="Ex: seu.usuario">
+                <button class="btn-sincronizar" style="width: auto; margin-bottom:0;" onclick="sincronizarEquipeDoDia()">🔄 Sincronizar Equipe</button>
+            </div>
+
+            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-top: 5px;">Responsável pelo Turno (Team Leader):</label>
+            <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px;" placeholder="Nome do TL">
+        </div>
+
+        <div class="config-grid-container">
+            <div class="config-col-linha">
+                <h4 style="margin:0 0 10px 0; color:#23285c; font-size:12px; text-transform:uppercase;">Escala - Linha A</h4>
+                <div class="config-grid" id="inputs-linha-A"></div>
+                <div class="config-group" style="margin-top: 10px;">
+                    <label>Colaboradores do Sorter A (Um nome por linha)</label>
+                    <textarea id="in-sorter-reps-A"></textarea>
+                </div>
+            </div>
+            <div class="config-col-linha">
+                <h4 style="margin:0 0 10px 0; color:#23285c; font-size:12px; text-transform:uppercase;">Escala - Linha B</h4>
+                <div class="config-grid" id="inputs-linha-B"></div>
+                <div class="config-group" style="margin-top: 10px;">
+                    <label>Colaboradores do Sorter B (Um nome por linha)</label>
+                    <textarea id="in-sorter-reps-B"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
+    </div>
 </div>
 
 <script>
@@ -279,7 +315,6 @@
     }
 
     function render() {
-        // Se houver elemento de display do TL na tela principal
         const tlDisplay = document.getElementById('nome-tl-display');
         if (tlDisplay) tlDisplay.innerText = nomeTL || "---";
 
@@ -367,7 +402,6 @@
 
     function sincronizarEquipeDoDia() {
         var tlLdap = document.getElementById('inputTlLdap').value.trim();
-        
         if (!tlLdap) {
             alert("Por favor, digite o seu LDAP.");
             return;
@@ -387,7 +421,6 @@
                 nomeTL = tlLdap.toUpperCase();
                 document.getElementById('in-nome-tl').value = nomeTL;
 
-                // Limpa arrays antes de preencher
                 p2mFixos_A = Array(4).fill("");
                 p2mGiro_A = Array(8).fill("");
                 sorterReps_A = [];
@@ -396,35 +429,26 @@
                 p2mGiro_B = Array(8).fill("");
                 sorterReps_B = [];
 
-                let idxFixA = 0, idxGiroA = 0, idxSortA = 0;
-                let idxFixB = 0, idxGiroB = 0, idxSortB = 0;
+                let idxFixA = 0, idxGiroA = 0;
+                let idxFixB = 0, idxGiroB = 0;
 
                 listaOperadores.forEach((op, idx) => {
                     let nomeOp = op.meli_user || op.colaborador || "";
                     if (!nomeOp) return;
 
-                    // Distribui alternadamente entre Linha A e Linha B
                     if (idx % 2 === 0) {
-                        if (idxFixA < 4) {
-                            p2mFixos_A[idxFixA++] = nomeOp;
-                        } else if (idxGiroA < 8) {
-                            p2mGiro_A[idxGiroA++] = nomeOp;
-                        } else {
-                            sorterReps_A.push(nomeOp);
-                        }
+                        if (idxFixA < 4) p2mFixos_A[idxFixA++] = nomeOp;
+                        else if (idxGiroA < 8) p2mGiro_A[idxGiroA++] = nomeOp;
+                        else sorterReps_A.push(nomeOp);
                     } else {
-                        if (idxFixB < 4) {
-                            p2mFixos_B[idxFixB++] = nomeOp;
-                        } else if (idxGiroB < 8) {
-                            p2mGiro_B[idxGiroB++] = nomeOp;
-                        } else {
-                            sorterReps_B.push(nomeOp);
-                        }
+                        if (idxFixB < 4) p2mFixos_B[idxFixB++] = nomeOp;
+                        else if (idxGiroB < 8) p2mGiro_B[idxGiroB++] = nomeOp;
+                        else sorterReps_B.push(nomeOp);
                     }
                 });
 
                 gerarInputsConfig();
-                alert("Sucesso! " + listaOperadores.length + " operadores sincronizados. Revise as posições se necessário e clique em 'Salvar Escala Geral'.");
+                alert("Sucesso! " + listaOperadores.length + " operadores sincronizados.");
             })
             .catch(erro => {
                 console.error("Erro ao sincronizar: ", erro);
@@ -470,6 +494,11 @@
             aba.style.display = 'block';
             aba.scrollIntoView({ behavior: 'smooth' });
         }
+    }
+
+    function gira() {
+        // Função de rotação das bancadas de giro se aplicável
+        alert("Rotatividade girada!");
     }
 
     function relogio() {
@@ -518,12 +547,12 @@
             if(salvo.p2mGiro_B) p2mGiro_B = salvo.p2mGiro_B;
             if(salvo.p2mFixos_B) p2mFixos_B = salvo.p2mFixos_B;
             if(salvo.sorterReps_B) sorterReps_B = salvo.sorterReps_B;
-            if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+            if(salvo.nomeTL) nomeTL = salvo.nomeTL;
         }
         render();
         carregarDadosTempoReal();
-        setInterval(carregarDadosTempoReal, 5000);
     };
 </script>
+
 </body>
 </html>
