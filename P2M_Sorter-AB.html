@@ -214,37 +214,7 @@
     </div>
 </div>
 
-<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
-
-<div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#23285c; font-size:16px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas A & B)</h3>
-    
-    <div class="config-tl-section">
-        <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
-        <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder="Digite o nome do TL">
-    </div>
-
-    <div class="config-grid-container">
-        <div class="config-col-linha">
-            <h4 style="margin:0 0 12px 0; color:#23285c; font-size:13px;">Escala - Linha A</h4>
-            <div class="config-grid" id="inputs-linha-A"></div>
-            <div class="config-group" style="margin-top: 15px;">
-                <label>Colaboradores do Sorter A (Um nome por linha)</label>
-                <textarea id="in-sorter-reps-A" placeholder="Digite os nomes aqui..."></textarea>
-            </div>
-        </div>
-        <div class="config-col-linha">
-            <h4 style="margin:0 0 12px 0; color:#23285c; font-size:13px;">Escala - Linha B</h4>
-            <div class="config-grid" id="inputs-linha-B"></div>
-            <div class="config-group" style="margin-top: 15px;">
-                <label>Colaboradores do Sorter B (Um nome por linha)</label>
-                <textarea id="in-sorter-reps-B" placeholder="Digite os nomes aqui..."></textarea>
-            </div>
-        </div>
-    </div>
-
-    <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
-    <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
+<button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
 </div>
 
 <script>
@@ -258,6 +228,8 @@
 
     let nomeTL = "";
     let dadosOperacionais = {}; 
+
+    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbxdgcyi3Nh8bpnauxu5WttBvbYLwPmQ_p9sqM2CNopzbyfx46LVjzUYfYgXOFu9_DMG/exec";
 
     function atualizarCardComTooltip(cardId, tooltipId, nomeColaborador) {
         const cardEl = document.getElementById(cardId);
@@ -307,35 +279,40 @@
     }
 
     function render() {
-        document.getElementById('nome-tl-display').innerText = nomeTL || "---";
+        // Se houver elemento de display do TL na tela principal
+        const tlDisplay = document.getElementById('nome-tl-display');
+        if (tlDisplay) tlDisplay.innerText = nomeTL || "---";
 
         const idsGiroA = ['e1', 'e2', 'e3', 'e4', 'e5', 'd7', 'd6', 'd5'];
         idsGiroA.forEach((pos, index) => {
-            document.getElementById(`p2m-A-${pos}`).innerText = p2mGiro_A[index] || "---";
+            const el = document.getElementById(`p2m-A-${pos}`);
+            if (el) el.innerText = p2mGiro_A[index] || "---";
             atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mGiro_A[index]);
         });
 
         const idsFixosA = ['pesca', 'cat1', 'cat2', 'cat3'];
         idsFixosA.forEach((pos, index) => {
-            document.getElementById(`p2m-A-${pos}`).innerText = p2mFixos_A[index] || "---";
+            const el = document.getElementById(`p2m-A-${pos}`);
+            if (el) el.innerText = p2mFixos_A[index] || "---";
             atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mFixos_A[index]);
         });
 
-        // Linha B - Giro
         const idsGiroB = ['e1', 'e2', 'e3', 'e4', 'e5', 'd7', 'd6', 'd5'];
         idsGiroB.forEach((pos, index) => {
-            document.getElementById(`p2m-B-${pos}`).innerText = p2mGiro_B[index] || "---";
+            const el = document.getElementById(`p2m-B-${pos}`);
+            if (el) el.innerText = p2mGiro_B[index] || "---";
             atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mGiro_B[index]);
         });
 
         const idsFixosB = ['pesca', 'cat1', 'cat2', 'cat3'];
         idsFixosB.forEach((pos, index) => {
-            document.getElementById(`p2m-B-${pos}`).innerText = p2mFixos_B[index] || "---";
+            const el = document.getElementById(`p2m-B-${pos}`);
+            if (el) el.innerText = p2mFixos_B[index] || "---";
             atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mFixos_B[index]);
         });
 
         const renderSorterReps = (reps) => {
-            if (reps.length === 0 || (reps.length === 1 && reps[0] === "")) return '';
+            if (!reps || reps.length === 0 || (reps.length === 1 && reps[0] === "")) return '';
             return reps.map(nome => {
                 const dados = dadosOperacionais[nome.trim().toUpperCase()];
                 const ociStr = dados && dados.ociosidade !== undefined ? String(dados.ociosidade).trim() : "0";
@@ -362,15 +339,10 @@
             }).join('');
         };
 
-        document.getElementById('lista-reps-sorter-A').innerHTML = renderSorterReps(sorterReps_A);
-        document.getElementById('lista-reps-sorter-B').innerHTML = renderSorterReps(sorterReps_B);
-    }
-
-    function gira() {
-        p2mGiro_A.unshift(p2mGiro_A.pop());
-        p2mGiro_B.unshift(p2mGiro_B.pop());
-        render();
-        salvarNoLocalStorage();
+        const sorterAEl = document.getElementById('lista-reps-sorter-A');
+        const sorterBEl = document.getElementById('lista-reps-sorter-B');
+        if (sorterAEl) sorterAEl.innerHTML = renderSorterReps(sorterReps_A);
+        if (sorterBEl) sorterBEl.innerHTML = renderSorterReps(sorterReps_B);
     }
 
     function gerarInputsConfig() {
@@ -393,6 +365,73 @@
         for(let i = 0; i < 8; i++) containerB.innerHTML += `<div class="config-group"><label>${rotulosGiro[i]}</label><input type="text" id="in-B-giro-${i}" value="${p2mGiro_B[i] || ''}"></div>`;
     }
 
+    function sincronizarEquipeDoDia() {
+        var tlLdap = document.getElementById('inputTlLdap').value.trim();
+        
+        if (!tlLdap) {
+            alert("Por favor, digite o seu LDAP.");
+            return;
+        }
+
+        const urlAppScript = URL_API_GOOGLE + "?tl=" + encodeURIComponent(tlLdap);
+        alert("Buscando equipe para o LDAP: " + tlLdap + "...");
+
+        fetch(urlAppScript)
+            .then(response => response.json())
+            .then(listaOperadores => {
+                if (!listaOperadores || listaOperadores.length === 0) {
+                    alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
+                    return;
+                }
+
+                nomeTL = tlLdap.toUpperCase();
+                document.getElementById('in-nome-tl').value = nomeTL;
+
+                // Limpa arrays antes de preencher
+                p2mFixos_A = Array(4).fill("");
+                p2mGiro_A = Array(8).fill("");
+                sorterReps_A = [];
+
+                p2mFixos_B = Array(4).fill("");
+                p2mGiro_B = Array(8).fill("");
+                sorterReps_B = [];
+
+                let idxFixA = 0, idxGiroA = 0, idxSortA = 0;
+                let idxFixB = 0, idxGiroB = 0, idxSortB = 0;
+
+                listaOperadores.forEach((op, idx) => {
+                    let nomeOp = op.meli_user || op.colaborador || "";
+                    if (!nomeOp) return;
+
+                    // Distribui alternadamente entre Linha A e Linha B
+                    if (idx % 2 === 0) {
+                        if (idxFixA < 4) {
+                            p2mFixos_A[idxFixA++] = nomeOp;
+                        } else if (idxGiroA < 8) {
+                            p2mGiro_A[idxGiroA++] = nomeOp;
+                        } else {
+                            sorterReps_A.push(nomeOp);
+                        }
+                    } else {
+                        if (idxFixB < 4) {
+                            p2mFixos_B[idxFixB++] = nomeOp;
+                        } else if (idxGiroB < 8) {
+                            p2mGiro_B[idxGiroB++] = nomeOp;
+                        } else {
+                            sorterReps_B.push(nomeOp);
+                        }
+                    }
+                });
+
+                gerarInputsConfig();
+                alert("Sucesso! " + listaOperadores.length + " operadores sincronizados. Revise as posições se necessário e clique em 'Salvar Escala Geral'.");
+            })
+            .catch(erro => {
+                console.error("Erro ao sincronizar: ", erro);
+                alert("Erro de conexão com o Apps Script.");
+            });
+    }
+
     function salvarConfig() {
         nomeTL = document.getElementById('in-nome-tl').value;
 
@@ -411,6 +450,7 @@
         render();
         salvarNoLocalStorage();
         toggleConfig();
+        alert("Escala salva com sucesso!");
     }
 
     function salvarNoLocalStorage() {
@@ -432,42 +472,29 @@
         }
     }
 
-    function resetarPainel() {
-        if(confirm("Deseja limpar as escalas e resetar o painel?")) {
-            p2mGiro_A = Array(8).fill("");
-            p2mFixos_A = Array(4).fill("");
-            sorterReps_A = [];
-            p2mGiro_B = Array(8).fill("");
-            p2mFixos_B = Array(4).fill("");
-            sorterReps_B = [];
-            nomeTL = "";
-            localStorage.removeItem('meli_p2m_sorter_AB_save');
-            render();
-            toggleConfig();
-        }
-    }
-
     function relogio() {
         setInterval(() => {
             const agora = new Date();
-            document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
+            const relogioEl = document.getElementById('relogio');
+            if (relogioEl) {
+                relogioEl.innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
+            }
         }, 1000);
     }
-
-    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbxdgcyi3Nh8bpnauxu5WttBvbYLwPmQ_p9sqM2CNopzbyfx46LVjzUYfYgXOFu9_DMG/exec";
 
     function carregarDadosTempoReal() {
         fetch(URL_API_GOOGLE)
             .then(response => response.json())
             .then(registros => {
                 if (registros && registros.length > 0) {
-                    if (registros[0].team_leader) {
+                    if (registros[0].team_leader && !nomeTL) {
                         nomeTL = registros[0].team_leader;
                     }
                     
                     registros.forEach(reg => {
-                        if (reg.colaborador) {
-                            const nomeUpper = reg.colaborador.trim().toUpperCase();
+                        let nomeCol = reg.colaborador || reg.meli_user;
+                        if (nomeCol) {
+                            const nomeUpper = nomeCol.trim().toUpperCase();
                             dadosOperacionais[nomeUpper] = {
                                 produtividade: reg.produtividade !== undefined ? parseFloat(reg.produtividade) : undefined,
                                 ociosidade: reg.ociosidade !== undefined ? reg.ociosidade : 0
