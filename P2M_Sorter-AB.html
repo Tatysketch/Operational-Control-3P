@@ -244,7 +244,6 @@
     </div>
 
     <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
-    <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
 </div>
 
 <script>
@@ -460,11 +459,19 @@
             .then(response => response.json())
             .then(registros => {
                 if (registros && registros.length > 0) {
-                    if (registros[0].team_leader) {
-                        nomeTL = registros[0].team_leader;
+                    const registrosFiltrados = registros.filter(reg => {
+                        const tlMatch = !nomeTL || !reg.team_leader || reg.team_leader.trim().toUpperCase() === nomeTL.trim().toUpperCase();
+                        const setorMatch = !reg.setor || ['P2M', 'SORTER', 'P2M E SORTER'].includes(String(reg.setor).trim().toUpperCase());
+                        return tlMatch && setorMatch;
+                    });
+
+                    const dadosAlvo = registrosFiltrados.length > 0 ? registrosFiltrados : registros;
+
+                    if (dadosAlvo[0].team_leader && !nomeTL) {
+                        nomeTL = dadosAlvo[0].team_leader;
                     }
                     
-                    registros.forEach(reg => {
+                    dadosAlvo.forEach(reg => {
                         if (reg.colaborador) {
                             const nomeUpper = reg.colaborador.trim().toUpperCase();
                             dadosOperacionais[nomeUpper] = {
