@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Controle Operacional - 3P</title>
+    <title>Controle Operacional - 3P (Check-in C & D)</title>
     <meta name="viewport" content="width=1024">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
@@ -29,6 +29,7 @@
         .bolinha-amarela { background: #f1c40f; }
         .bolinha-vermelha { background: #c0392b; }
         .card-ch { border-left: 6px solid #2d3277; }
+        
         .config-section { background: #eef2f7; border: 2px dashed #2d3277; border-radius: 8px; padding: 15px; margin-top: 20px; display: none; width: 1360px; }
         .config-grid-container { display: flex; gap: 20px; }
         .config-col-linha { flex: 1; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
@@ -38,9 +39,9 @@
         .config-group input { padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px; }
         .config-tl-section { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
         .btn-toggle-config { background: #666; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 12px; }
-        .btn-sincronizar { background: #2980b9; color: white; border: none; padding: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-bottom: 10px; width: 100%; text-transform: uppercase; font-size: 12px; }
         .btn-salvar { background: #27ae60; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 14px;}
-        .btn-reset { background: #c0392b; color: white; border: none; padding: 8px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 5px; width: 100%; text-transform: uppercase; font-size: 11px;}
+        
+        .sync-box { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
@@ -48,11 +49,11 @@
 <div class="painel">
     <div class="header-container">
         <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
-        <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P</h1></div>
+        <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P (Check-in C & D)</h1></div>
     </div>
 
     <div class="info-topo">
-        <div>TEAM LEADER:    <span class="tl-nome" id="nome-tl-display">---</span></div>
+        <div>TEAM LEADER: <span class="tl-nome" id="nome-tl-display">---</span></div>
         <div id="relogio">--/--/---- | --:--:--</div>
     </div>
 
@@ -154,6 +155,8 @@
     let escalaD = Array(18).fill(null);
     let nomeTL = "";
 
+    const URL_API_GOOGLE = "https://script.google.com/macros/s/SEU_ID_DE_DEPLOY_AQUI/exec";
+
     function classeProdutividade(val) {
         if (val === undefined || val === null || val === "") return "bolinha-amarela";
         let num = parseFloat(val);
@@ -181,7 +184,6 @@
             let colC = escalaC[i];
             let colD = escalaD[i];
 
-            // Renderiza Linha C
             let elC = document.getElementById(`ch-C-${i}`);
             if (elC) {
                 if (colC && colC.nome) {
@@ -199,7 +201,6 @@
                 }
             }
 
-            // Renderiza Linha D
             let elD = document.getElementById(`ch-D-${i}`);
             if (elD) {
                 if (colD && colD.nome) {
@@ -264,12 +265,12 @@
         render();
 
         localStorage.setItem(
-            'meli_checkin_duplo_save',
+            'meli_checkin_cd_save',
             JSON.stringify({ escalaC, escalaD, nomeTL })
         );
 
         toggleConfig();
-        alert("Escala do Check-in salva com sucesso!");
+        alert("Escala do Check-in C & D salva com sucesso!");
     }
 
     function toggleConfig() {
@@ -292,118 +293,74 @@
     }
 
     function sincronizarEquipeDoDia() {
-    var tlLdap = document.getElementById('inputTlLdap').value.trim();
-    
-    if (!tlLdap) {
-        alert("Por favor, digite o seu LDAP.");
-        return;
-    }
-
-    const urlAppScript = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbzpnbPQL7wOs5pgqtZxgEjCDVcpTyvE2FksIXYRxnJKDczrj5HCVzicBZMkwdaheS8/exec" + encodeURIComponent(tlLdap);
-
-    alert("Buscando equipe para o LDAP: " + tlLdap + "...");
-
-    fetch(urlAppScript)
-        .then(response => response.json())
-        .then(listaOperadores => {
-            if (!listaOperadores || listaOperadores.length === 0) {
-                alert("Nenhum operador encontrado para este LDAP na extração de hoje.");
-                return;
-            }
-
-            nomeTL = tlLdap.toUpperCase();
-            document.getElementById('in-nome-tl').value = nomeTL;
-
-            escalaC = Array(18).fill(null);
-            escalaD = Array(18).fill(null);
-
-            let indexC = 1;
-            let indexD = 1;
-
-            listaOperadores.forEach((op, idx) => {
-                let dadosOp = {
-                    nome: op.meli_user,
-                    produtividade: op.produtividade || '-',
-                    ociosidade: op.ociosidade || '-'
-                };
-
-                if (idx % 2 === 0) {
-                    if (indexC <= 17) {
-                        escalaC[indexC] = dadosOp;
-                        indexC++;
-                    }
-                } else {
-                    if (indexD <= 17) {
-                        escalaD[indexD] = dadosOp;
-                        indexD++;
-                    }
-                }
-            });
-
-            gerarInputsConfig();
-            alert("Sucesso! " + listaOperadores.length + " operadores sincronizados. Revise as posições se necessário e clique em 'Salvar Escala no Painel'.");
-        })
-        .catch(erro => {
-            console.error("Erro ao sincronizar: ", erro);
-            alert("Erro de conexão com o Apps Script. Verifique se o Web App está publicado para 'Qualquer pessoa'.");
-        });
-}
-
-const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycbygAM9GtWx02JEQDKIzx7zEdVYsMkOzggq-iAzhBaZLkset4pFdvXrRCz8Tc6er-4il/exec";
-
-function carregarDadosTempoReal() {
-    fetch(URL_API_GOOGLE)
-    .then(response => response.json())
-    .then(registros => {
-        if(registros && registros.length > 0) {
-            if(registros[0].team_leader && !nomeTL) {
-                nomeTL = registros[0].team_leader;
-            }
-
-            registros.forEach(item => {
-                let nomeMeli = (item.meli_user || "").trim().toLowerCase();
-                if(!nomeMeli) return;
-
-                let pVal = (item.produtividade !== "" && item.produtividade !== undefined && item.produtividade !== null) ? item.produtividade : ((item.process_duration !== "" && item.process_duration !== undefined && item.process_duration !== null) ? item.process_duration : '-');
-                let oVal = (item.ociosidade !== "" && item.ociosidade !== undefined && item.ociosidade !== null) ? item.ociosidade : ((item.idle_time !== "" && item.idle_time !== undefined && item.idle_time !== null) ? item.idle_time : '-');
-
-                for(let i = 1; i <= 17; i++) {
-                    if(escalaC[i] && escalaC[i].nome && escalaC[i].nome.trim().toLowerCase() === nomeMeli) {
-                        escalaC[i].produtividade = pVal;
-                        escalaC[i].ociosidade = oVal;
-                    }
-                    if(escalaD[i] && escalaD[i].nome && escalaD[i].nome.trim().toLowerCase() === nomeMeli) {
-                        escalaD[i].produtividade = pVal;
-                        escalaD[i].ociosidade = oVal;
-                    }
-                }
-            });
-
-            render();
+        var tlLdap = document.getElementById('inputTlLdap').value.trim();
+        
+        if (!tlLdap) {
+            alert("Por favor, digite o seu LDAP.");
+            return;
         }
-    })
-    .catch(erro => console.error("Erro na sincronização dos dados:", erro));
-}
 
-window.onload = () => {
-    iniciarRelogio();
-
-    const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
-    if(salvo) {
-        if(salvo.escalaC) escalaC = salvo.escalaC;
-        if(salvo.escalaD) escalaD = salvo.escalaD;
-        if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+        nomeTL = tlLdap;
+        carregarDadosTempoReal();
     }
 
-    render();
-    carregarDadosTempoReal();
-    
-    setInterval(carregarDadosTempoReal, 25000);
-};
-</script>
+    function carregarDadosTempoReal() {
+        let urlBusca = URL_API_GOOGLE + "?";
+        let params = [];
 
-</body>
-</html>
+        if (nomeTL) {
+            params.push("tl=" + encodeURIComponent(nomeTL));
+        }
+        
+        let processoAtual = "Check In"; 
+        params.push("processo=" + encodeURIComponent(processoAtual));
+        urlBusca += params.join("&");
+
+        fetch(urlBusca)
+        .then(response => response.json())
+        .then(registros => {
+            if (registros && registros.length > 0) {
+                registros.forEach(item => {
+                    let nomeMeli = (item.meli_user || "").trim().toLowerCase();
+                    if (!nomeMeli) return;
+
+                    let pVal = item.produtividade !== "" ? item.produtividade : '-';
+                    let oVal = item.ociosidade !== "" ? item.ociosidade : '-';
+
+                    for (let i = 1; i <= 17; i++) {
+                        if (typeof escalaC !== 'undefined' && escalaC[i] && escalaC[i].nome && escalaC[i].nome.trim().toLowerCase() === nomeMeli) {
+                            escalaC[i].produtividade = pVal;
+                            escalaC[i].ociosidade = oVal;
+                        }
+                        if (typeof escalaD !== 'undefined' && escalaD[i] && escalaD[i].nome && escalaD[i].nome.trim().toLowerCase() === nomeMeli) {
+                            escalaD[i].produtividade = pVal;
+                            escalaD[i].ociosidade = oVal;
+                        }
+                    }
+                });
+                
+                render();
+            }
+        })
+        .catch(erro => console.error("Erro na sincronização dos dados:", erro));
+    }
+
+    window.onload = () => {
+        iniciarRelogio();
+
+        const salvo = JSON.parse(localStorage.getItem('meli_checkin_cd_save'));
+        if(salvo) {
+            if(salvo.escalaC) escalaC = salvo.escalaC;
+            if(salvo.escalaD) escalaD = salvo.escalaD;
+            if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
+        }
+
+        render();
+        carregarDadosTempoReal();
+        
+        setInterval(carregarDadosTempoReal, 25000);
+    };
+</script>
 
 </body>
 </html>
