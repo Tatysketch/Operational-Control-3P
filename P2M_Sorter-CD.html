@@ -117,7 +117,7 @@
     <div class="header-container">
         <div class="header-left">
             <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
-            <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P</h1></div>
+            <div class="header-titles"><h1>CONTROLE OPERACIONAL - P2M & SORTER C/D</h1></div>
         </div>
         <div class="header-right">
             <div>TL: <span class="tl-nome" id="nome-tl-display"></span></div>
@@ -244,7 +244,6 @@
     </div>
 
     <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
-    <button class="btn-reset" onclick="resetarPainel()">⚠️ Resetar Painel para o Padrão</button>
 </div>
 
 <script>
@@ -494,7 +493,7 @@
         }
         render();
         carregarDadosTempoReal();
-        setInterval(carregarDadosTempoReal, 5000);
+        setInterval(carregarDadosTempoReal, 25000);
     };
 </script>
 </body>
