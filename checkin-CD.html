@@ -10,38 +10,48 @@
         .header-container { display: flex; align-items: center; justify-content: center; gap: 20px; border-bottom: 2px solid #2d3277; padding-bottom: 12px; margin-bottom: 15px; }
         .logo-meli { width: 50px; height: auto; }
         .header-titles h1 { color: #2d3277; margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-        .info-topo { display: flex; justify-content: space-between; color: #444; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
-        .tl-nome { color: #2d3277; border-bottom: 2px solid #ffdb00; text-transform: uppercase; }
-        #relogio { background: #2d3277; color: white; padding: 3px 10px; border-radius: 4px; font-family: monospace; }
+        .info-topo { display: flex; justify-content: space-between; color: #444; font-size: 14px; font-weight: 600; margin-bottom: 15px; align-items: center; }
+        .tl-nome { color: #2d3277; border-bottom: 2px solid #ffdb00; text-transform: uppercase; cursor: pointer; }
+        .tl-nome:hover { opacity: 0.8; }
+        #relogio { background: #000000; color: white; padding: 3px 10px; border-radius: 4px; font-family: monospace; }
         .container-linhas { display: flex; justify-content: space-between; gap: 30px; width: 100%; }
         .modulo-linha { flex: 1; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; }
         .titulo-linha { text-align: center; color: white; background: #2d3277; margin: -15px -15px 15px -15px; padding: 10px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 800; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
         .layout-esteira-unica { display: flex; justify-content: center; position: relative; gap: 15px; }
         .lado-esquerdo { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         .lado-direito { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-        .esteira-central { width: 45px; background: #111111; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; letter-spacing: 2px; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); min-height: 340px; }
-        .card { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 6px 10px; min-height: 34px; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .card-info { font-size: 9px; color: #666; font-weight: 800; margin-bottom: 1px; text-transform: uppercase; display: flex; justify-content: space-between; }
-        .nome-colaborador { color: #1a1a1a; font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: space-between; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .info-metricas { display: flex; gap: 8px; font-size: 10px; font-weight: normal; }
-        .status-bolinha { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; margin-right: 6px; }
+        .esteira-central { width: 45px; background: #111111; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; letter-spacing: 2px; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); }
+        
+        .card { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 5px 10px; height: 32px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+        .card-ch { border-left: 5px solid #2d3277; }
+        
+        .card-conteudo-linha { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .info-esquerda-card { display: flex; align-items: center; gap: 8px; overflow: hidden; }
+        
+        .badge-bancada {
+            background-color: #eef2f7;
+            color: #2d3277;
+            border: 1px solid #d0d7de;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            width: 70px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .nome-colaborador { color: #1a1a1a; font-size: 12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; padding: 2px 4px; border-radius: 3px; transition: background 0.2s; }
+        .nome-colaborador:hover { background-color: #eef2f7; color: #2d3277; }
+        
+        .info-metricas { display: flex; gap: 8px; font-size: 10px; color: #555; font-weight: 600; flex-shrink: 0; }
+        
+        .status-bolinha { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; margin-right: 4px; }
         .bolinha-verde { background: #27ae60; }
         .bolinha-amarela { background: #f1c40f; }
         .bolinha-vermelha { background: #c0392b; }
-        .card-ch { border-left: 6px solid #2d3277; }
-        
-        .config-section { background: #eef2f7; border: 2px dashed #2d3277; border-radius: 8px; padding: 15px; margin-top: 20px; display: none; width: 1360px; }
-        .config-grid-container { display: flex; gap: 20px; }
-        .config-col-linha { flex: 1; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
-        .config-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-        .config-group { display: flex; flex-direction: column; }
-        .config-group label { font-size: 10px; font-weight: bold; color: #333; margin-bottom: 2px; }
-        .config-group input { padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px; }
-        .config-tl-section { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
-        .btn-toggle-config { background: #666; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 12px; }
-        .btn-salvar { background: #27ae60; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 14px;}
-        
-        .sync-box { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
@@ -49,9 +59,7 @@
 <div class="painel">
     <div class="header-container">
         <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
-        <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P (Check-in C & D)</h1></div>
-    </div>
-
+        <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P </h1></div>
     <div class="info-topo">
         <div>TEAM LEADER: <span class="tl-nome" id="nome-tl-display">---</span></div>
         <div id="relogio">--/--/---- | --:--:--</div>
@@ -63,26 +71,26 @@
             <div class="titulo-linha">Linha C</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 10</span></div><div class="nome-colaborador" id="ch-C-10">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 11</span></div><div class="nome-colaborador" id="ch-C-11">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 12</span></div><div class="nome-colaborador" id="ch-C-12">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 13</span></div><div class="nome-colaborador" id="ch-C-13">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 14</span></div><div class="nome-colaborador" id="ch-C-14">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 15</span></div><div class="nome-colaborador" id="ch-C-15">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 16</span></div><div class="nome-colaborador" id="ch-C-16">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 17</span></div><div class="nome-colaborador" id="ch-C-17">---</div></div>
-                </div>
+                    <div class="card card-ch" id="card-C-10"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">10</span><span class="nome-colaborador" id="ch-C-10">---</span></div><span class="info-metricas" id="met-C-10"></span></div></div>
+                    <div class="card card-ch" id="card-C-11"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">11</span><span class="nome-colaborador" id="ch-C-11">---</span></div><span class="info-metricas" id="met-C-11"></span></div></div>
+                    <div class="card card-ch" id="card-C-12"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">12</span><span class="nome-colaborador" id="ch-C-12">---</span></div><span class="info-metricas" id="met-C-12"></span></div></div>
+                    <div class="card card-ch" id="card-C-13"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">13</span><span class="nome-colaborador" id="ch-C-13">---</span></div><span class="info-metricas" id="met-C-13"></span></div></div>
+                    <div class="card card-ch" id="card-C-14"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">14</span><span class="nome-colaborador" id="ch-C-14">---</span></div><span class="info-metricas" id="met-C-14"></span></div></div>
+                    <div class="card card-ch" id="card-C-15"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">15</span><span class="nome-colaborador" id="ch-C-15">---</span></div><span class="info-metricas" id="met-C-15"></span></div></div>
+                    <div class="card card-ch" id="card-C-16"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">16</span><span class="nome-colaborador" id="ch-C-16">---</span></div><span class="info-metricas" id="met-C-16"></span></div></div>
+                    <div class="card card-ch" id="card-C-17"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">17</span><span class="nome-colaborador" id="ch-C-17">---</span></div><span class="info-metricas" id="met-C-17"></span></div></div>
+            </div>
                 <div class="esteira-central">ESTEIRA</div>
                 <div class="lado-direito">
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 01</span></div><div class="nome-colaborador" id="ch-C-1">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 02</span></div><div class="nome-colaborador" id="ch-C-2">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 03</span></div><div class="nome-colaborador" id="ch-C-3">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 04</span></div><div class="nome-colaborador" id="ch-C-4">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 05</span></div><div class="nome-colaborador" id="ch-C-5">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 06</span></div><div class="nome-colaborador" id="ch-C-6">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 07</span></div><div class="nome-colaborador" id="ch-C-7">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 08</span></div><div class="nome-colaborador" id="ch-C-8">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 09</span></div><div class="nome-colaborador" id="ch-C-9">---</div></div>
+                    <div class="card card-ch" id="card-C-1"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">01</span><span class="nome-colaborador" id="ch-C-1">---</span></div><span class="info-metricas" id="met-C-1"></span></div></div>
+                    <div class="card card-ch" id="card-C-2"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">02</span><span class="nome-colaborador" id="ch-C-2">---</span></div><span class="info-metricas" id="met-C-2"></span></div></div>
+                    <div class="card card-ch" id="card-C-3"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">03</span><span class="nome-colaborador" id="ch-C-3">---</span></div><span class="info-metricas" id="met-C-3"></span></div></div>
+                    <div class="card card-ch" id="card-C-4"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">04</span><span class="nome-colaborador" id="ch-C-4">---</span></div><span class="info-metricas" id="met-C-4"></span></div></div>
+                    <div class="card card-ch" id="card-C-5"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">05</span><span class="nome-colaborador" id="ch-C-5">---</span></div><span class="info-metricas" id="met-C-5"></span></div></div>
+                    <div class="card card-ch" id="card-C-6"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">06</span><span class="nome-colaborador" id="ch-C-6">---</span></div><span class="info-metricas" id="met-C-6"></span></div></div>
+                    <div class="card card-ch" id="card-C-7"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">07</span><span class="nome-colaborador" id="ch-C-7">---</span></div><span class="info-metricas" id="met-C-7"></span></div></div>
+                    <div class="card card-ch" id="card-C-8"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">08</span><span class="nome-colaborador" id="ch-C-8">---</span></div><span class="info-metricas" id="met-C-8"></span></div></div>
+                    <div class="card card-ch" id="card-C-9"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">09</span><span class="nome-colaborador" id="ch-C-9">---</span></div><span class="info-metricas" id="met-C-9"></span></div></div>
                 </div>
             </div>
         </div>
@@ -92,26 +100,28 @@
             <div class="titulo-linha">Linha D</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 10</span></div><div class="nome-colaborador" id="ch-D-10">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 11</span></div><div class="nome-colaborador" id="ch-D-11">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 12</span></div><div class="nome-colaborador" id="ch-D-12">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 13</span></div><div class="nome-colaborador" id="ch-D-13">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 14</span></div><div class="nome-colaborador" id="ch-D-14">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 15</span></div><div class="nome-colaborador" id="ch-D-15">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 16</span></div><div class="nome-colaborador" id="ch-D-16">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 17</span></div><div class="nome-colaborador" id="ch-D-17">---</div></div>
+                    <div class="card card-ch" id="card-D-10"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">10</span><span class="nome-colaborador" id="ch-D-10">---</span></div><span class="info-metricas" id="met-D-10"></span></div></div>
+                    <div class="card card-ch" id="card-D-11"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">11</span><span class="nome-colaborador" id="ch-D-11">---</span></div><span class="info-metricas" id="met-D-11"></span></div></div>
+                    <div class="card card-ch" id="card-D-12"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">12</span><span class="nome-colaborador" id="ch-D-12">---</span></div><span class="info-metricas" id="met-D-12"></span></div></div>
+                    <div class="card card-ch" id="card-D-13"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">13</span><span class="nome-colaborador" id="ch-D-13">---</span></div><span class="info-metricas" id="met-D-13"></span></div></div>
+                    <div class="card card-ch" id="card-D-14"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">14</span><span class="nome-colaborador" id="ch-D-14">---</span></div><span class="info-metricas" id="met-D-14"></span></div></div>
+                    <div class="card card-ch" id="card-D-15"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">15</span><span class="nome-colaborador" id="ch-D-15">---</span></div><span class="info-metricas" id="met-D-15"></span></div></div>
+                    <div class="card card-ch" id="card-D-16"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">16</span><span class="nome-colaborador" id="ch-D-16">---</span></div><span class="info-metricas" id="met-D-16"></span></div></div>
+                    <div class="card card-ch" id="card-D-17"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">17</span><span class="nome-colaborador" id="ch-D-17">---</span></div><span class="info-metricas" id="met-D-17"></span></div></div>
+                    <div class="card card-ch" id="card-D-18"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">18</span><span class="nome-colaborador" id="ch-D-18">---</span></div><span class="info-metricas" id="met-D-18"></span></div></div>
+                </div>
                 </div>
                 <div class="esteira-central">ESTEIRA</div>
                 <div class="lado-direito">
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 01</span></div><div class="nome-colaborador" id="ch-D-1">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 02</span></div><div class="nome-colaborador" id="ch-D-2">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 03</span></div><div class="nome-colaborador" id="ch-D-3">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 04</span></div><div class="nome-colaborador" id="ch-D-4">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 05</span></div><div class="nome-colaborador" id="ch-D-5">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 06</span></div><div class="nome-colaborador" id="ch-D-6">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 07</span></div><div class="nome-colaborador" id="ch-D-7">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 08</span></div><div class="nome-colaborador" id="ch-D-8">---</div></div>
-                    <div class="card card-ch"><div class="card-info"><span>Bancada 09</span></div><div class="nome-colaborador" id="ch-D-9">---</div></div>
+                    <div class="card card-ch" id="card-D-1"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">01</span><span class="nome-colaborador" id="ch-D-1">---</span></div><span class="info-metricas" id="met-D-1"></span></div></div>
+                    <div class="card card-ch" id="card-D-2"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">02</span><span class="nome-colaborador" id="ch-D-2">---</span></div><span class="info-metricas" id="met-D-2"></span></div></div>
+                    <div class="card card-ch" id="card-D-3"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">03</span><span class="nome-colaborador" id="ch-D-3">---</span></div><span class="info-metricas" id="met-D-3"></span></div></div>
+                    <div class="card card-ch" id="card-D-4"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">04</span><span class="nome-colaborador" id="ch-D-4">---</span></div><span class="info-metricas" id="met-D-4"></span></div></div>
+                    <div class="card card-ch" id="card-D-5"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">05</span><span class="nome-colaborador" id="ch-D-5">---</span></div><span class="info-metricas" id="met-D-5"></span></div></div>
+                    <div class="card card-ch" id="card-D-6"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">06</span><span class="nome-colaborador" id="ch-D-6">---</span></div><span class="info-metricas" id="met-D-6"></span></div></div>
+                    <div class="card card-ch" id="card-D-7"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">07</span><span class="nome-colaborador" id="ch-D-7">---</span></div><span class="info-metricas" id="met-D-7"></span></div></div>
+                    <div class="card card-ch" id="card-D-8"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">08</span><span class="nome-colaborador" id="ch-D-8">---</span></div><span class="info-metricas" id="met-D-8"></span></div></div>
+                    <div class="card card-ch" id="card-D-9"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">09</span><span class="nome-colaborador" id="ch-D-9">---</span></div><span class="info-metricas" id="met-D-9"></span></div></div>
                 </div>
             </div>
         </div>
