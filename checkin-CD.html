@@ -52,16 +52,29 @@
         .bolinha-verde { background: #27ae60; }
         .bolinha-amarela { background: #f1c40f; }
         .bolinha-vermelha { background: #c0392b; }
+
+        .btn-toggle-config { margin-top: 15px; padding: 8px 15px; background: #2d3277; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .config-section { display: none; margin-top: 15px; background: white; padding: 20px; border-radius: 8px; border: 1px solid #ccc; width: 1400px; box-sizing: border-box; }
+        .sync-box { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+        .config-tl-section { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+        .config-grid-container { display: flex; gap: 20px; }
+        .config-col-linha { flex: 1; }
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .config-group { display: flex; flex-direction: column; font-size: 11px; font-weight: bold; }
+        .config-group input { padding: 4px; border: 1px solid #ccc; border-radius: 3px; font-size: 11px; }
+        .btn-salvar { margin-top: 15px; padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="painel">
     <div class="header-container">
-        <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli">
-        <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P </h1></div>
+        <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.21.22/mercadolibre/logo__small.png" class="logo-meli" alt="Logo Mercado Livre">
+        <div class="header-titles"><h1>CONTROLE OPERACIONAL - 3P</h1></div>
+    </div>
+    
     <div class="info-topo">
-        <div>TEAM LEADER: <span class="tl-nome" id="nome-tl-display">---</span></div>
+        <div>TEAM LEADER: <span class="tl-nome" id="nome-tl-display" onclick="toggleConfig()">---</span></div>
         <div id="relogio">--/--/---- | --:--:--</div>
     </div>
 
@@ -71,26 +84,38 @@
             <div class="titulo-linha">Linha C</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <div class="card card-ch" id="card-C-10"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">10</span><span class="nome-colaborador" id="ch-C-10">---</span></div><span class="info-metricas" id="met-C-10"></span></div></div>
-                    <div class="card card-ch" id="card-C-11"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">11</span><span class="nome-colaborador" id="ch-C-11">---</span></div><span class="info-metricas" id="met-C-11"></span></div></div>
-                    <div class="card card-ch" id="card-C-12"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">12</span><span class="nome-colaborador" id="ch-C-12">---</span></div><span class="info-metricas" id="met-C-12"></span></div></div>
-                    <div class="card card-ch" id="card-C-13"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">13</span><span class="nome-colaborador" id="ch-C-13">---</span></div><span class="info-metricas" id="met-C-13"></span></div></div>
-                    <div class="card card-ch" id="card-C-14"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">14</span><span class="nome-colaborador" id="ch-C-14">---</span></div><span class="info-metricas" id="met-C-14"></span></div></div>
-                    <div class="card card-ch" id="card-C-15"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">15</span><span class="nome-colaborador" id="ch-C-15">---</span></div><span class="info-metricas" id="met-C-15"></span></div></div>
-                    <div class="card card-ch" id="card-C-16"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">16</span><span class="nome-colaborador" id="ch-C-16">---</span></div><span class="info-metricas" id="met-C-16"></span></div></div>
-                    <div class="card card-ch" id="card-C-17"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">17</span><span class="nome-colaborador" id="ch-C-17">---</span></div><span class="info-metricas" id="met-C-17"></span></div></div>
-            </div>
+                    <script>
+                        for(let i=10; i<=17; i++) {
+                            document.write(`
+                            <div class="card card-ch" id="card-C-${i}">
+                                <div class="card-conteudo-linha">
+                                    <div class="info-esquerda-card">
+                                        <span class="badge-bancada">${i}</span>
+                                        <span class="nome-colaborador" id="ch-C-${i}">---</span>
+                                    </div>
+                                    <span class="info-metricas" id="met-C-${i}"></span>
+                                </div>
+                            </div>`);
+                        }
+                    </script>
+                </div>
                 <div class="esteira-central">ESTEIRA</div>
                 <div class="lado-direito">
-                    <div class="card card-ch" id="card-C-1"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">01</span><span class="nome-colaborador" id="ch-C-1">---</span></div><span class="info-metricas" id="met-C-1"></span></div></div>
-                    <div class="card card-ch" id="card-C-2"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">02</span><span class="nome-colaborador" id="ch-C-2">---</span></div><span class="info-metricas" id="met-C-2"></span></div></div>
-                    <div class="card card-ch" id="card-C-3"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">03</span><span class="nome-colaborador" id="ch-C-3">---</span></div><span class="info-metricas" id="met-C-3"></span></div></div>
-                    <div class="card card-ch" id="card-C-4"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">04</span><span class="nome-colaborador" id="ch-C-4">---</span></div><span class="info-metricas" id="met-C-4"></span></div></div>
-                    <div class="card card-ch" id="card-C-5"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">05</span><span class="nome-colaborador" id="ch-C-5">---</span></div><span class="info-metricas" id="met-C-5"></span></div></div>
-                    <div class="card card-ch" id="card-C-6"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">06</span><span class="nome-colaborador" id="ch-C-6">---</span></div><span class="info-metricas" id="met-C-6"></span></div></div>
-                    <div class="card card-ch" id="card-C-7"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">07</span><span class="nome-colaborador" id="ch-C-7">---</span></div><span class="info-metricas" id="met-C-7"></span></div></div>
-                    <div class="card card-ch" id="card-C-8"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">08</span><span class="nome-colaborador" id="ch-C-8">---</span></div><span class="info-metricas" id="met-C-8"></span></div></div>
-                    <div class="card card-ch" id="card-C-9"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">09</span><span class="nome-colaborador" id="ch-C-9">---</span></div><span class="info-metricas" id="met-C-9"></span></div></div>
+                    <script>
+                        for(let i=1; i<=9; i++) {
+                            let labelNum = i < 10 ? '0' + i : i;
+                            document.write(`
+                            <div class="card card-ch" id="card-C-${i}">
+                                <div class="card-conteudo-linha">
+                                    <div class="info-esquerda-card">
+                                        <span class="badge-bancada">${labelNum}</span>
+                                        <span class="nome-colaborador" id="ch-C-${i}">---</span>
+                                    </div>
+                                    <span class="info-metricas" id="met-C-${i}"></span>
+                                </div>
+                            </div>`);
+                        }
+                    </script>
                 </div>
             </div>
         </div>
@@ -100,28 +125,38 @@
             <div class="titulo-linha">Linha D</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <div class="card card-ch" id="card-D-10"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">10</span><span class="nome-colaborador" id="ch-D-10">---</span></div><span class="info-metricas" id="met-D-10"></span></div></div>
-                    <div class="card card-ch" id="card-D-11"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">11</span><span class="nome-colaborador" id="ch-D-11">---</span></div><span class="info-metricas" id="met-D-11"></span></div></div>
-                    <div class="card card-ch" id="card-D-12"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">12</span><span class="nome-colaborador" id="ch-D-12">---</span></div><span class="info-metricas" id="met-D-12"></span></div></div>
-                    <div class="card card-ch" id="card-D-13"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">13</span><span class="nome-colaborador" id="ch-D-13">---</span></div><span class="info-metricas" id="met-D-13"></span></div></div>
-                    <div class="card card-ch" id="card-D-14"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">14</span><span class="nome-colaborador" id="ch-D-14">---</span></div><span class="info-metricas" id="met-D-14"></span></div></div>
-                    <div class="card card-ch" id="card-D-15"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">15</span><span class="nome-colaborador" id="ch-D-15">---</span></div><span class="info-metricas" id="met-D-15"></span></div></div>
-                    <div class="card card-ch" id="card-D-16"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">16</span><span class="nome-colaborador" id="ch-D-16">---</span></div><span class="info-metricas" id="met-D-16"></span></div></div>
-                    <div class="card card-ch" id="card-D-17"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">17</span><span class="nome-colaborador" id="ch-D-17">---</span></div><span class="info-metricas" id="met-D-17"></span></div></div>
-                    <div class="card card-ch" id="card-D-18"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">18</span><span class="nome-colaborador" id="ch-D-18">---</span></div><span class="info-metricas" id="met-D-18"></span></div></div>
-                </div>
+                    <script>
+                        for(let i=10; i<=18; i++) {
+                            document.write(`
+                            <div class="card card-ch" id="card-D-${i}">
+                                <div class="card-conteudo-linha">
+                                    <div class="info-esquerda-card">
+                                        <span class="badge-bancada">${i}</span>
+                                        <span class="nome-colaborador" id="ch-D-${i}">---</span>
+                                    </div>
+                                    <span class="info-metricas" id="met-D-${i}"></span>
+                                </div>
+                            </div>`);
+                        }
+                    </script>
                 </div>
                 <div class="esteira-central">ESTEIRA</div>
                 <div class="lado-direito">
-                    <div class="card card-ch" id="card-D-1"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">01</span><span class="nome-colaborador" id="ch-D-1">---</span></div><span class="info-metricas" id="met-D-1"></span></div></div>
-                    <div class="card card-ch" id="card-D-2"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">02</span><span class="nome-colaborador" id="ch-D-2">---</span></div><span class="info-metricas" id="met-D-2"></span></div></div>
-                    <div class="card card-ch" id="card-D-3"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">03</span><span class="nome-colaborador" id="ch-D-3">---</span></div><span class="info-metricas" id="met-D-3"></span></div></div>
-                    <div class="card card-ch" id="card-D-4"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">04</span><span class="nome-colaborador" id="ch-D-4">---</span></div><span class="info-metricas" id="met-D-4"></span></div></div>
-                    <div class="card card-ch" id="card-D-5"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">05</span><span class="nome-colaborador" id="ch-D-5">---</span></div><span class="info-metricas" id="met-D-5"></span></div></div>
-                    <div class="card card-ch" id="card-D-6"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">06</span><span class="nome-colaborador" id="ch-D-6">---</span></div><span class="info-metricas" id="met-D-6"></span></div></div>
-                    <div class="card card-ch" id="card-D-7"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">07</span><span class="nome-colaborador" id="ch-D-7">---</span></div><span class="info-metricas" id="met-D-7"></span></div></div>
-                    <div class="card card-ch" id="card-D-8"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">08</span><span class="nome-colaborador" id="ch-D-8">---</span></div><span class="info-metricas" id="met-D-8"></span></div></div>
-                    <div class="card card-ch" id="card-D-9"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">09</span><span class="nome-colaborador" id="ch-D-9">---</span></div><span class="info-metricas" id="met-D-9"></span></div></div>
+                    <script>
+                        for(let i=1; i<=9; i++) {
+                            let labelNum = i < 10 ? '0' + i : i;
+                            document.write(`
+                            <div class="card card-ch" id="card-D-${i}">
+                                <div class="card-conteudo-linha">
+                                    <div class="info-esquerda-card">
+                                        <span class="badge-bancada">${labelNum}</span>
+                                        <span class="nome-colaborador" id="ch-D-${i}">---</span>
+                                    </div>
+                                    <span class="info-metricas" id="met-D-${i}"></span>
+                                </div>
+                            </div>`);
+                        }
+                    </script>
                 </div>
             </div>
         </div>
@@ -142,17 +177,17 @@
     </div>
 
     <div class="config-tl-section">
-        <label style="font-size: 11px; font-weight: bold; color: #333;">Responsável pelo Turno (Team Leader):</label>
+        <label style="font-size: 11px; font-weight: bold; color: #333;" for="in-nome-tl">Responsável pelo Turno (Team Leader):</label>
         <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;" placeholder="Nome do TL">
     </div>
 
     <div class="config-grid-container">
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha C</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha C (1 a 17)</h4>
             <div class="config-grid" id="inputs-linha-C"></div>
         </div>
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha D</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha D (1 a 18)</h4>
             <div class="config-grid" id="inputs-linha-D"></div>
         </div>
     </div>
@@ -162,7 +197,7 @@
 
 <script>
     let escalaC = Array(18).fill(null);
-    let escalaD = Array(18).fill(null);
+    let escalaD = Array(19).fill(null);
     let nomeTL = "";
 
     const URL_API_GOOGLE = "https://script.google.com/macros/s/SEU_ID_DE_DEPLOY_AQUI/exec";
@@ -177,21 +212,11 @@
         return "bolinha-vermelha"; 
     }
 
-    function classeOciosidade(val) {
-        if (val === undefined || val === null || val === "") return "bolinha-amarela";
-        let num = parseFloat(val);
-        if (isNaN(num)) return "bolinha-amarela";
-        
-        if (num <= 10) return "bolinha-verde";
-        if (num >= 12) return "bolinha-vermelha";
-        return "bolinha-amarela";
-    }
-
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
 
-        for(let i = 1; i <= 17; i++) {
-            let colC = escalaC[i];
+        for(let i = 1; i <= 18; i++) {
+            let colC = i <= 17 ? escalaC[i] : null;
             let colD = escalaD[i];
 
             let elC = document.getElementById(`ch-C-${i}`);
@@ -201,13 +226,17 @@
                     elC.innerHTML = `
                         <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
                             <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colC.nome}
-                        </span>
-                        <span class="info-metricas">
-                            <span title="Produtividade">P: ${colC.produtividade ?? '-'}</span>
-                            <span title="Ociosidade">O: ${colC.ociosidade ?? '-'}</span>
                         </span>`;
+                    let metC = document.getElementById(`met-C-${i}`);
+                    if(metC) {
+                        metC.innerHTML = `
+                            <span title="Produtividade">P: ${colC.produtividade ?? '-'}</span>
+                            <span title="Ociosidade">O: ${colC.ociosidade ?? '-'}</span>`;
+                    }
                 } else {
                     elC.innerHTML = "---";
+                    let metC = document.getElementById(`met-C-${i}`);
+                    if(metC) metC.innerHTML = "";
                 }
             }
 
@@ -218,13 +247,17 @@
                     elD.innerHTML = `
                         <span style="display:flex; align-items:center; overflow:hidden; text-overflow:ellipsis;">
                             <span class="status-bolinha ${pClass}" title="Produtividade"></span>${colD.nome}
-                        </span>
-                        <span class="info-metricas">
-                            <span title="Produtividade">P: ${colD.produtividade ?? '-'}</span>
-                            <span title="Ociosidade">O: ${colD.ociosidade ?? '-'}</span>
                         </span>`;
+                    let metD = document.getElementById(`met-D-${i}`);
+                    if(metD) {
+                        metD.innerHTML = `
+                            <span title="Produtividade">P: ${colD.produtividade ?? '-'}</span>
+                            <span title="Ociosidade">O: ${colD.ociosidade ?? '-'}</span>`;
+                    }
                 } else {
                     elD.innerHTML = "---";
+                    let metD = document.getElementById(`met-D-${i}`);
+                    if(metD) metD.innerHTML = "";
                 }
             }
         }
@@ -241,34 +274,36 @@
         for(let i = 1; i <= 17; i++) {
             containerC.innerHTML += `
             <div class="config-group">
-                <label>Bancada ${i}</label>
+                <label for="in-C-${i}">Bancada ${i}</label>
                 <input type="text" id="in-C-${i}" value="${escalaC[i]?.nome || ''}">
             </div>`;
+        }
 
+        for(let i = 1; i <= 18; i++) {
             containerD.innerHTML += `
             <div class="config-group">
-                <label>Bancada ${i}</label>
+                <label for="in-D-${i}">Bancada ${i}</label>
                 <input type="text" id="in-D-${i}" value="${escalaD[i]?.nome || ''}">
             </div>`;
         }
     }
 
     function salvarConfig() {
-        nomeTL = document.getElementById('in-nome-tl').value;
+        nomeTL = document.getElementById('in-nome-tl').value.trim();
 
         for(let i = 1; i <= 17; i++) {
             let inputC = document.getElementById(`in-C-${i}`);
-            let inputD = document.getElementById(`in-D-${i}`);
-
-            if (inputC && inputD) {
-                let nomeC = inputC.value.trim();
-                let nomeD = inputD.value.trim();
-
+            if (inputC) {
                 if(!escalaC[i]) escalaC[i] = {};
-                escalaC[i].nome = nomeC;
+                escalaC[i].nome = inputC.value.trim();
+            }
+        }
 
+        for(let i = 1; i <= 18; i++) {
+            let inputD = document.getElementById(`in-D-${i}`);
+            if (inputD) {
                 if(!escalaD[i]) escalaD[i] = {};
-                escalaD[i].nome = nomeD;
+                escalaD[i].nome = inputD.value.trim();
             }
         }
 
@@ -322,8 +357,7 @@
             params.push("tl=" + encodeURIComponent(nomeTL));
         }
         
-        let processoAtual = "Check In"; 
-        params.push("processo=" + encodeURIComponent(processoAtual));
+        params.push("processo=" + encodeURIComponent("Check In"));
         urlBusca += params.join("&");
 
         fetch(urlBusca)
@@ -337,12 +371,12 @@
                     let pVal = item.produtividade !== "" ? item.produtividade : '-';
                     let oVal = item.ociosidade !== "" ? item.ociosidade : '-';
 
-                    for (let i = 1; i <= 17; i++) {
-                        if (typeof escalaC !== 'undefined' && escalaC[i] && escalaC[i].nome && escalaC[i].nome.trim().toLowerCase() === nomeMeli) {
+                    for (let i = 1; i <= 18; i++) {
+                        if (i <= 17 && escalaC[i] && escalaC[i].nome && escalaC[i].nome.trim().toLowerCase() === nomeMeli) {
                             escalaC[i].produtividade = pVal;
                             escalaC[i].ociosidade = oVal;
                         }
-                        if (typeof escalaD !== 'undefined' && escalaD[i] && escalaD[i].nome && escalaD[i].nome.trim().toLowerCase() === nomeMeli) {
+                        if (escalaD[i] && escalaD[i].nome && escalaD[i].nome.trim().toLowerCase() === nomeMeli) {
                             escalaD[i].produtividade = pVal;
                             escalaD[i].ociosidade = oVal;
                         }
