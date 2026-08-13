@@ -31,15 +31,31 @@
         .sorter-container { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; display: flex; flex-direction: column; padding: 10px; margin-top: 5px; }
         .sorter-titulo { text-align: left; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; }
         .sorter-grid-canalizacoes { display: grid; grid-template-columns: repeat(11, 1fr); gap: 6px; margin-bottom: 10px; }
-        .canalizacao-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 10px; font-weight: 700; color: #475569; text-align: center; padding: 8px 0; text-transform: uppercase; }
+        .canalizacao-item { border: 1px solid #e2e8f0; border-radius: 4px; font-size: 10px; font-weight: 700; text-align: center; padding: 8px 0; text-transform: uppercase; }
+
+        .canal-rj02 { background-color: #fff0eb; border-color: #ffd8cc; color: #c94a29; }
+        .canal-pe01 { background-color: #e6fcf5; border-color: #c3fae8; color: #0ca678; }
+        .canal-ba01 { background-color: #f3f0ff; border-color: #e5dbff; color: #7950f2; }
+        .canal-sc02 { background-color: #fff4e6; border-color: #ffe8cc; color: #f76707; }
+        .canal-pr01 { background-color: #e7f5ff; border-color: #d0ebff; color: #1c7ed6; }
+        .canal-sp02 { background-color: #fff5f5; border-color: #ffe3e3; color: #e03131; }
+        .canal-sp04 { background-color: #ebfbee; border-color: #d3f9d8; color: #2b8a3e; }
+        .canal-sp11 { background-color: #fff0f6; border-color: #ffdeeb; color: #c2255c; }
+        .canal-sp15 { background-color: #e7f5ff; border-color: #d0ebff; color: #1864ab; }
+        .canal-sp19 { background-color: #f8f0fc; border-color: #f3d9fa; color: #ae3ec9; }
+        .canal-sp25 { background-color: #e8f4fd; border-color: #d2e8fc; color: #1098ad; }
 
         .sorter-reps-container { display: flex; flex-direction: column; gap: 4px; }
         .rep-sorter-item { background: white; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.02); position: relative; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
 
         .card { background: white; border: 1px solid #e2e8f0; border-radius: 5px; padding: 6px 10px; min-height: 42px; display: flex; flex-direction: column; justify-content: center; position: relative; cursor: pointer; }
         .card-topo-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-        .card-info { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; }
+        .card-info { font-size: 9px; font-weight: 700; text-transform: uppercase; }
         
+        .info-gm { color: #64748b; }
+        .info-pesca { color: #ef4444; }
+        .info-cat { color: #b45309; }
+
         .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
         .card-gm { border-left: 5px solid #2d3277; }
@@ -132,35 +148,37 @@
             <div class="conteudo-linha-flex">
                 <div class="layout-esteira-unica">
                     <div class="lado-esquerdo">
-                        <div class="card card-gm" id="card-p2m-A-e1"><div class="card-info">Bancada 01 (GM)</div><div class="nome-colaborador" id="p2m-A-e1">---</div><div class="tooltip-info" id="tip-p2m-A-e1"></div></div>
-                        <div class="card card-gm" id="card-p2m-A-e2"><div class="card-info">Bancada 02 (GM)</div><div class="nome-colaborador" id="p2m-A-e2">---</div><div class="tooltip-info" id="tip-p2m-A-e2"></div></div>
-                        <div class="card card-gm" id="card-p2m-A-e3"><div class="card-info">Bancada 03 (GM)</div><div class="nome-colaborador" id="p2m-A-e3">---</div><div class="tooltip-info" id="tip-p2m-A-e3"></div></div>
-                        <div class="card card-gm" id="card-p2m-A-e4"><div class="card-info">Bancada 04 (GM)</div><div class="nome-colaborador" id="p2m-A-e4">---</div><div class="tooltip-info" id="tip-p2m-A-e4"></div></div>
-                        <div class="card card-gm" id="card-p2m-A-e5"><div class="card-info">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-A-e5">---</div><div class="tooltip-info" id="tip-p2m-A-e5"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e1"><div class="card-info info-gm">Bancada 01 (GM)</div><div class="nome-colaborador" id="p2m-A-e1">---</div><div class="tooltip-info" id="tip-p2m-A-e1"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e2"><div class="card-info info-gm">Bancada 02 (GM)</div><div class="nome-colaborador" id="p2m-A-e2">---</div><div class="tooltip-info" id="tip-p2m-A-e2"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e3"><div class="card-info info-gm">Bancada 03 (GM)</div><div class="nome-colaborador" id="p2m-A-e3">---</div><div class="tooltip-info" id="tip-p2m-A-e3"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e4"><div class="card-info info-gm">Bancada 04 (GM)</div><div class="nome-colaborador" id="p2m-A-e4">---</div><div class="tooltip-info" id="tip-p2m-A-e4"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e5"><div class="card-info info-gm">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-A-e5">---</div><div class="tooltip-info" id="tip-p2m-A-e5"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-e5"><div class="card-info info-gm">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-A-e5">---</div><div class="tooltip-info" id="tip-p2m-A-e5"></div></div>
+
                     </div>
                     
                     <div class="esteira-central">P2M</div>
                     
                     <div class="lado-direito">
-                        <div class="card card-pesca" id="card-p2m-A-pesca"><span class="tag-fixo-pesca"></span><div class="card-info">Bancada 01 (PESCA)</div><div class="nome-colaborador" id="p2m-A-pesca">---</div><div class="tooltip-info" id="tip-p2m-A-pesca"></div></div>
-                        <div class="card card-cat" id="card-p2m-A-cat1"><div class="card-info">Bancada 02 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div><div class="tooltip-info" id="tip-p2m-A-cat1"></div></div>
-                        <div class="card card-cat" id="card-p2m-A-cat2"><div class="card-info">Bancada 03 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div><div class="tooltip-info" id="tip-p2m-A-cat2"></div></div>
-                        <div class="card card-cat" id="card-p2m-A-cat3"><div class="card-info">Bancada 04 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat3">---</div><div class="cat-tag">HV / SANEANTES</div><div class="tooltip-info" id="tip-p2m-A-cat3"></div></div>
-                        <div class="card card-gm" id="card-p2m-A-d5"><div class="card-info">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-A-d5">---</div><div class="tooltip-info" id="tip-p2m-A-d5"></div></div>
-                        <div class="card card-gm" id="card-p2m-A-d6"><div class="card-info">Bancada 06 (GM)</div><div class="nome-colaborador" id="p2m-A-d6">---</div><div class="tooltip-info" id="tip-p2m-A-d6"></div></div>
-                        <div class="card card-gm" id="card-p2m-A-d7"><div class="card-info">Bancada 07 (GM)</div><div class="nome-colaborador" id="p2m-A-d7">---</div><div class="tooltip-info" id="tip-p2m-A-d7"></div></div>
+                        <div class="card card-pesca" id="card-p2m-A-pesca"><span class="tag-fixo-pesca"></span><div class="card-info info-pesca">PESCA</div><div class="nome-colaborador" id="p2m-A-pesca">---</div><div class="tooltip-info" id="tip-p2m-A-pesca"></div></div>
+                        <div class="card card-cat" id="card-p2m-A-cat1"><div class="card-info info-cat">Bancada 02 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div><div class="tooltip-info" id="tip-p2m-A-cat1"></div></div>
+                        <div class="card card-cat" id="card-p2m-A-cat2"><div class="card-info info-cat">Bancada 03 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div><div class="tooltip-info" id="tip-p2m-A-cat2"></div></div>
+                        <div class="card card-cat" id="card-p2m-A-cat3"><div class="card-info info-cat">Bancada 04 (CAT)</div><div class="nome-colaborador" id="p2m-A-cat3">---</div><div class="cat-tag">HV / SANEANTES</div><div class="tooltip-info" id="tip-p2m-A-cat3"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-d5"><div class="card-info info-gm">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-A-d5">---</div><div class="tooltip-info" id="tip-p2m-A-d5"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-d6"><div class="card-info info-gm">Bancada 06 (GM)</div><div class="nome-colaborador" id="p2m-A-d6">---</div><div class="tooltip-info" id="tip-p2m-A-d6"></div></div>
+                        <div class="card card-gm" id="card-p2m-A-d7"><div class="card-info info-gm">Bancada 07 (GM)</div><div class="nome-colaborador" id="p2m-A-d7">---</div><div class="tooltip-info" id="tip-p2m-A-d7"></div></div>
                     </div>
                 </div>
                 
                 <div class="sorter-container">
-                    <div class="sorter-titulo">Sorter A</div>
+                    <div class="sorter-titulo">Sorter </div>
                     <div class="sorter-grid-canalizacoes">
-                        <div class="canalizacao-item">RJ02</div><div class="canalizacao-item">PE01</div>
-                        <div class="canalizacao-item">BA01</div><div class="canalizacao-item">SC02</div>
-                        <div class="canalizacao-item">PR01</div><div class="canalizacao-item">SP02</div>
-                        <div class="canalizacao-item">SP04</div><div class="canalizacao-item">SP11</div>
-                        <div class="canalizacao-item">SP15</div><div class="canalizacao-item">SP19</div>
-                        <div class="canalizacao-item">SP25</div>
+                        <div class="canalizacao-item canal-rj02">RJ02</div><div class="canalizacao-item canal-pe01">PE01</div>
+                        <div class="canalizacao-item canal-ba01">BA01</div><div class="canalizacao-item canal-sc02">SC02</div>
+                        <div class="canalizacao-item canal-pr01">PR01</div><div class="canalizacao-item canal-sp02">SP02</div>
+                        <div class="canalizacao-item canal-sp04">SP04</div><div class="canalizacao-item canal-sp11">SP11</div>
+                        <div class="canalizacao-item canal-sp15">SP15</div><div class="canalizacao-item canal-sp19">SP19</div>
+                        <div class="canalizacao-item canal-sp25">SP25</div>
                     </div>
                     <div class="sorter-reps-container" id="lista-reps-sorter-A"></div>
                 </div>
@@ -173,35 +191,35 @@
             <div class="conteudo-linha-flex">
                 <div class="layout-esteira-unica">
                     <div class="lado-esquerdo">
-                        <div class="card card-gm" id="card-p2m-B-e1"><div class="card-info">Bancada 01 (GM)</div><div class="nome-colaborador" id="p2m-B-e1">---</div><div class="tooltip-info" id="tip-p2m-B-e1"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-e2"><div class="card-info">Bancada 02 (GM)</div><div class="nome-colaborador" id="p2m-B-e2">---</div><div class="tooltip-info" id="tip-p2m-B-e2"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-e3"><div class="card-info">Bancada 03 (GM)</div><div class="nome-colaborador" id="p2m-B-e3">---</div><div class="tooltip-info" id="tip-p2m-B-e3"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-e4"><div class="card-info">Bancada 04 (GM)</div><div class="nome-colaborador" id="p2m-B-e4">---</div><div class="tooltip-info" id="tip-p2m-B-e4"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-e5"><div class="card-info">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-B-e5">---</div><div class="tooltip-info" id="tip-p2m-B-e5"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e1"><div class="card-info info-gm">Bancada 01 (GM)</div><div class="nome-colaborador" id="p2m-B-e1">---</div><div class="tooltip-info" id="tip-p2m-B-e1"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e2"><div class="card-info info-gm">Bancada 02 (GM)</div><div class="nome-colaborador" id="p2m-B-e2">---</div><div class="tooltip-info" id="tip-p2m-B-e2"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e3"><div class="card-info info-gm">Bancada 03 (GM)</div><div class="nome-colaborador" id="p2m-B-e3">---</div><div class="tooltip-info" id="tip-p2m-B-e3"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e4"><div class="card-info info-gm">Bancada 04 (GM)</div><div class="nome-colaborador" id="p2m-B-e4">---</div><div class="tooltip-info" id="tip-p2m-B-e4"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-e5"><div class="card-info info-gm">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-B-e5">---</div><div class="tooltip-info" id="tip-p2m-B-e5"></div></div>
                     </div>
                     
                     <div class="esteira-central">P2M</div>
                     
                     <div class="lado-direito">
-                        <div class="card card-pesca" id="card-p2m-B-pesca"><span class="tag-fixo-pesca"></span><div class="card-info">Bancada 01 (PESCA)</div><div class="nome-colaborador" id="p2m-B-pesca">---</div><div class="tooltip-info" id="tip-p2m-B-pesca"></div></div>
-                        <div class="card card-cat" id="card-p2m-B-cat1"><div class="card-info">Bancada 02 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div><div class="tooltip-info" id="tip-p2m-B-cat1"></div></div>
-                        <div class="card card-cat" id="card-p2m-B-cat2"><div class="card-info">Bancada 03 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div><div class="tooltip-info" id="tip-p2m-B-cat2"></div></div>
-                        <div class="card card-cat" id="card-p2m-B-cat3"><div class="card-info">Bancada 04 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat3">---</div><div class="cat-tag">HV / SANEANTES</div><div class="tooltip-info" id="tip-p2m-B-cat3"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-d5"><div class="card-info">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-B-d5">---</div><div class="tooltip-info" id="tip-p2m-B-d5"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-d6"><div class="card-info">Bancada 06 (GM)</div><div class="nome-colaborador" id="p2m-B-d6">---</div><div class="tooltip-info" id="tip-p2m-B-d6"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-d7"><div class="card-info">Bancada 07 (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div><div class="tooltip-info" id="tip-p2m-B-d7"></div></div>
+                        <div class="card card-pesca" id="card-p2m-B-pesca"><span class="tag-fixo-pesca"></span><div class="card-info info-pesca">PESCA</div><div class="nome-colaborador" id="p2m-B-pesca">---</div><div class="tooltip-info" id="tip-p2m-B-pesca"></div></div>
+                        <div class="card card-cat" id="card-p2m-B-cat1"><div class="card-info info-cat">Bancada 02 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag">ALIMENTO / SAÚDE</div><div class="tooltip-info" id="tip-p2m-B-cat1"></div></div>
+                        <div class="card card-cat" id="card-p2m-B-cat2"><div class="card-info info-cat">Bancada 03 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat2">---</div><div class="cat-tag">COSMÉTICO / MAPA</div><div class="tooltip-info" id="tip-p2m-B-cat2"></div></div>
+                        <div class="card card-cat" id="card-p2m-B-cat3"><div class="card-info info-cat">Bancada 04 (CAT)</div><div class="nome-colaborador" id="p2m-B-cat3">---</div><div class="cat-tag">HV / SANEANTES</div><div class="tooltip-info" id="tip-p2m-B-cat3"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d5"><div class="card-info info-gm">Bancada 05 (GM)</div><div class="nome-colaborador" id="p2m-B-d5">---</div><div class="tooltip-info" id="tip-p2m-B-d5"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d6"><div class="card-info info-gm">Bancada 06 (GM)</div><div class="nome-colaborador" id="p2m-B-d6">---</div><div class="tooltip-info" id="tip-p2m-B-d6"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d7"><div class="card-info info-gm">Bancada 07 (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div><div class="tooltip-info" id="tip-p2m-B-d7"></div></div>
                     </div>
                 </div>
                 
                 <div class="sorter-container">
-                    <div class="sorter-titulo">Sorter B</div>
+                    <div class="sorter-titulo">Sorter </div>
                     <div class="sorter-grid-canalizacoes">
-                        <div class="canalizacao-item">RJ02</div><div class="canalizacao-item">PE01</div>
-                        <div class="canalizacao-item">BA01</div><div class="canalizacao-item">SC02</div>
-                        <div class="canalizacao-item">PR01</div><div class="canalizacao-item">SP02</div>
-                        <div class="canalizacao-item">SP04</div><div class="canalizacao-item">SP11</div>
-                        <div class="canalizacao-item">SP15</div><div class="canalizacao-item">SP19</div>
-                        <div class="canalizacao-item">SP25</div>
+                        <div class="canalizacao-item canal-rj02">RJ02</div><div class="canalizacao-item canal-pe01">PE01</div>
+                        <div class="canalizacao-item canal-ba01">BA01</div><div class="canalizacao-item canal-sc02">SC02</div>
+                        <div class="canalizacao-item canal-pr01">PR01</div><div class="canalizacao-item canal-sp02">SP02</div>
+                        <div class="canalizacao-item canal-sp04">SP04</div><div class="canalizacao-item canal-sp11">SP11</div>
+                        <div class="canalizacao-item canal-sp15">SP15</div><div class="canalizacao-item canal-sp19">SP19</div>
+                        <div class="canalizacao-item canal-sp25">SP25</div>
                     </div>
                     <div class="sorter-reps-container" id="lista-reps-sorter-B"></div>
                 </div>
