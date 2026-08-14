@@ -21,8 +21,17 @@
         .lado-direito { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         .esteira-central { width: 45px; background: #111111; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; letter-spacing: 2px; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); min-height: 340px; }
         
-        .card { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 5px 10px; min-height: 30px; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+        .card { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 5px 10px; min-height: 30px; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: all 0.3s ease; }
         .card-ch { border-left: 5px solid #2d3277; }
+        
+        @keyframes piscarVermelho {
+            0% { background-color: white; border-color: #e0e0e0; }
+            50% { background-color: #fadbd8; border-color: #c0392b; box-shadow: 0 0 8px rgba(192, 57, 43, 0.6); }
+            100% { background-color: white; border-color: #e0e0e0; }
+        }
+        .piscar-alerta {
+            animation: piscarVermelho 1s infinite;
+        }
         
         .card-conteudo-linha { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .info-esquerda-card { display: flex; align-items: center; gap: 8px; overflow: hidden; }
@@ -174,6 +183,8 @@
     let nomeTL = "";
 
     const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbw1UmfTFvrGLLafPyY8MeocdGW_X-qQhq25ww3fljgC9aRvdMMCgYMny-r2vC75faqj/exec";
+    
+    const URL_API_PALETES = "COLE_AQUI_A_URL_DO_NOVO_APPS_SCRIPT_DE_PALETES";
 
     function classeProdutividade(val) {
         if (val === undefined || val === null || val === "") return "bolinha-amarela";
@@ -185,6 +196,26 @@
         return "bolinha-vermelha"; 
     }
 
+    function verificarEstouroTarget(colData, cardEl) {
+        if (!cardEl) return;
+        let temEstouro = false;
+
+        if (colData) {
+            if (colData.produtividade !== undefined && colData.produtividade !== '-' && colData.produtividade !== '') {
+                if (parseFloat(colData.produtividade) < 200) temEstouro = true;
+            }
+            if (colData.tempoPaleteMinutos !== undefined && colData.tempoPaleteMinutos !== '-' && colData.tempoPaleteMinutos !== '') {
+                if (parseFloat(colData.tempoPaleteMinutos) > 30) temEstouro = true;
+            }
+        }
+
+        if (temEstouro) {
+            cardEl.classList.add('piscar-alerta');
+        } else {
+            cardEl.classList.remove('piscar-alerta');
+        }
+    }
+
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
 
@@ -194,31 +225,45 @@
 
             let elA = document.getElementById(`ch-A-${i}`);
             let metA = document.getElementById(`met-A-${i}`);
+            let cardA = document.getElementById(`card-A-${i}`);
+            
             if (elA) {
                 if (colA && colA.nome) {
                     let pClass = classeProdutividade(colA.produtividade);
                     elA.innerHTML = `<span class="status-bolinha ${pClass}" title="Produtividade"></span>${colA.nome}`;
                     if(metA) {
-                        metA.innerHTML = `<span title="Produtividade">P: ${colA.produtividade ?? '-'}</span><span title="Ociosidade">O: ${colA.ociosidade ?? '-'}</span>`;
+                        let prodText = colA.produtividade ?? '-';
+                        let ociText = colA.ociosidade ?? '-';
+                        let paleteText = colA.tempoPalete ?? '-';
+                        metA.innerHTML = `<span title="Produtividade">P: ${prodText}</span> <span title="Ociosidade">O: ${ociText}</span> <span title="Tempo de Palete">⏱️ ${paleteText}</span>`;
                     }
+                    verificarEstouroTarget(colA, cardA);
                 } else {
                     elA.innerHTML = "---";
                     if(metA) metA.innerHTML = "";
+                    if(cardA) cardA.classList.remove('piscar-alerta');
                 }
             }
 
             let elB = document.getElementById(`ch-B-${i}`);
             let metB = document.getElementById(`met-B-${i}`);
+            let cardB = document.getElementById(`card-B-${i}`);
+            
             if (elB) {
                 if (colB && colB.nome) {
                     let pClass = classeProdutividade(colB.produtividade);
                     elB.innerHTML = `<span class="status-bolinha ${pClass}" title="Produtividade"></span>${colB.nome}`;
                     if(metB) {
-                        metB.innerHTML = `<span title="Produtividade">P: ${colB.produtividade ?? '-'}</span><span title="Ociosidade">O: ${colB.ociosidade ?? '-'}</span>`;
+                        let prodText = colB.produtividade ?? '-';
+                        let ociText = colB.ociosidade ?? '-';
+                        let paleteText = colB.tempoPalete ?? '-';
+                        metB.innerHTML = `<span title="Produtividade">P: ${prodText}</span> <span title="Ociosidade">O: ${ociText}</span> <span title="Tempo de Palete">⏱️ ${paleteText}</span>`;
                     }
+                    verificarEstouroTarget(colB, cardB);
                 } else {
                     elB.innerHTML = "---";
                     if(metB) metB.innerHTML = "";
+                    if(cardB) cardB.classList.remove('piscar-alerta');
                 }
             }
         }
@@ -306,6 +351,7 @@
 
         nomeTL = tlLdap;
         carregarDadosTempoReal();
+        carregarDadosPaletes();
     }
 
     function carregarDadosTempoReal() {
@@ -348,11 +394,39 @@
                         }
                     }
                 });
-                
                 render();
             }
         })
         .catch(erro => console.error("Erro na sincronização dos dados:", erro));
+    }
+
+    // Nova função para buscar os dados de paletes (stage_in) do Apps Script isolado
+    function carregarDadosPaletes() {
+        if (!URL_API_PALETES || URL_API_PALETES.includes("COLE_AQUI")) return;
+
+        fetch(URL_API_PALETES)
+        .then(response => response.json())
+        .then(dadosPaletes => {
+            // Espera-se um array ou objeto mapeando bancada/colaborador para o tempo do palete
+            if (dadosPaletes && Array.isArray(dadosPaletes)) {
+                dadosPaletes.forEach(p => {
+                    let bancadaNum = parseInt(p.bancada);
+                    let linhaStr = (p.linha || "").trim().toUpperCase(); // "A" ou "B"
+                    let tempoStr = p.tempo_palete || "0m";
+                    let tempoMin = parseFloat(p.tempo_minutos) || 0;
+
+                    if (linhaStr === "A" && escalaA[bancadaNum]) {
+                        escalaA[bancadaNum].tempoPalete = tempoStr;
+                        escalaA[bancadaNum].tempoPaleteMinutos = tempoMin;
+                    } else if (linhaStr === "B" && escalaB[bancadaNum]) {
+                        escalaB[bancadaNum].tempoPalete = tempoStr;
+                        escalaB[bancadaNum].tempoPaleteMinutos = tempoMin;
+                    }
+                });
+                render();
+            }
+        })
+        .catch(err => console.log("Aguardando conexão com o Apps Script de paletes:", err));
     }
 
     window.onload = () => {
@@ -367,8 +441,10 @@
 
         render();
         carregarDadosTempoReal();
+        carregarDadosPaletes();
         
         setInterval(carregarDadosTempoReal, 25000);
+        setInterval(carregarDadosPaletes, 30000);
     };
 </script>
 
