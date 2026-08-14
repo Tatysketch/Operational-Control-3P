@@ -33,17 +33,17 @@
         .sorter-grid-canalizacoes { display: grid; grid-template-columns: repeat(11, 1fr); gap: 6px; margin-bottom: 10px; }
         .canalizacao-item { border: 1px solid #e2e8f0; border-radius: 4px; font-size: 10px; font-weight: 700; text-align: center; padding: 8px 0; text-transform: uppercase; }
 
-        .canal-rj02 { background-color: #fffcfb; border-color: #fff3f0; color: #d65c3b; }
-        .canal-pe01 { background-color: #f7fee7; border-color: #ecfdf3; color: #16a34a; }
-        .canal-ba01 { background-color: #fdf4ff; border-color: #fae8ff; color: #8b5cf6; }
-        .canal-sc02 { background-color: #fffdf5; border-color: #fefce8; color: #d97706; }
-        .canal-pr01 { background-color: #f0fdf4; border-color: #f0f9ff; color: #0284c7; }
-        .canal-sp02 { background-color: #fff5f5; border-color: #fee2e2; color: #dc2626; }
-        .canal-sp04 { background-color: #f4fbf7; border-color: #e6fcf0; color: #15803d; }
-        .canal-sp11 { background-color: #fff1f8; border-color: #fce7f3; color: #db2777; }
-        .canal-sp15 { background-color: #f4f8fb; border-color: #e0f2fe; color: #0369a1; }
-        .canal-sp19 { background-color: #fcf8ff; border-color: #f3e8ff; color: #9333ea; }
-        .canal-sp25 { background-color: #f0fdf9; border-color: #ccfbf1; color: #0d9488; }
+        .canal-rj02 { background-color: #fffcfb; border-color: #fff3f0; color: #e08269; }
+        .canal-pe01 { background-color: #f7fee7; border-color: #ecfdf3; color: #4ade80; }
+        .canal-ba01 { background-color: #fdf4ff; border-color: #fae8ff; color: #a78bfa; }
+        .canal-sc02 { background-color: #fffdf5; border-color: #fefce8; color: #fbbf24; }
+        .canal-pr01 { background-color: #f0fdf4; border-color: #f0f9ff; color: #38bdf8; }
+        .canal-sp02 { background-color: #fff5f5; border-color: #fee2e2; color: #f87171; }
+        .canal-sp04 { background-color: #f4fbf7; border-color: #e6fcf0; color: #4ade80; }
+        .canal-sp11 { background-color: #fff1f8; border-color: #fce7f3; color: #f472b6; }
+        .canal-sp15 { background-color: #f4f8fb; border-color: #e0f2fe; color: #38bdf8; }
+        .canal-sp19 { background-color: #fcf8ff; border-color: #f3e8ff; color: #c084fc; }
+        .canal-sp25 { background-color: #f0fdf9; border-color: #ccfbf1; color: #2dd4bf; }
 
         .sorter-reps-container { display: flex; flex-direction: column; gap: 4px; }
         .rep-sorter-item { background: white; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.02); position: relative; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
@@ -64,25 +64,23 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
 
-        .num-gm { color: #2d3277; background: #f8fafc; border-color: #cbd5e1; }
-        .num-cat { color: #d97706; background: #fffbeb; border-color: #fde68a; }
-        .num-pesca { color: #ef4444; background: #fef2f2; border-color: #fecaca; }
-        .num-azul { color: #0284c7; background: #f0f9ff; border-color: #bae6fd; }
-
-        .card-topo-info { display: flex; align-items: center; margin-bottom: 2px; }
-        .card-info { font-size: 9px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; }
-        
-        .info-gm { color: #64748b; }
-        .info-pesca { color: #ef4444; }
-        .info-cat { color: #d97706; }
-
-        .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 27px; }
-        
-        .card-gm { border-left: 5px solid #2d3277; }
-        .card-cat { border-left: 5px solid #f59e0b; }
-        .card-pesca { border-left: 5px solid #fca5a5; background-color: #fffbfa; } /* Tom mais claro na pesca */
-        .tag-fixo-pesca { position: absolute; top: 4px; right: 6px; font-size: 7px; background: #ef4444; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
-        .cat-tag { font-size: 8px; color: #d97706; font-weight: 700; margin-top: 2px; text-transform: uppercase; opacity: 0.9; margin-left: 27px; }
+    .num-cat { color: #f59e0b; background: #fffbeb; border-color: #fef3c7; }
+    .num-pesca { color: #f87171; background: #fff5f5; border-color: #ffebe5; }
+    
+    .card-topo-info { display: flex; align-items: center; margin-bottom: 2px; }
+    .card-info { font-size: 9px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; }
+    
+    .info-gm { color: #64748b; }
+    .info-pesca { color: #f87171; }
+    .info-cat { color: #fbbf24; }
+    
+    .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 27px; }
+    
+    .card-gm { border-left: 5px solid #2d3277; }
+    .card-cat { border-left: 5px solid #fcd34d; }
+    .card-pesca { border-left: 5px solid #fca5a5; background-color: #fffcfb; }
+    .tag-fixo-pesca { position: absolute; top: 4px; right: 6px; font-size: 7px; background: #f87171; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
+    .cat-tag { font-size: 8px; color: #f59e0b; font-weight: 700; margin-top: 2px; text-transform: uppercase; opacity: 0.9; margin-left: 27px; }
 
         .status-bolinha { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
         .bolinha-verde { background-color: #10b981; }
@@ -224,9 +222,9 @@
                         <div class="card card-cat" id="card-p2m-B-cat1"><div class="card-info info-cat"><span class="card-num-box num-cat">01</span>ALIMENTO / SAÚDE</div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-B-cat1"></div></div>
                         <div class="card card-cat" id="card-p2m-B-cat2"><div class="card-info info-cat"><span class="card-num-box num-cat">02</span>COSMÉTICO / ANIMAL</div><div class="nome-colaborador" id="p2m-B-cat2">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-B-cat2"></div></div>
                         <div class="card card-cat" id="card-p2m-B-cat3"><div class="card-info info-cat"><span class="card-num-box num-cat">03</span>HV / SANEANTES</div><div class="nome-colaborador" id="p2m-B-cat3">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-B-cat3"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-d5"><div class="card-info info-gm"><span class="card-num-box num-azul">07</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d5">---</div><div class="tooltip-info" id="tip-p2m-B-d5"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d5"><div class="card-info info-gm"><span class="card-num-box num-azul">09</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d5">---</div><div class="tooltip-info" id="tip-p2m-B-d5"></div></div>
                         <div class="card card-gm" id="card-p2m-B-d6"><div class="card-info info-gm"><span class="card-num-box num-azul">08</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d6">---</div><div class="tooltip-info" id="tip-p2m-B-d6"></div></div>
-                        <div class="card card-gm" id="card-p2m-B-d7"><div class="card-info info-gm"><span class="card-num-box num-azul">09</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div><div class="tooltip-info" id="tip-p2m-B-d7"></div></div>
+                        <div class="card card-gm" id="card-p2m-B-d7"><div class="card-info info-gm"><span class="card-num-box num-azul">07</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div><div class="tooltip-info" id="tip-p2m-B-d7"></div></div>
                     </div>
                 </div>
                 
