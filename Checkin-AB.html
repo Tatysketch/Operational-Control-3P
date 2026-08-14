@@ -48,6 +48,7 @@
         .bolinha-amarela { background: #f1c40f; }
         .bolinha-vermelha { background: #c0392b; }
 
+        /* Estilo Exato do Submenu Flutuante (Tooltip) conforme a imagem *
         .card .tooltip-submenu {
             visibility: hidden;
             opacity: 0;
@@ -55,16 +56,16 @@
             bottom: 115%;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #2d3277;
+            background-color: #1b1e2b; /* Tom escuro exato conforme solicitado/referência */
             color: #fff;
             text-align: left;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 6px;
             font-size: 11px;
             font-weight: 500;
             white-space: nowrap;
             z-index: 100;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
             transition: opacity 0.2s ease, visibility 0.2s ease;
             pointer-events: none;
         }
@@ -76,13 +77,21 @@
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
-            border-color: #2d3277 transparent transparent transparent;
+            border-color: #1b1e2b transparent transparent transparent;
         }
         .card:hover .tooltip-submenu {
             visibility: visible;
             opacity: 1;
         }
-        .tooltip-linha-info { display: flex; gap: 10px; margin-bottom: 2px; }
+        .tooltip-titulo-nome { 
+            font-weight: bold; 
+            font-size: 12px; 
+            margin-bottom: 6px; 
+            padding-bottom: 4px; 
+            border-bottom: 1px solid rgba(255,255,255,0.15); 
+            letter-spacing: 0.3px;
+        }
+        .tooltip-linha-info { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 3px; }
         .tooltip-linha-info:last-child { margin-bottom: 0; }
 
         .config-section { background: #eef2f7; border: 2px dashed #2d3277; border-radius: 8px; padding: 15px; margin-top: 20px; display: none; width: 1360px; }
@@ -260,23 +269,20 @@
                     let pClass = classeProdutividade(colA.produtividade);
                     elA.innerHTML = `<span class="status-bolinha ${pClass}" title="Produtividade"></span>${colA.nome}`;
                     
-                    let prodText = colA.produtividade ?? '-';
-                    let ociText = colA.ociosidade ?? '-';
+                    let prodText = (colA.produtividade !== undefined && colA.produtividade !== '' && colA.produtividade !== null) ? colA.produtividade : '---';
+                    let ociText = (colA.ociosidade !== undefined && colA.ociosidade !== '' && colA.ociosidade !== null) ? colA.ociosidade : '---';
+                    let ociClass = classeProdutividade(colA.ociosidade);
                     let paleteText = colA.tempoPalete ?? '-';
 
-                    // Visível diretamente no card (com o reloginho ⏱️ e o tempo do palete atualizado sistemicamente)
                     if(metA) {
                         metA.innerHTML = `<span title="Tempo de Palete">⏱️ ${paleteText}</span>`;
                     }
                     
-                    // Detalhes completos guardados no submenu flutuante (hover)
                     if(tipA) {
                         tipA.innerHTML = `
-                            <div class="tooltip-linha-info"><strong>Bancada:</strong> ${i < 10 ? '0' + i : i} (Linha A)</div>
-                            <div class="tooltip-linha-info"><strong>Colaborador:</strong> ${colA.nome}</div>
-                            <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
-                            <div class="tooltip-linha-info"><strong>Ociosidade:</strong> ${ociText}</div>
-                            <div class="tooltip-linha-info"><strong>⏱️ Tempo do Palete:</strong> ${paleteText}</div>
+                            <div class="tooltip-titulo-nome">${colA.nome}</div>
+                            <div class="tooltip-linha-info"><span>Produtividade:</span> <span>${prodText}</span></div>
+                            <div class="tooltip-linha-info"><span>Ociosidade:</span> <span><span class="status-bolinha ${ociClass}"></span>${ociText}</span></div>
                         `;
                     }
                     verificarEstouroTarget(colA, cardA);
@@ -298,23 +304,20 @@
                     let pClass = classeProdutividade(colB.produtividade);
                     elB.innerHTML = `<span class="status-bolinha ${pClass}" title="Produtividade"></span>${colB.nome}`;
 
-                    let prodText = colB.produtividade ?? '-';
-                    let ociText = colB.ociosidade ?? '-';
+                    let prodText = (colB.produtividade !== undefined && colB.produtividade !== '' && colB.produtividade !== null) ? colB.produtividade : '---';
+                    let ociText = (colB.ociosidade !== undefined && colB.ociosidade !== '' && colB.ociosidade !== null) ? colB.ociosidade : '---';
+                    let ociClass = classeProdutividade(colB.ociosidade);
                     let paleteText = colB.tempoPalete ?? '-';
 
-                    // Visível diretamente no card (com o reloginho ⏱️ e o tempo do palete atualizado sistemicamente)
                     if(metB) {
                         metB.innerHTML = `<span title="Tempo de Palete">⏱️ ${paleteText}</span>`;
                     }
 
-                    // Detalhes completos guardados no submenu flutuante (hover)
                     if(tipB) {
                         tipB.innerHTML = `
-                            <div class="tooltip-linha-info"><strong>Bancada:</strong> ${i < 10 ? '0' + i : i} (Linha B)</div>
-                            <div class="tooltip-linha-info"><strong>Colaborador:</strong> ${colB.nome}</div>
-                            <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
-                            <div class="tooltip-linha-info"><strong>Ociosidade:</strong> ${ociText}</div>
-                            <div class="tooltip-linha-info"><strong>⏱️ Tempo do Palete:</strong> ${paleteText}</div>
+                            <div class="tooltip-titulo-nome">${colB.nome}</div>
+                            <div class="tooltip-linha-info"><span>Produtividade:</span> <span>${prodText}</span></div>
+                            <div class="tooltip-linha-info"><span>Ociosidade:</span> <span><span class="status-bolinha ${ociClass}"></span>${ociText}</span></div>
                         `;
                     }
                     verificarEstouroTarget(colB, cardB);
@@ -452,7 +455,6 @@
         .catch(erro => console.error("Erro na sincronização dos dados:", erro));
     }
 
-    // Leitura amarrada estritamente sistemicamente à bancada do palete (stage_in)
     function carregarDadosPaletes() {
         if (!URL_API_PALETES || URL_API_PALETES.includes("COLE_AQUI")) return;
 
@@ -462,7 +464,7 @@
             if (dadosPaletes && Array.isArray(dadosPaletes)) {
                 dadosPaletes.forEach(p => {
                     let bancadaNum = parseInt(p.bancada);
-                    let linhaStr = (p.linha || "").trim().toUpperCase(); // "A" ou "B"
+                    let linhaStr = (p.linha || "").trim().toUpperCase(); 
                     let tempoStr = p.tempo_palete || "-";
                     let tempoMin = parseFloat(p.tempo_minutos) || 0;
 
