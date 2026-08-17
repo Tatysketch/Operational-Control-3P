@@ -112,7 +112,6 @@
     </div>
 
     <div class="container-linhas">
-        <!-- Linha A -->
         <div class="modulo-linha">
             <div class="titulo-linha">Linha A</div>
             <div class="layout-esteira-unica">
@@ -142,7 +141,6 @@
             </div>
         </div>
 
-        <!-- Linha B -->
         <div class="modulo-linha">
             <div class="titulo-linha">Linha B</div>
             <div class="layout-esteira-unica">
@@ -207,7 +205,6 @@
 </div>
 
 <script>
-    // FIX 1: Inicializar com objetos vazios em vez de null para evitar falhas de referência
     function criarEscalaVazia() {
         let escala = [];
         for (let i = 0; i <= 18; i++) {
@@ -219,11 +216,9 @@
     let escalaA = criarEscalaVazia();
     let escalaB = criarEscalaVazia();
     let nomeTL = "";
-    // FIX 3: LDAP separado do nome de exibição do TL
     let ldapTL = "";
 
     const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbw1UmfTFvrGLLafPyY8MeocdGW_X-qQhq25ww3fljgC9aRvdMMCgYMny-r2vC75faqj/exec";
-    // FIX 2: Guard mais robusto — verificar URL vazia ou placeholder genérico
     const URL_API_PALETES = "https://script.google.com/macros/s/AKfycbyBCu2JXyB5rsAWukzA3Mr_GA7bvDEEVH8acF00omqzvrkLjFHYXTE1TEYfCP3_YdkO/exec";
     const URL_PALETES_VALIDA = URL_API_PALETES && URL_API_PALETES.trim() !== "" && !URL_API_PALETES.includes("COLE_AQUI") && !URL_API_PALETES.includes("placeholder");
 
@@ -269,7 +264,6 @@
             let tipA = document.getElementById(`tip-A-${i}`);
             
             if (elA) {
-                // FIX 1: checar nome com trim() para não renderizar colaboradores com nome vazio
                 if (colA && colA.nome && colA.nome.trim() !== '') {
                     let pClass = classeProdutividade(colA.produtividade);
                     elA.innerHTML = `<span class="status-bolinha ${pClass}" title="Produtividade"></span>${colA.nome}`;
@@ -286,7 +280,7 @@
                         tipA.innerHTML = `
                             <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
                             <div class="tooltip-linha-info"><strong>Ociosidade:</strong> ${ociText}</div>
-                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${tempText}</div>
+                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${paleteText}</div>
                         `;
                     }
                     verificarEstouroTarget(colA, cardA);
@@ -320,7 +314,7 @@
                         tipB.innerHTML = `
                             <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
                             <div class="tooltip-linha-info"><strong>Ociosidade:</strong> ${ociText}</div>
-                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${tempText}</div> 
+                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${paleteText}</div> 
                         `;
                     }
                     verificarEstouroTarget(colB, cardB);
@@ -358,7 +352,6 @@
     }
 
     function salvarConfig() {
-        // FIX 3: nome de exibição separado do LDAP — só atualiza nomeTL pelo campo de nome
         nomeTL = document.getElementById('in-nome-tl').value.trim();
 
         for(let i = 1; i <= 18; i++) {
@@ -369,11 +362,9 @@
                 let nomeA = inputA.value.trim();
                 let nomeB = inputB.value.trim();
 
-                // FIX 1: preservar métricas já carregadas ao salvar, apenas atualizar nome
                 escalaA[i].nome = nomeA;
                 escalaB[i].nome = nomeB;
 
-                // Se o nome foi limpo, zerar métricas associadas
                 if (!nomeA) {
                     escalaA[i].produtividade = null;
                     escalaA[i].ociosidade = null;
@@ -425,127 +416,112 @@
             alert("Por favor, digite o seu LDAP.");
             return;
         }
-        // FIX 3: salvar LDAP separadamente; não sobrescrever nomeTL com LDAP
         ldapTL = tlLdap;
         carregarDadosTempoReal();
         carregarDadosPaletes();
     }
 
-    // FIX 5: função auxiliar de matching mais segura — prioriza igualdade exata,
-    // e só usa includes como fallback quando um dos nomes tem pelo menos 4 chars
-    // para evitar casamentos falsos com nomes curtos (ex: "Ana" vs "Ana Paula")
     function nomesCorrespondem(nomeEscala, nomeMeli) {
         if (!nomeEscala || !nomeMeli) return false;
         let a = nomeEscala.trim().toLowerCase();
         let b = nomeMeli.trim().toLowerCase();
         if (a === b) return true;
-        // Fallback: includes apenas se o termo buscado tem 4+ chars
         if (b.length >= 4 && a.includes(b)) return true;
         if (a.length >= 4 && b.includes(a)) return true;
         return false;
     }
 
     function carregarDadosTempoReal() {
-        // FIX 3: usar ldapTL para a query, não nomeTL
         if (!ldapTL) return;
-
         let urlBusca = URL_API_GOOGLE + "?";
         let params = [];
-        params.push("tl=" + encodeURIComponent(ldapTL));
-        params.push("processo=" + encodeURIComponent("Check In"));
+        params.push("ldap=" + encodeURIComponent(ldapTL));
         urlBusca += params.join("&");
 
         fetch(urlBusca)
-        .then(response => response.json())
-        .then(registros => {
-            if (registros && registros.length > 0) {
-                registros.forEach(item => {
-                    let nomeMeli = (item.meli_user || "").trim().toLowerCase();
-                    if (!nomeMeli) return;
-
-                    let pVal = (item.produtividade !== "" && item.produtividade !== undefined) ? item.produtividade : null;
-                    let oVal = (item.ociosidade !== "" && item.ociosidade !== undefined) ? item.ociosidade : null;
-
-                    for (let i = 1; i <= 18; i++) {
-                        // FIX 1 + FIX 5: só sincronizar bancadas com nome preenchido, usando matching seguro
-                        if (escalaA[i].nome && nomesCorrespondem(escalaA[i].nome, nomeMeli)) {
-                            escalaA[i].produtividade = pVal;
-                            escalaA[i].ociosidade = oVal;
-                        }
-                        if (escalaB[i].nome && nomesCorrespondem(escalaB[i].nome, nomeMeli)) {
-                            escalaB[i].produtividade = pVal;
-                            escalaB[i].ociosidade = oVal;
+            .then(res => res.json())
+            .then(data => {
+                if (!data || !data.colaboradores) return;
+                
+                for (let i = 1; i <= 18; i++) {
+                    let nomeA = escalaA[i]?.nome;
+                    if (nomeA) {
+                        let matchA = data.colaboradores.find(c => nomesCorrespondem(nomeA, c.nome));
+                        if (matchA) {
+                            escalaA[i].produtividade = matchA.produtividade ?? null;
+                            escalaA[i].ociosidade = matchA.ociosidade ?? null;
                         }
                     }
-                });
+                    let nomeB = escalaB[i]?.nome;
+                    if (nomeB) {
+                        let matchB = data.colaboradores.find(c => nomesCorrespondem(nomeB, c.nome));
+                        if (matchB) {
+                            escalaB[i].produtividade = matchB.produtividade ?? null;
+                            escalaB[i].ociosidade = matchB.ociosidade ?? null;
+                        }
+                    }
+                }
                 render();
-            }
-        })
-        .catch(erro => console.error("Erro na sincronização dos dados:", erro));
+            })
+            .catch(err => console.error("Erro ao buscar dados de tempo real:", err));
     }
 
     function carregarDadosPaletes() {
-        // FIX 2: checar validade da URL antes de fazer fetch
-        if (!URL_PALETES_VALIDA) return;
+        if (!URL_PALETES_VALIDA || !ldapTL) return;
+        
+        let urlBusca = URL_API_PALETES + "?";
+        let params = [];
+        params.push("ldap=" + encodeURIComponent(ldapTL));
+        urlBusca += params.join("&");
 
-        fetch(URL_API_PALETES)
-        .then(response => response.json())
-        .then(dadosPaletes => {
-            if (dadosPaletes && Array.isArray(dadosPaletes)) {
-                dadosPaletes.forEach(p => {
-                    let bancadaNum = parseInt(p.bancada);
-                    let linhaStr = (p.linha || "").trim().toUpperCase(); 
-                    let tempoStr = p.tempo_palete || "-";
-                    let tempoMin = parseFloat(p.tempo_minutos) || 0;
+        fetch(urlBusca)
+            .then(res => res.json())
+            .then(data => {
+                if (!data || !data.paletes) return;
 
-                    if (!isNaN(bancadaNum) && bancadaNum >= 1 && bancadaNum <= 18) {
-                        if (linhaStr === "A") {
-                            escalaA[bancadaNum].tempoPalete = tempoStr;
-                            escalaA[bancadaNum].tempoPaleteMinutos = tempoMin;
-                        } else if (linhaStr === "B") {
-                            escalaB[bancadaNum].tempoPalete = tempoStr;
-                            escalaB[bancadaNum].tempoPaleteMinutos = tempoMin;
+                for (let i = 1; i <= 18; i++) {
+                    let nomeA = escalaA[i]?.nome;
+                    if (nomeA) {
+                        let matchA = data.paletes.find(p => nomesCorrespondem(nomeA, p.nome));
+                        if (matchA) {
+                            escalaA[i].tempoPalete = matchA.tempoPalete ?? null;
+                            escalaA[i].tempoPaleteMinutos = matchA.tempoPaleteMinutos ?? null;
                         }
                     }
-                });
+                    let nomeB = escalaB[i]?.nome;
+                    if (nomeB) {
+                        let matchB = data.paletes.find(p => nomesCorrespondem(nomeB, p.nome));
+                        if (matchB) {
+                            escalaB[i].tempoPalete = matchB.tempoPalete ?? null;
+                            escalaB[i].tempoPaleteMinutos = matchB.tempoPaleteMinutos ?? null;
+                        }
+                    }
+                }
                 render();
-            }
-        })
-        .catch(err => console.log("Aguardando conexão com o Apps Script de paletes:", err));
+            })
+            .catch(err => console.error("Erro ao buscar dados de paletes:", err));
     }
 
-    window.onload = () => {
+    window.onload = function() {
         iniciarRelogio();
-
-        try {
-            const salvo = JSON.parse(localStorage.getItem('meli_checkin_duplo_save'));
-            if (salvo) {
-                // FIX 1: mesclar dados salvos com a estrutura vazia para garantir todas as propriedades
-                if (salvo.escalaA) {
-                    salvo.escalaA.forEach((item, i) => {
-                        if (item && i <= 18) escalaA[i] = { ...escalaA[i], ...item };
-                    });
+        let salvo = localStorage.getItem('meli_checkin_duplo_save');
+        if (salvo) {
+            try {
+                let dados = JSON.parse(salvo);
+                if (dados.escalaA) escalaA = dados.escalaA;
+                if (dados.escalaB) escalaB = dados.escalaB;
+                if (dados.nomeTL) nomeTL = dados.nomeTL;
+                if (dados.ldapTL) {
+                    ldapTL = dados.ldapTL;
+                    let inputLdap = document.getElementById('inputTlLdap');
+                    if (inputLdap) inputLdap.value = ldapTL;
                 }
-                if (salvo.escalaB) {
-                    salvo.escalaB.forEach((item, i) => {
-                        if (item && i <= 18) escalaB[i] = { ...escalaB[i], ...item };
-                    });
-                }
-                if (salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
-                if (salvo.ldapTL !== undefined) ldapTL = salvo.ldapTL;
+            } catch(e) {
+                console.error("Erro ao carregar dados salvos", e);
             }
-        } catch(e) {
-            console.warn("Erro ao carregar dados salvos do localStorage:", e);
         }
-
         render();
-        carregarDadosTempoReal();
-        carregarDadosPaletes();
-        
-        setInterval(carregarDadosTempoReal, 25000);
-        setInterval(carregarDadosPaletes, 30000);
     };
 </script>
-
 </body>
 </html>
