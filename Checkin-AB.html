@@ -174,10 +174,10 @@
     </div>
 </div>
 
-<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração (Líderes)</button>
+<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração </button>
 
 <div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno (Check-in A & B)</h3>
+    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno </h3>
     
     <div class="sync-box">
         <label for="inputTlLdap" style="font-size: 12px; font-weight: bold; color: #2d3277;">LDAP DO TEAM LEADER:</label>
@@ -188,17 +188,17 @@
     </div>
 
     <div class="config-tl-section">
-        <label style="font-size: 11px; font-weight: bold; color: #333;">Responsável pelo Turno (Team Leader) — Nome para exibição:</label>
+        <label style="font-size: 11px; font-weight: bold; color: #333;">Responsável pelo Turno: </label>
         <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;" placeholder="Nome completo do TL (ex: João Silva)">
     </div>
 
     <div class="config-grid-container">
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha A</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;"> Linha A</h4>
             <div class="config-grid" id="inputs-linha-A"></div>
         </div>
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Escala Linha B</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;"> Linha B</h4>
             <div class="config-grid" id="inputs-linha-B"></div>
         </div>
     </div>
@@ -286,6 +286,7 @@
                         tipA.innerHTML = `
                             <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
                             <div class="tooltip-linha-info"><strong>Ociosidade:</strong> ${ociText}</div>
+                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${tempText}</div>
                         `;
                     }
                     verificarEstouroTarget(colA, cardA);
@@ -319,6 +320,7 @@
                         tipB.innerHTML = `
                             <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
                             <div class="tooltip-linha-info"><strong>Ociosidade:</strong> ${ociText}</div>
+                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${tempText}</div> 
                         `;
                     }
                     verificarEstouroTarget(colB, cardB);
