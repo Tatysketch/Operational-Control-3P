@@ -452,14 +452,18 @@
         render();
     }
 
-    function sincronizarEquipeDoDia() {
-        let inputTl = document.getElementById('input-ldap-tl');
-        if (inputTl && inputTl.value.trim() !== '') {
-            ldapTL = inputTl.value.trim();
-        }
-        carregarDadosTempoReal();
-        carregarDadosPaletes();
+    function sincronizarEquipe() {
+    let inputTl = document.getElementById('input-ldap-tl');
+    let ldapTL = inputTl ? inputTl.value.trim() : "";
+
+    if (ldapTL === "") {
+        alert("Por favor, digite o LDAP.");
+        return;
     }
+
+    carregarDadosTempoReal(ldapTL);
+    carregarDadosPaletes(ldapTL);
+}
 
     function nomesCorrespondem(nomeEscala, nomeMeli) {
         if (!nomeEscala || !nomeMeli) return false;
