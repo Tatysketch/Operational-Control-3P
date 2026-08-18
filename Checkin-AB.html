@@ -94,7 +94,7 @@
         .config-group input { padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px; }
         .btn-toggle-config { background: #666; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 12px; }
         .btn-salvar { background: #27ae60; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 14px;}
-        .sync-box { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .sync-box { background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
@@ -169,24 +169,28 @@
     </div>
 </div>
 
-<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração </button>
+<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
 
 <div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno </h3>
+    <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno</h3>
     
     <div class="sync-box">
-        <button onclick="sincronizarEquipeDoDia()" style="padding: 7px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; text-transform: uppercase;">
-            🔄 Sincronizar Equipe do Dia
+        <div class="config-group" style="flex: 1; min-width: 200px;">
+            <label for="input-ldap-tl">LDAP do Team Leader (TL)</label>
+            <input type="text" id="input-ldap-tl" placeholder="Ex: ooseias">
+        </div>
+        <button onclick="sincronizarEquipe()" style="padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; text-transform: uppercase; margin-top: 15px;">
+            🔄 Sincronizar Equipe
         </button>
     </div>
 
     <div class="config-grid-container">
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;"> Linha A</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Linha A</h4>
             <div class="config-grid" id="inputs-linha-A"></div>
         </div>
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;"> Linha B</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 14px;">Linha B</h4>
             <div class="config-grid" id="inputs-linha-B"></div>
         </div>
     </div>
@@ -262,8 +266,8 @@
                     let paleteText = colA.tempoPalete ?? '-';
 
                     if(metA) {
-    metA.innerHTML = `<span>⏱️ ${paleteText}</span>`;
-}
+                        metA.innerHTML = `<span>⏱️ ${paleteText}</span>`;
+                    }
                     
                     if(tipA) {
                         tipA.innerHTML = `
@@ -295,9 +299,9 @@
                     let ociText = colB.ociosidade ?? '-';
                     let paleteText = colB.tempoPalete ?? '-';
 
-                   if(metB) {
-    metB.innerHTML = `<span>⏱️ ${paleteText}</span>`;
-}
+                    if(metB) {
+                        metB.innerHTML = `<span>⏱️ ${paleteText}</span>`;
+                    }
 
                     if(tipB) {
                         tipB.innerHTML = `
@@ -336,8 +340,8 @@
 
             if (idEsq !== null) {
                 let numF = idEsq < 10 ? '0' + idEsq : idEsq;
-                htmlA_esq = `<div class="config-group"><label>Bancada ${numF} (Esq)</label><input type="text" id="in-A-${idEsq}" value="${escalaA[idEsq]?.nome || ''}"></div>`;
-                htmlB_esq = `<div class="config-group"><label>Bancada ${numF} (Esq)</label><input type="text" id="in-B-${idEsq}" value="${escalaB[idEsq]?.nome || ''}"></div>`;
+                htmlA_esq = `<div class="config-group"><label>Bancada ${numF}</label><input type="text" id="in-A-${idEsq}" value="${escalaA[idEsq]?.nome || ''}"></div>`;
+                htmlB_esq = `<div class="config-group"><label>Bancada ${numF}</label><input type="text" id="in-B-${idEsq}" value="${escalaB[idEsq]?.nome || ''}"></div>`;
             } else {
                 htmlA_esq = `<div></div>`;
                 htmlB_esq = `<div></div>`;
@@ -345,8 +349,8 @@
 
             if (idDir !== null) {
                 let numF = idDir < 10 ? '0' + idDir : idDir;
-                htmlA_dir = `<div class="config-group"><label>Bancada ${numF} (Dir)</label><input type="text" id="in-A-${idDir}" value="${escalaA[idDir]?.nome || ''}"></div>`;
-                htmlB_dir = `<div class="config-group"><label>Bancada ${numF} (Dir)</label><input type="text" id="in-B-${idDir}" value="${escalaB[idDir]?.nome || ''}"></div>`;
+                htmlA_dir = `<div class="config-group"><label>Bancada ${numF}</label><input type="text" id="in-A-${idDir}" value="${escalaA[idDir]?.nome || ''}"></div>`;
+                htmlB_dir = `<div class="config-group"><label>Bancada ${numF}</label><input type="text" id="in-B-${idDir}" value="${escalaB[idDir]?.nome || ''}"></div>`;
             } else {
                 htmlA_dir = `<div></div>`;
                 htmlB_dir = `<div></div>`;
@@ -358,6 +362,11 @@
     }
 
     function salvarConfig() {
+        let inputTl = document.getElementById('input-ldap-tl');
+        if (inputTl) {
+            ldapTL = inputTl.value.trim();
+        }
+
         for(let i = 1; i <= 18; i++) {
             let inputA = document.getElementById(`in-A-${i}`);
             let inputB = document.getElementById(`in-B-${i}`);
@@ -401,6 +410,9 @@
             aba.style.display = 'none';
         } else {
             gerarInputsConfig();
+            let inputTl = document.getElementById('input-ldap-tl');
+            if (inputTl) inputTl.value = ldapTL || '';
+            
             aba.style.display = 'block';
             aba.scrollIntoView({ behavior:'smooth' });
         }
@@ -439,6 +451,10 @@
     }
 
     function sincronizarEquipeDoDia() {
+        let inputTl = document.getElementById('input-ldap-tl');
+        if (inputTl && inputTl.value.trim() !== '') {
+            ldapTL = inputTl.value.trim();
+        }
         carregarDadosTempoReal();
         carregarDadosPaletes();
     }
