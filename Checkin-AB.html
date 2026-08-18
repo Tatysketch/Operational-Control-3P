@@ -41,7 +41,7 @@
         }
 
         .nome-colaborador { color: #1a1a1a; font-size: 12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .info-metricas { display: flex; gap: 8px; font-size: 10px; color: #555; font-weight: 600; flex-shrink: 0; align-items: center; }
+        .info-metricas { display: flex; gap: 8px; font-size: 10px; color: #555; font-weight: 600; flex-shrink: 0; align-items: center; cursor: pointer; }
         
         .status-bolinha { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; margin-right: 4px; }
         .bolinha-verde { background: #27ae60; }
@@ -111,12 +111,10 @@
     </div>
 
     <div class="container-linhas">
-        <!-- Linha A -->
         <div class="modulo-linha">
             <div class="titulo-linha">Linha A</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <div class="card card-ch" id="card-A-10"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">10</span><span class="nome-colaborador" id="ch-A-10">---</span></div><span class="info-metricas" id="met-A-10"></span></div><div class="tooltip-submenu" id="tip-A-10"></div></div>
                     <div class="card card-ch" id="card-A-11"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">11</span><span class="nome-colaborador" id="ch-A-11">---</span></div><span class="info-metricas" id="met-A-11"></span></div><div class="tooltip-submenu" id="tip-A-11"></div></div>
                     <div class="card card-ch" id="card-A-12"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">12</span><span class="nome-colaborador" id="ch-A-12">---</span></div><span class="info-metricas" id="met-A-12"></span></div><div class="tooltip-submenu" id="tip-A-12"></div></div>
                     <div class="card card-ch" id="card-A-13"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">13</span><span class="nome-colaborador" id="ch-A-13">---</span></div><span class="info-metricas" id="met-A-13"></span></div><div class="tooltip-submenu" id="tip-A-13"></div></div>
@@ -141,12 +139,10 @@
             </div>
         </div>
 
-        <!-- Linha B -->
         <div class="modulo-linha">
             <div class="titulo-linha">Linha B</div>
             <div class="layout-esteira-unica">
                 <div class="lado-esquerdo">
-                    <div class="card card-ch" id="card-B-10"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">10</span><span class="nome-colaborador" id="ch-B-10">---</span></div><span class="info-metricas" id="met-B-10"></span></div><div class="tooltip-submenu" id="tip-B-10"></div></div>
                     <div class="card card-ch" id="card-B-11"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">11</span><span class="nome-colaborador" id="ch-B-11">---</span></div><span class="info-metricas" id="met-B-11"></span></div><div class="tooltip-submenu" id="tip-B-11"></div></div>
                     <div class="card card-ch" id="card-B-12"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">12</span><span class="nome-colaborador" id="ch-B-12">---</span></div><span class="info-metricas" id="met-B-12"></span></div><div class="tooltip-submenu" id="tip-B-12"></div></div>
                     <div class="card card-ch" id="card-B-13"><div class="card-conteudo-linha"><div class="info-esquerda-card"><span class="badge-bancada">13</span><span class="nome-colaborador" id="ch-B-13">---</span></div><span class="info-metricas" id="met-B-13"></span></div><div class="tooltip-submenu" id="tip-B-13"></div></div>
@@ -179,10 +175,8 @@
     <h3 style="margin-top:0; color:#2d3277;">⚙️ Gerenciar Escala do Turno </h3>
     
     <div class="sync-box">
-        <label for="inputTlLdap" style="font-size: 12px; font-weight: bold; color: #2d3277;">LDAP DO TEAM LEADER:</label>
-        <input type="text" id="inputTlLdap" placeholder="" style="padding: 6px; width: 220px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
         <button onclick="sincronizarEquipeDoDia()" style="padding: 7px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; text-transform: uppercase;">
-            🔄 Sincronizar Equipe
+            🔄 Sincronizar Equipe do Dia
         </button>
     </div>
 
@@ -235,7 +229,7 @@
                 if (parseFloat(colData.produtividade) < 200) temEstouro = true;
             }
             if (colData.tempoPaleteMinutos !== null && colData.tempoPaleteMinutos !== '-' && colData.tempoPaleteMinutos !== '') {
-                if (parseFloat(colData.tempoPaleteMinutos) > 240) temEstouro = true;
+                if (parseFloat(colData.tempoPaleteMinutos) >= 240) temEstouro = true;
             }
         }
 
@@ -268,8 +262,8 @@
                     let paleteText = colA.tempoPalete ?? '-';
 
                     if(metA) {
-                        metA.innerHTML = `<span title="Tempo de Palete">🕐 ${paleteText}</span>`;
-                    }
+    metA.innerHTML = `<span>⏱️ ${paleteText}</span>`;
+}
                     
                     if(tipA) {
                         tipA.innerHTML = `
@@ -301,9 +295,9 @@
                     let ociText = colB.ociosidade ?? '-';
                     let paleteText = colB.tempoPalete ?? '-';
 
-                    if(metB) {
-                        metB.innerHTML = `<span title="Tempo de Palete">🕐 ${paleteText}</span>`;
-                    }
+                   if(metB) {
+    metB.innerHTML = `<span>⏱️ ${paleteText}</span>`;
+}
 
                     if(tipB) {
                         tipB.innerHTML = `
@@ -330,28 +324,40 @@
         containerA.innerHTML = '';
         containerB.innerHTML = '';
 
-        const ordemBancadas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+        const esquerdaIds = [11, 12, 13, 14, 15, 16, 17, 18];
+        const direitaIds  = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-        ordemBancadas.forEach(i => {
-            let numFormatado = i < 10 ? '0' + i : i;
-            
-            containerA.innerHTML += `
-            <div class="config-group">
-                <label>Bancada ${numFormatado}</label>
-                <input type="text" id="in-A-${i}" value="${escalaA[i]?.nome || ''}">
-            </div>`;
+        for (let idx = 0; idx < 9; idx++) {
+            let idEsq = esquerdaIds[idx] !== undefined ? esquerdaIds[idx] : null;
+            let idDir = direitaIds[idx] !== undefined ? direitaIds[idx] : null;
 
-            containerB.innerHTML += `
-            <div class="config-group">
-                <label>Bancada ${numFormatado}</label>
-                <input type="text" id="in-B-${i}" value="${escalaB[i]?.nome || ''}">
-            </div>`;
-        });
+            let htmlA_esq = '', htmlA_dir = '';
+            let htmlB_esq = '', htmlB_dir = '';
+
+            if (idEsq !== null) {
+                let numF = idEsq < 10 ? '0' + idEsq : idEsq;
+                htmlA_esq = `<div class="config-group"><label>Bancada ${numF} (Esq)</label><input type="text" id="in-A-${idEsq}" value="${escalaA[idEsq]?.nome || ''}"></div>`;
+                htmlB_esq = `<div class="config-group"><label>Bancada ${numF} (Esq)</label><input type="text" id="in-B-${idEsq}" value="${escalaB[idEsq]?.nome || ''}"></div>`;
+            } else {
+                htmlA_esq = `<div></div>`;
+                htmlB_esq = `<div></div>`;
+            }
+
+            if (idDir !== null) {
+                let numF = idDir < 10 ? '0' + idDir : idDir;
+                htmlA_dir = `<div class="config-group"><label>Bancada ${numF} (Dir)</label><input type="text" id="in-A-${idDir}" value="${escalaA[idDir]?.nome || ''}"></div>`;
+                htmlB_dir = `<div class="config-group"><label>Bancada ${numF} (Dir)</label><input type="text" id="in-B-${idDir}" value="${escalaB[idDir]?.nome || ''}"></div>`;
+            } else {
+                htmlA_dir = `<div></div>`;
+                htmlB_dir = `<div></div>`;
+            }
+
+            containerA.innerHTML += htmlA_esq + htmlA_dir;
+            containerB.innerHTML += htmlB_esq + htmlB_dir;
+        }
     }
 
     function salvarConfig() {
-        ldapTL = document.getElementById('inputTlLdap').value.trim();
-
         for(let i = 1; i <= 18; i++) {
             let inputA = document.getElementById(`in-A-${i}`);
             let inputB = document.getElementById(`in-B-${i}`);
@@ -433,11 +439,6 @@
     }
 
     function sincronizarEquipeDoDia() {
-        var tlLdap = document.getElementById('inputTlLdap').value.trim();
-        if (!tlLdap) {
-            return;
-        }
-        ldapTL = tlLdap;
         carregarDadosTempoReal();
         carregarDadosPaletes();
     }
@@ -535,8 +536,6 @@
                 if (dados.escalaB) escalaB = dados.escalaB;
                 if (dados.ldapTL) {
                     ldapTL = dados.ldapTL;
-                    let inputLdap = document.getElementById('inputTlLdap');
-                    if (inputLdap) inputLdap.value = ldapTL;
                 }
             } catch(e) {
                 console.error("Erro ao carregar dados salvos", e);
