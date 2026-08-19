@@ -7,7 +7,6 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .painel { background: white; width: 1550px; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-        
         .header-container { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #2d3277; padding-bottom: 10px; margin-bottom: 20px; }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .logo-meli { width: 45px; height: auto; }
@@ -15,24 +14,18 @@
         .header-right { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; color: #475569; }
         .tl-nome { color: #475569; font-weight: 700; text-transform: uppercase; }
         #relogio { background: #000000; color: white; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-size: 13px; }
-
         .container-linhas { display: flex; justify-content: space-between; gap: 20px; width: 100%; }
         .modulo-linha { flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; display: flex; flex-direction: column; }
         .titulo-linha { text-align: center; color: #ffffff; background: #2d3277; margin: -15px -15px 15px -15px; padding: 8px; border-top-left-radius: 5px; border-top-right-radius: 5px; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; }
-
         .conteudo-linha-flex { display: flex; flex-direction: column; gap: 15px; }
         .layout-esteira-unica { display: flex; justify-content: center; gap: 10px; }
-        
         .lado-esquerdo { flex: 1; display: flex; flex-direction: column; gap: 6px; }
         .lado-direito { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-        
         .esteira-central { width: 35px; background: #1e293b; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; letter-spacing: 2px; min-height: 420px; box-shadow: inset 0 0 8px rgba(0,0,0,0.5); }
-
         .sorter-container { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; display: flex; flex-direction: column; padding: 10px; margin-top: 5px; }
         .sorter-titulo { text-align: left; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; }
         .sorter-grid-canalizacoes { display: grid; grid-template-columns: repeat(11, 1fr); gap: 6px; margin-bottom: 10px; }
         .canalizacao-item { border: 1px solid #e2e8f0; border-radius: 4px; font-size: 10px; font-weight: 700; text-align: center; padding: 8px 0; text-transform: uppercase; }
-
         .canal-rj02 { background-color: #fffcfb; border-color: #fff3f0; color: #e08269; }
         .canal-pe01 { background-color: #f7fee7; border-color: #ecfdf3; color: #4ade80; }
         .canal-ba01 { background-color: #fdf4ff; border-color: #fae8ff; color: #a78bfa; }
@@ -44,12 +37,9 @@
         .canal-sp15 { background-color: #f4f8fb; border-color: #e0f2fe; color: #38bdf8; }
         .canal-sp19 { background-color: #fcf8ff; border-color: #f3e8ff; color: #c084fc; }
         .canal-sp25 { background-color: #f0fdf9; border-color: #ccfbf1; color: #2dd4bf; }
-
         .sorter-reps-container { display: flex; flex-direction: column; gap: 4px; }
         .rep-sorter-item { background: white; border: 1px solid #e2e8f0; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.02); position: relative; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-
         .card { background: white; border: 1px solid #e2e8f0; border-radius: 5px; padding: 6px 10px; min-height: 40px; display: flex; flex-direction: column; justify-content: center; position: relative; cursor: pointer; }
-        
         .card-num-box {
             display: inline-flex;
             align-items: center;
@@ -63,19 +53,14 @@
             margin-right: 6px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
-
     .num-cat { color: #d97706; background: #fffbeb; border-color: #fde68a; }
     .num-pesca { color: #f87171; background: #fff5f5; border-color: #ffebe5; }
-    
     .card-topo-info { display: flex; align-items: center; margin-bottom: 2px; }
     .card-info { font-size: 9px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; }
-    
     .info-gm { color: #64748b; }
     .info-pesca { color: #f87171; }
     .info-cat { color: #d97706; }
-    
     .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 27px; }
-    
     .card-gm { border-left: 5px solid #2d3277; }
     .card-cat { border-left: 5px solid #f59e0b; }
     .card-pesca { border-left: 5px solid #fca5a5; background-color: #fffcfb; }
@@ -84,7 +69,6 @@
         .status-bolinha { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
         .bolinha-verde { background-color: #10b981; }
         .bolinha-vermelha { background-color: #ef4444; }
-
         .tooltip-info {
             visibility: hidden;
             width: 190px;
@@ -120,15 +104,12 @@
         }
         .tooltip-linha-detalhe { display: flex; justify-content: space-between; margin-bottom: 3px; align-items: center; }
         .tooltip-linha-detalhe span:last-child { font-weight: 700; color: #38bdf8; }
-
         .prod-verde { background-color: #d1fae5 !important; border-color: #10b981 !important; }
         .prod-amarela { background-color: #fef3c7 !important; border-color: #f59e0b !important; }
         .prod-vermelha { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
-
         .btn-container-central { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
         .btn-girar { background: #2d3277; color: white; padding: 10px 24px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; }
         .btn-girar:hover { background: #1e2252; }
-
         .config-section { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 20px; margin-top: 20px; display: none; width: 1510px; }
         .config-grid-container { display: flex; gap: 20px; }
         .config-col-linha { flex: 1; background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; }
@@ -137,14 +118,12 @@
         .config-group label { font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
         .config-group input, .config-group textarea { padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px; color: #1e293b; font-family: inherit; }
         .config-group textarea { resize: vertical; min-height: 80px; }
-        
         .config-tl-section { background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; }
         .btn-toggle-config { background: #64748b; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-top: 15px; font-size: 11px; text-transform: uppercase; }
         .btn-salvar { background: #10b981; color: white; border: none; padding: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
-
 <div class="painel">
     <div class="header-container">
         <div class="header-left">
@@ -156,9 +135,7 @@
             <div id="relogio">--/--/---- | --:--:--</div>
         </div>
     </div>
-
     <div class="container-linhas">
-        <!-- LINHA A -->
         <div class="modulo-linha">
             <div class="titulo-linha">Linha A</div>
             <div class="conteudo-linha-flex">
@@ -171,9 +148,7 @@
                         <div class="card card-gm" id="card-p2m-A-e5"><div class="card-info info-gm"><span class="card-num-box num-gm">05</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-A-e5">---</div><div class="tooltip-info" id="tip-p2m-A-e5"></div></div>
                         <div class="card card-gm" id="card-p2m-A-e6"><div class="card-info info-gm"><span class="card-num-box num-gm">06</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-A-e6">---</div><div class="tooltip-info" id="tip-p2m-A-e6"></div></div>
                     </div>
-                    
                     <div class="esteira-central">P2M</div>
-                    
                     <div class="lado-direito">
                         <div class="card card-pesca" id="card-p2m-A-pesca"><span class="tag-fixo-pesca"></span><div class="card-info info-pesca"><span class="card-num-box num-pesca">pesca</span></div><div class="nome-colaborador" id="p2m-A-pesca">---</div><div class="tooltip-info" id="tip-p2m-A-pesca"></div></div>
                         <div class="card card-cat" id="card-p2m-A-cat1"><div class="card-info info-cat"><span class="card-num-box num-cat">01</span>ALIMENTO / SAÚDE</div><div class="nome-colaborador" id="p2m-A-cat1">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-A-cat1"></div></div>
@@ -184,7 +159,6 @@
                         <div class="card card-gm" id="card-p2m-A-d7"><div class="card-info info-gm"><span class="card-num-box num-azul">07</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-A-d7">---</div><div class="tooltip-info" id="tip-p2m-A-d7"></div></div>
                     </div>
                 </div>
-                
                 <div class="sorter-container">
                     <div class="sorter-titulo">Sorter A</div>
                     <div class="sorter-grid-canalizacoes">
@@ -199,8 +173,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- LINHA B -->
         <div class="modulo-linha">
             <div class="titulo-linha">Linha B</div>
             <div class="conteudo-linha-flex">
@@ -212,10 +184,8 @@
                         <div class="card card-gm" id="card-p2m-B-e4"><div class="card-info info-gm"><span class="card-num-box num-gm">04</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-e4">---</div><div class="tooltip-info" id="tip-p2m-B-e4"></div></div>
                         <div class="card card-gm" id="card-p2m-B-e5"><div class="card-info info-gm"><span class="card-num-box num-gm">05</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-e5">---</div><div class="tooltip-info" id="tip-p2m-B-e5"></div></div>
                         <div class="card card-gm" id="card-p2m-B-e6"><div class="card-info info-gm"><span class="card-num-box num-gm">06</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-e6">---</div><div class="tooltip-info" id="tip-p2m-B-e6"></div></div>
-                    </div>
-                    
-                    <div class="esteira-central">P2M</div>
-                    
+                    </div>     
+                    <div class="esteira-central">P2M</div>     
                     <div class="lado-direito">
                         <div class="card card-pesca" id="card-p2m-B-pesca"><span class="tag-fixo-pesca"></span><div class="card-info info-pesca"><span class="card-num-box num-pesca">pesca</span></div><div class="nome-colaborador" id="p2m-B-pesca">---</div><div class="tooltip-info" id="tip-p2m-B-pesca"></div></div>
                         <div class="card card-cat" id="card-p2m-B-cat1"><div class="card-info info-cat"><span class="card-num-box num-cat">01</span>ALIMENTO / SAÚDE</div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-B-cat1"></div></div>
@@ -225,8 +195,7 @@
                         <div class="card card-gm" id="card-p2m-B-d6"><div class="card-info info-gm"><span class="card-num-box num-azul">08</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d6">---</div><div class="tooltip-info" id="tip-p2m-B-d6"></div></div>
                         <div class="card card-gm" id="card-p2m-B-d7"><div class="card-info info-gm"><span class="card-num-box num-azul">07</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div><div class="tooltip-info" id="tip-p2m-B-d7"></div></div>
                     </div>
-                </div>
-                
+                </div> 
                 <div class="sorter-container">
                     <div class="sorter-titulo">Sorter B</div>
                     <div class="sorter-grid-canalizacoes">
@@ -242,22 +211,17 @@
             </div>
         </div>
     </div>
-
     <div class="btn-container-central">
         <button class="btn-girar" onclick="gira()">Girar Rotatividade</button>
     </div>
 </div>
-
 <button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
-
 <div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas A & B)</h3>
-    
+    <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas A & B)</h3> 
     <div class="config-tl-section">
         <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
         <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder="Digite o nome do TL">
     </div>
-
     <div class="config-grid-container">
         <div class="config-col-linha">
             <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha A</h4>
@@ -276,43 +240,32 @@
             </div>
         </div>
     </div>
-
     <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
 </div>
-
 <script>
     let p2mGiro_A = Array(9).fill(""); 
     let p2mFixos_A = Array(4).fill(""); 
     let sorterReps_A = [];
-
     let p2mGiro_B = Array(9).fill(""); 
     let p2mFixos_B = Array(4).fill(""); 
     let sorterReps_B = [];
-
     let nomeTL = "";
     let dadosOperacionais = {}; 
-
     function atualizarCardComTooltip(cardId, tooltipId, nomeColaborador) {
         const cardEl = document.getElementById(cardId);
         const tipEl = document.getElementById(tooltipId);
         if (!cardEl || !tipEl) return;
-
         cardEl.classList.remove('prod-verde', 'prod-amarela', 'prod-vermelha');
-
         if (!nomeColaborador || nomeColaborador === "---") {
             tipEl.innerHTML = `<div class="tooltip-linha-detalhe"><span>Status:</span><span>Vazio</span></div>`;
             return;
         }
-
         const nomeUpper = nomeColaborador.trim().toUpperCase();
         const dados = dadosOperacionais[nomeUpper];
-
         let prod = dados ? dados.produtividade : undefined;
         let ociosidadeStr = dados && dados.ociosidade !== undefined ? String(dados.ociosidade).trim() : "0";
-        
         let ociNum = parseFloat(ociosidadeStr.replace('%', '').replace(',', '.')) || 0;
         let ociDisplay = ociNum + "%";
-
         if (prod !== undefined && prod !== null) {
             if (prod >= 1900) {
                 cardEl.classList.add('prod-verde');
@@ -322,7 +275,6 @@
                 cardEl.classList.add('prod-vermelha');
             }
         }
-
         let bolinhaHtml = '';
         if (ociNum <= 10) {
             bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-verde"></span>${ociDisplay}</span>`;
@@ -331,41 +283,34 @@
         } else {
             bolinhaHtml = `<span>${ociDisplay}</span>`;
         }
-
         tipEl.innerHTML = `
             <div style="font-weight:700; margin-bottom:5px; border-bottom:1px solid #475569; padding-bottom:3px; color:#cbd5e1;">${nomeColaborador}</div>
             <div class="tooltip-linha-detalhe"><span>Produtividade:</span><span>${prod !== undefined ? prod : '---'}</span></div>
             <div class="tooltip-linha-detalhe"><span>Ociosidade:</span>${bolinhaHtml}</div>
         `;
     }
-
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
-
         const idsGiroA = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6'];
         idsGiroA.forEach((pos, index) => {
             document.getElementById(`p2m-A-${pos}`).innerText = p2mGiro_A[index] || "---";
             atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mGiro_A[index]);
         });
-
         const idsFixosA = ['pesca', 'cat1', 'cat2', 'cat3', 'd5', 'd6', 'd7'];
         idsFixosA.forEach((pos, index) => {
             document.getElementById(`p2m-A-${pos}`).innerText = p2mFixos_A[index] || "---";
             atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mFixos_A[index]);
         });
-
         const idsGiroB = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6'];
         idsGiroB.forEach((pos, index) => {
             document.getElementById(`p2m-B-${pos}`).innerText = p2mGiro_B[index] || "---";
             atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mGiro_B[index]);
         });
-
         const idsFixosB = ['pesca', 'cat1', 'cat2', 'cat3', 'd5', 'd6', 'd7'];
         idsFixosB.forEach((pos, index) => {
             document.getElementById(`p2m-B-${pos}`).innerText = p2mFixos_B[index] || "---";
             atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mFixos_B[index]);
         });
-
         const renderSorterReps = (reps) => {
             if (reps.length === 0 || (reps.length === 1 && reps[0] === "")) return '';
             return reps.map(nome => {
@@ -373,7 +318,6 @@
                 const ociStr = dados && dados.ociosidade !== undefined ? String(dados.ociosidade).trim() : "0";
                 const ociNum = parseFloat(ociStr.replace('%', '').replace(',', '.')) || 0;
                 const prd = dados && dados.produtividade !== undefined ? dados.produtividade : '---';
-                
                 let bolinhaHtml = '';
                 if (ociNum <= 10) {
                     bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-verde"></span>${ociNum}%</span>`;
@@ -382,8 +326,7 @@
                 } else {
                     bolinhaHtml = `<span>${ociNum}%</span>`;
                 }
-
-                return `<div class="rep-sorter-item">
+                  return `<div class="rep-sorter-item">
                     <span>${nome}</span>
                     <div class="tooltip-info">
                         <div style="font-weight:700; margin-bottom:5px; border-bottom:1px solid #475569; padding-bottom:3px; color:#cbd5e1;">${nome}</div>
@@ -393,41 +336,32 @@
                 </div>`;
             }).join('');
         };
-
         document.getElementById('lista-reps-sorter-A').innerHTML = renderSorterReps(sorterReps_A);
         document.getElementById('lista-reps-sorter-B').innerHTML = renderSorterReps(sorterReps_B);
     }
-
     function gira() {
         p2mGiro_A.unshift(p2mGiro_A.pop());
         p2mGiro_B.unshift(p2mGiro_B.pop());
         render();
         salvarNoLocalStorage();
     }
-
     function gerarInputsConfig() {
         document.getElementById('in-nome-tl').value = nomeTL;
         document.getElementById('in-sorter-reps-A').value = sorterReps_A.join('\n');
         document.getElementById('in-sorter-reps-B').value = sorterReps_B.join('\n');
-
         const containerA = document.getElementById('inputs-linha-A');
         const containerB = document.getElementById('inputs-linha-B');
         containerA.innerHTML = '';
         containerB.innerHTML = '';
-
         const rotulosGiro = ["01 (Esquerda)", "02 (Esquerda)", "03 (Esquerda)", "04 (Esquerda)", "05 (Esquerda)", "06 (Esquerda)"];
         const rotulosFixos = ["PESCA", "01 CAT (Alimento)", "02 CAT (Cosmético)", "03 CAT (HV)", "07 (GM)", "08 (GM)", "09 (GM)"];
-
         for(let i = 0; i < 6; i++) containerA.innerHTML += `<div class="config-group"><label>Bancada Esquerda ${rotulosGiro[i]}</label><input type="text" id="in-A-giro-${i}" value="${p2mGiro_A[i] || ''}"></div>`;
         for(let i = 0; i < 7; i++) containerA.innerHTML += `<div class="config-group"><label>Bancada Direita ${rotulosFixos[i]}</label><input type="text" id="in-A-fixo-${i}" value="${p2mFixos_A[i] || ''}"></div>`;
-
         for(let i = 0; i < 6; i++) containerB.innerHTML += `<div class="config-group"><label>Bancada Esquerda ${rotulosGiro[i]}</label><input type="text" id="in-B-giro-${i}" value="${p2mGiro_B[i] || ''}"></div>`;
         for(let i = 0; i < 7; i++) containerB.innerHTML += `<div class="config-group"><label>Bancada Direita ${rotulosFixos[i]}</label><input type="text" id="in-B-fixo-${i}" value="${p2mFixos_B[i] || ''}"></div>`;
     }
-
     function salvarConfig() {
         nomeTL = document.getElementById('in-nome-tl').value;
-
         for(let i = 0; i < 6; i++) {
             p2mGiro_A[i] = document.getElementById(`in-A-giro-${i}`).value;
             p2mGiro_B[i] = document.getElementById(`in-B-giro-${i}`).value;
@@ -436,15 +370,12 @@
             p2mFixos_A[i] = document.getElementById(`in-A-fixo-${i}`).value;
             p2mFixos_B[i] = document.getElementById(`in-B-fixo-${i}`).value;
         }
-
         sorterReps_A = document.getElementById('in-sorter-reps-A').value.split('\n').map(n => n.trim()).filter(n => n !== "");
         sorterReps_B = document.getElementById('in-sorter-reps-B').value.split('\n').map(n => n.trim()).filter(n => n !== "");
-
         render();
         salvarNoLocalStorage();
         toggleConfig();
     }
-
     function salvarNoLocalStorage() {
         localStorage.setItem('meli_p2m_sorter_AB_save', JSON.stringify({ 
             p2mGiro_A, p2mFixos_A, sorterReps_A,
@@ -452,7 +383,6 @@
             nomeTL 
         }));
     }
-
     function toggleConfig() {
         const aba = document.getElementById('aba-config');
         if(aba.style.display === 'block') {
@@ -463,16 +393,13 @@
             aba.scrollIntoView({ behavior: 'smooth' });
         }
     }
-
     function relogio() {
         setInterval(() => {
             const agora = new Date();
             document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
         }, 1000);
     }
-
     const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbzg-q_5NQQlAy2gUfMXoFd9FK1CPgrrkjr9OvVfMtl6yVbrA2n-SGvvw6rtzm3Lu_7Y/exec";
-
     function carregarDadosTempoReal() {
         fetch(URL_API_GOOGLE)
             .then(response => response.json())
@@ -483,13 +410,11 @@
                         const setorMatch = !reg.setor || ['P2M', 'SORTER', 'P2M E SORTER'].includes(String(reg.setor).trim().toUpperCase());
                         return tlMatch && setorMatch;
                     });
-
                     const dadosAlvo = registrosFiltrados.length > 0 ? registrosFiltrados : registros;
 
                     if (dadosAlvo[0].team_leader && !nomeTL) {
                         nomeTL = dadosAlvo[0].team_leader;
-                    }
-                    
+                    }   
                     dadosAlvo.forEach(reg => {
                         if (reg.colaborador) {
                             const nomeUpper = reg.colaborador.trim().toUpperCase();
@@ -499,13 +424,11 @@
                             };
                         }
                     });
-
                     render();
                 }
             })
             .catch(erro => console.error("Erro na sincronização:", erro));
     }
-
     window.onload = () => {
         relogio();
         const salvo = JSON.parse(localStorage.getItem('meli_p2m_sorter_AB_save'));
