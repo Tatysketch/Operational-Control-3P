@@ -214,11 +214,11 @@
                 <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha A</h4>
                 <div class="config-sub-columns">
                     <div class="config-col-lado">
-                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;">Bancada (01 a 06)</div>
+                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;"></div>
                         <div id="config-A-esq" style="display:flex; flex-direction:column; gap:8px;"></div>
                     </div>
                     <div class="config-col-lado">
-                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;"> (Pesca, Cat & GM 09/08/07)</div>
+                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;"></div>
                         <div id="config-A-dir" style="display:flex; flex-direction:column; gap:8px;"></div>
                     </div>
                 </div>
@@ -231,11 +231,11 @@
                 <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha B</h4>
                 <div class="config-sub-columns">
                     <div class="config-col-lado">
-                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;">Bancada (01 a 06)</div>
+                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;"></div>
                         <div id="config-B-esq" style="display:flex; flex-direction:column; gap:8px;"></div>
                     </div>
                     <div class="config-col-lado">
-                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;"> (Pesca, Cat & GM 09/08/07)</div>
+                        <div style="font-size:11px; font-weight:700; color:#2d3277; border-bottom:1px solid #e2e8f0; padding-bottom:3px;"></div>
                         <div id="config-B-dir" style="display:flex; flex-direction:column; gap:8px;"></div>
                     </div>
                 </div>
@@ -397,8 +397,8 @@
         esqA.innerHTML = ''; dirA.innerHTML = '';
         esqB.innerHTML = ''; dirB.innerHTML = '';
 
-        const rotulosGiro = ["01 (Giro)", "02 (Giro)", "03 (Giro)", "04 (Giro)", "05 (Giro)", "06 (Giro)"];
-        const rotulosFixos = ["Pesca", "01 CAT (Alimento)", "02 CAT (Cosmético)", "03 CAT (HV)", "09 (GM)", "08 (GM)", "07 (GM)"];
+        const rotulosGiro = ["01- (GM)", "02- (GM)", "03- (GM)", "04- (GM)", "05- (GM)", "06- (GM)"];
+        const rotulosFixos = ["Pesca", "01- CAT", "02- CAT", "03- CAT", "09- (GM)", "08- (GM)", "07- (GM)"];
 
         for(let i = 0; i < 6; i++) {
             esqA.innerHTML += `<div class="config-group"><label>Bancada ${rotulosGiro[i]}</label><input type="text" id="in-A-giro-${i}" value="${p2mGiro_A[i] || ''}"></div>`;
