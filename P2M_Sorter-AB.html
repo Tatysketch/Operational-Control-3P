@@ -53,25 +53,25 @@
             margin-right: 6px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
-    .num-cat { color: #d97706; background: #fffbeb; border-color: #fde68a; }
-    .num-pesca { color: #f87171; background: #fff5f5; border-color: #ffebe5; }
-    .card-topo-info { display: flex; align-items: center; margin-bottom: 2px; }
-    .card-info { font-size: 9px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; }
-    .info-gm { color: #64748b; }
-    .info-pesca { color: #f87171; }
-    .info-cat { color: #d97706; }
-    .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 27px; }
-    .card-gm { border-left: 5px solid #2d3277; }
-    .card-cat { border-left: 5px solid #f59e0b; }
-    .card-pesca { border-left: 5px solid #fca5a5; background-color: #fffcfb; }
-    .tag-fixo-pesca { position: absolute; top: 4px; right: 6px; font-size: 7px; background: #f87171; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
-    .cat-tag { font-size: 8px; color: #d97706; font-weight: 700; margin-top: 2px; text-transform: uppercase; opacity: 0.9; margin-left: 27px; }
+        .num-cat { color: #d97706; background: #fffbeb; border-color: #fde68a; }
+        .num-pesca { color: #f87171; background: #fff5f5; border-color: #ffebe5; }
+        .card-topo-info { display: flex; align-items: center; margin-bottom: 2px; }
+        .card-info { font-size: 9px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; }
+        .info-gm { color: #64748b; }
+        .info-pesca { color: #f87171; }
+        .info-cat { color: #d97706; }
+        .nome-colaborador { color: #1e293b; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-left: 27px; }
+        .card-gm { border-left: 5px solid #2d3277; }
+        .card-cat { border-left: 5px solid #f59e0b; }
+        .card-pesca { border-left: 5px solid #fca5a5; background-color: #fffcfb; }
+        .tag-fixo-pesca { position: absolute; top: 4px; right: 6px; font-size: 7px; background: #f87171; color: white; padding: 1px 4px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
+        .cat-tag { font-size: 8px; color: #d97706; font-weight: 700; margin-top: 2px; text-transform: uppercase; opacity: 0.9; margin-left: 27px; }
         .status-bolinha { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
         .bolinha-verde { background-color: #10b981; }
         .bolinha-vermelha { background-color: #ef4444; }
         .tooltip-info {
             visibility: hidden;
-            width: 190px;
+            width: 210px;
             background-color: #1e293b;
             color: #fff;
             text-align: left;
@@ -214,103 +214,127 @@
     <div class="btn-container-central">
         <button class="btn-girar" onclick="gira()">Girar Rotatividade</button>
     </div>
-</div>
-<button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
-<div class="config-section" id="aba-config">
-    <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas A & B)</h3> 
-    <div class="config-tl-section">
-        <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
-        <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder="Digite o nome do TL">
-    </div>
-    <div class="config-grid-container">
-        <div class="config-col-linha">
-            <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha A</h4>
-            <div class="config-grid" id="inputs-linha-A"></div>
-            <div class="config-group" style="margin-top: 15px;">
-                <label>Colaboradores do Sorter A (Um nome por linha)</label>
-                <textarea id="in-sorter-reps-A" placeholder="Digite os nomes aqui..."></textarea>
+    <button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
+    <div class="config-section" id="aba-config">
+        <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala P2M e Sorter (Linhas A & B)</h3> 
+        <div class="config-tl-section">
+            <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
+            <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder="Digite o nome do TL">
+        </div>
+        <div class="config-grid-container">
+            <div class="config-col-linha">
+                <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha A</h4>
+                <div class="config-grid" id="inputs-linha-A"></div>
+                <div class="config-group" style="margin-top: 15px;">
+                    <label>Colaboradores do Sorter A (Um nome por linha)</label>
+                    <textarea id="in-sorter-reps-A" placeholder="Digite os nomes aqui..."></textarea>
+                </div>
+            </div>
+            <div class="config-col-linha">
+                <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha B</h4>
+                <div class="config-grid" id="inputs-linha-B"></div>
+                <div class="config-group" style="margin-top: 15px;">
+                    <label>Colaboradores do Sorter B (Um nome por linha)</label>
+                    <textarea id="in-sorter-reps-B" placeholder="Digite os nomes aqui..."></textarea>
+                </div>
             </div>
         </div>
-        <div class="config-col-linha">
-            <h4 style="margin:0 0 12px 0; color:#2d3277; font-size:13px;">Escala - Linha B</h4>
-            <div class="config-grid" id="inputs-linha-B"></div>
-            <div class="config-group" style="margin-top: 15px;">
-                <label>Colaboradores do Sorter B (Um nome por linha)</label>
-                <textarea id="in-sorter-reps-B" placeholder="Digite os nomes aqui..."></textarea>
-            </div>
-        </div>
+        <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
     </div>
-    <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Escala Geral</button>
 </div>
 <script>
-    let p2mGiro_A = Array(9).fill(""); 
-    let p2mFixos_A = Array(4).fill(""); 
+    let p2mGiro_A = Array(6).fill(""); 
+    let p2mFixos_A = Array(7).fill(""); 
     let sorterReps_A = [];
-    let p2mGiro_B = Array(9).fill(""); 
-    let p2mFixos_B = Array(4).fill(""); 
+    let p2mGiro_B = Array(6).fill(""); 
+    let p2mFixos_B = Array(7).fill(""); 
     let sorterReps_B = [];
     let nomeTL = "";
     let dadosOperacionais = {}; 
-    function atualizarCardComTooltip(cardId, tooltipId, nomeColaborador) {
+    function atualizarCardComTooltip(cardId, tooltipId, nomesColaborador) {
         const cardEl = document.getElementById(cardId);
         const tipEl = document.getElementById(tooltipId);
         if (!cardEl || !tipEl) return;
         cardEl.classList.remove('prod-verde', 'prod-amarela', 'prod-vermelha');
-        if (!nomeColaborador || nomeColaborador === "---") {
+        if (!nomesColaborador || nomesColaborador === "---" || nomesColaborador.trim() === "") {
             tipEl.innerHTML = `<div class="tooltip-linha-detalhe"><span>Status:</span><span>Vazio</span></div>`;
             return;
         }
-        const nomeUpper = nomeColaborador.trim().toUpperCase();
-        const dados = dadosOperacionais[nomeUpper];
-        let prod = dados ? dados.produtividade : undefined;
-        let ociosidadeStr = dados && dados.ociosidade !== undefined ? String(dados.ociosidade).trim() : "0";
-        let ociNum = parseFloat(ociosidadeStr.replace('%', '').replace(',', '.')) || 0;
-        let ociDisplay = ociNum + "%";
-        if (prod !== undefined && prod !== null) {
-            if (prod >= 1900) {
-                cardEl.classList.add('prod-verde');
-            } else if (prod >= 1500) {
-                cardEl.classList.add('prod-amarela');
-            } else if (prod <= 900) {
-                cardEl.classList.add('prod-vermelha');
+        const listaReps = nomesColaborador.split(',').map(n => n.trim()).filter(n => n !== "");
+        let htmlTooltip = "";
+        let temVermelha = false;
+        let temVerde = false;
+        let temAmarela = false;
+        listaReps.forEach((nome, index) => {
+            const nomeUpper = nome.toUpperCase();
+            const dados = dadosOperacionais[nomeUpper];
+            let prod = dados ? dados.produtividade : undefined;
+            let ociosidadeStr = dados && dados.ociosidade !== undefined ? String(dados.ociosidade).trim() : "0";
+            let ociNum = parseFloat(ociosidadeStr.replace('%', '').replace(',', '.')) || 0;
+            let ociDisplay = ociNum + "%";
+            if (prod !== undefined && prod !== null) {
+                if (prod >= 1900) temVerde = true;
+                else if (prod >= 1500) temAmarela = true;
+                else if (prod <= 900) temVermelha = true;
             }
-        }
-        let bolinhaHtml = '';
-        if (ociNum <= 10) {
-            bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-verde"></span>${ociDisplay}</span>`;
-        } else if (ociNum >= 12) {
-            bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-vermelha"></span>${ociDisplay}</span>`;
-        } else {
-            bolinhaHtml = `<span>${ociDisplay}</span>`;
-        }
-        tipEl.innerHTML = `
-            <div style="font-weight:700; margin-bottom:5px; border-bottom:1px solid #475569; padding-bottom:3px; color:#cbd5e1;">${nomeColaborador}</div>
-            <div class="tooltip-linha-detalhe"><span>Produtividade:</span><span>${prod !== undefined ? prod : '---'}</span></div>
-            <div class="tooltip-linha-detalhe"><span>Ociosidade:</span>${bolinhaHtml}</div>
-        `;
+
+            let bolinhaHtml = '';
+            if (ociNum <= 10) {
+                bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-verde"></span>${ociDisplay}</span>`;
+            } else if (ociNum >= 12) {
+                bolinhaHtml = `<span style="display:flex; align-items:center; gap:4px;"><span class="status-bolinha bolinha-vermelha"></span>${ociDisplay}</span>`;
+            } else {
+                bolinhaHtml = `<span>${ociDisplay}</span>`;
+            }
+
+            const borderStyle = index > 0 ? "border-top:1px solid #475569; margin-top:5px; padding-top:5px;" : "";
+            htmlTooltip += `
+                <div style="${borderStyle}">
+                    <div style="font-weight:700; margin-bottom:3px; color:#cbd5e1;">${nome}</div>
+                    <div class="tooltip-linha-detalhe"><span>Produtividade:</span><span>${prod !== undefined ? prod : '---'}</span></div>
+                    <div class="tooltip-linha-detalhe"><span>Ociosidade:</span>${bolinhaHtml}</div>
+                </div>
+            `;
+        });
+
+        if (temVermelha) cardEl.classList.add('prod-vermelha');
+        else if (temVerde) cardEl.classList.add('prod-verde');
+        else if (temAmarela) cardEl.classList.add('prod-amarela');
+
+        tipEl.innerHTML = htmlTooltip;
     }
+
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
+        
         const idsGiroA = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6'];
         idsGiroA.forEach((pos, index) => {
-            document.getElementById(`p2m-A-${pos}`).innerText = p2mGiro_A[index] || "---";
-            atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mGiro_A[index]);
+            const val = p2mGiro_A[index] || "---";
+            document.getElementById(`p2m-A-${pos}`).innerText = val;
+            atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, val);
         });
+
         const idsFixosA = ['pesca', 'cat1', 'cat2', 'cat3', 'd5', 'd6', 'd7'];
         idsFixosA.forEach((pos, index) => {
-            document.getElementById(`p2m-A-${pos}`).innerText = p2mFixos_A[index] || "---";
-            atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, p2mFixos_A[index]);
+            const val = p2mFixos_A[index] || "---";
+            document.getElementById(`p2m-A-${pos}`).innerText = val;
+            atualizarCardComTooltip(`card-p2m-A-${pos}`, `tip-p2m-A-${pos}`, val);
         });
+
         const idsGiroB = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6'];
         idsGiroB.forEach((pos, index) => {
-            document.getElementById(`p2m-B-${pos}`).innerText = p2mGiro_B[index] || "---";
-            atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mGiro_B[index]);
+            const val = p2mGiro_B[index] || "---";
+            document.getElementById(`p2m-B-${pos}`).innerText = val;
+            atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, val);
         });
+
         const idsFixosB = ['pesca', 'cat1', 'cat2', 'cat3', 'd5', 'd6', 'd7'];
         idsFixosB.forEach((pos, index) => {
-            document.getElementById(`p2m-B-${pos}`).innerText = p2mFixos_B[index] || "---";
-            atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, p2mFixos_B[index]);
+            const val = p2mFixos_B[index] || "---";
+            document.getElementById(`p2m-B-${pos}`).innerText = val;
+            atualizarCardComTooltip(`card-p2m-B-${pos}`, `tip-p2m-B-${pos}`, val);
         });
+
         const renderSorterReps = (reps) => {
             if (reps.length === 0 || (reps.length === 1 && reps[0] === "")) return '';
             return reps.map(nome => {
@@ -326,7 +350,7 @@
                 } else {
                     bolinhaHtml = `<span>${ociNum}%</span>`;
                 }
-                  return `<div class="rep-sorter-item">
+                return `<div class="rep-sorter-item">
                     <span>${nome}</span>
                     <div class="tooltip-info">
                         <div style="font-weight:700; margin-bottom:5px; border-bottom:1px solid #475569; padding-bottom:3px; color:#cbd5e1;">${nome}</div>
@@ -339,27 +363,41 @@
         document.getElementById('lista-reps-sorter-A').innerHTML = renderSorterReps(sorterReps_A);
         document.getElementById('lista-reps-sorter-B').innerHTML = renderSorterReps(sorterReps_B);
     }
+
     function gira() {
         p2mGiro_A.unshift(p2mGiro_A.pop());
         p2mGiro_B.unshift(p2mGiro_B.pop());
         render();
         salvarNoLocalStorage();
     }
+
     function gerarInputsConfig() {
         document.getElementById('in-nome-tl').value = nomeTL;
         document.getElementById('in-sorter-reps-A').value = sorterReps_A.join('\n');
         document.getElementById('in-sorter-reps-B').value = sorterReps_B.join('\n');
+        
         const containerA = document.getElementById('inputs-linha-A');
         const containerB = document.getElementById('inputs-linha-B');
         containerA.innerHTML = '';
         containerB.innerHTML = '';
+
         const rotulosGiro = ["01 (Esquerda)", "02 (Esquerda)", "03 (Esquerda)", "04 (Esquerda)", "05 (Esquerda)", "06 (Esquerda)"];
-        const rotulosFixos = ["PESCA", "01 CAT (Alimento)", "02 CAT (Cosmético)", "03 CAT (HV)", "07 (GM)", "08 (GM)", "09 (GM)"];
-        for(let i = 0; i < 6; i++) containerA.innerHTML += `<div class="config-group"><label>Bancada Esquerda ${rotulosGiro[i]}</label><input type="text" id="in-A-giro-${i}" value="${p2mGiro_A[i] || ''}"></div>`;
-        for(let i = 0; i < 7; i++) containerA.innerHTML += `<div class="config-group"><label>Bancada Direita ${rotulosFixos[i]}</label><input type="text" id="in-A-fixo-${i}" value="${p2mFixos_A[i] || ''}"></div>`;
-        for(let i = 0; i < 6; i++) containerB.innerHTML += `<div class="config-group"><label>Bancada Esquerda ${rotulosGiro[i]}</label><input type="text" id="in-B-giro-${i}" value="${p2mGiro_B[i] || ''}"></div>`;
-        for(let i = 0; i < 7; i++) containerB.innerHTML += `<div class="config-group"><label>Bancada Direita ${rotulosFixos[i]}</label><input type="text" id="in-B-fixo-${i}" value="${p2mFixos_B[i] || ''}"></div>`;
+        const rotulosFixos = ["PESCA", "01 CAT (Alimento)", "02 CAT (Cosmético)", "03 CAT (HV)", "09 (GM)", "08 (GM)", "07 (GM)"];
+
+        for(let i = 0; i < 6; i++) {
+            containerA.innerHTML += `<div class="config-group"><label>Bancada ${rotulosGiro[i]}</label><input type="text" id="in-A-giro-${i}" value="${p2mGiro_A[i] || ''}"></div>`;
+        }
+        for(let i = 0; i < 7; i++) {
+            containerA.innerHTML += `<div class="config-group"><label>Bancada ${rotulosFixos[i]}</label><input type="text" id="in-A-fixo-${i}" value="${p2mFixos_A[i] || ''}"></div>`;
+        }
+        for(let i = 0; i < 6; i++) {
+            containerB.innerHTML += `<div class="config-group"><label>Bancada ${rotulosGiro[i]}</label><input type="text" id="in-B-giro-${i}" value="${p2mGiro_B[i] || ''}"></div>`;
+        }
+        for(let i = 0; i < 7; i++) {
+            containerB.innerHTML += `<div class="config-group"><label>Bancada ${rotulosFixos[i]}</label><input type="text" id="in-B-fixo-${i}" value="${p2mFixos_B[i] || ''}"></div>`;
+        }
     }
+
     function salvarConfig() {
         nomeTL = document.getElementById('in-nome-tl').value;
         for(let i = 0; i < 6; i++) {
@@ -376,6 +414,7 @@
         salvarNoLocalStorage();
         toggleConfig();
     }
+
     function salvarNoLocalStorage() {
         localStorage.setItem('meli_p2m_sorter_AB_save', JSON.stringify({ 
             p2mGiro_A, p2mFixos_A, sorterReps_A,
@@ -383,6 +422,7 @@
             nomeTL 
         }));
     }
+
     function toggleConfig() {
         const aba = document.getElementById('aba-config');
         if(aba.style.display === 'block') {
@@ -393,12 +433,14 @@
             aba.scrollIntoView({ behavior: 'smooth' });
         }
     }
+
     function relogio() {
         setInterval(() => {
             const agora = new Date();
             document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
         }, 1000);
     }
+
     const URL_API_GOOGLE = "";
     function carregarDadosTempoReal() {
         fetch(URL_API_GOOGLE)
@@ -429,6 +471,7 @@
             })
             .catch(erro => console.error("Erro na sincronização:", erro));
     }
+
     window.onload = () => {
         relogio();
         const salvo = JSON.parse(localStorage.getItem('meli_p2m_sorter_AB_save'));
