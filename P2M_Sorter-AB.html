@@ -399,7 +399,7 @@
             document.getElementById('relogio').innerText = agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
         }, 1000);
     }
-    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbzg-q_5NQQlAy2gUfMXoFd9FK1CPgrrkjr9OvVfMtl6yVbrA2n-SGvvw6rtzm3Lu_7Y/exec";
+    const URL_API_GOOGLE = "";
     function carregarDadosTempoReal() {
         fetch(URL_API_GOOGLE)
             .then(response => response.json())
