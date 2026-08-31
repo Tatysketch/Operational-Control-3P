@@ -134,6 +134,7 @@
                         <div class="card card-gm" id="card-p2m-C-e3"><div class="card-info info-gm"><span class="card-num-box num-gm">03</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-C-e3">---</div><div class="tooltip-info" id="tip-p2m-C-e3"></div></div>
                         <div class="card card-gm" id="card-p2m-C-e4"><div class="card-info info-gm"><span class="card-num-box num-gm">04</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-C-e4">---</div><div class="tooltip-info" id="tip-p2m-C-e4"></div></div>
                         <div class="card card-gm" id="card-p2m-C-e5"><div class="card-info info-gm"><span class="card-num-box num-gm">05</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-C-e5">---</div><div class="tooltip-info" id="tip-p2m-C-e5"></div></div>
+                        <div class="card card-gm" id="card-p2m-C-e6"><div class="card-info info-gm"><span class="card-num-box num-gm">06</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-C-e6">---</div><div class="tooltip-info" id="tip-p2m-C-e6"></div></div>
                     </div>
                     <div class="esteira-central"></div>
                     <div class="lado-direito">
@@ -174,7 +175,7 @@
                     </div>     
                     <div class="esteira-central"></div>     
                     <div class="lado-direito">
-                        <div class="card card-pesca" id="card-p2m-D-pesca"><span class=></span><div class="card-info info-pesca"><span class="card-num-box num-pesca">Pesca</span></div><div class="nome-colaborador" id="p2m-D-pesca">---</div><div class="tooltip-info" id="tip-p2m-D-pesca"></div></div>
+                        <div class="card card-pesca" id="card-p2m-D-pesca"><span class="tag-fixo-pesca"></span><div class="card-info info-pesca"><span class="card-num-box num-pesca">Pesca</span></div><div class="nome-colaborador" id="p2m-D-pesca">---</div><div class="tooltip-info" id="tip-p2m-D-pesca"></div></div>
                         <div class="card card-cat" id="card-p2m-D-cat1"><div class="card-info info-cat"><span class="card-num-box num-cat">01</span>ALIMENTO / SAÚDE</div><div class="nome-colaborador" id="p2m-D-cat1">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-D-cat1"></div></div>
                         <div class="card card-cat" id="card-p2m-D-cat2"><div class="card-info info-cat"><span class="card-num-box num-cat">02</span>COSMÉTICO / ANIMAL</div><div class="nome-colaborador" id="p2m-D-cat2">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-D-cat2"></div></div>
                         <div class="card card-cat" id="card-p2m-D-cat3"><div class="card-info info-cat"><span class="card-num-box num-cat">03</span>HV / SANEANTES</div><div class="nome-colaborador" id="p2m-D-cat3">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-D-cat3"></div></div>
@@ -205,8 +206,13 @@
     <div class="config-section" id="aba-config">
         <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala </h3> 
         <div class="config-tl-section">
-            <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
-            <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder=>
+            <label style="font-size: 11px; font-weight: 700; color: #475569;">LDAP do Team Leader (TL):</label>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; flex: 1; min-width: 200px;">
+                <button onclick="sincronizarEquipe()" style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px; text-transform: uppercase;">
+                    🔄 Sincronizar Equipe
+                </button>
+            </div>
         </div>
         <div class="config-grid-container">
             <div class="config-col-linha">
@@ -223,7 +229,7 @@
                 </div>
                 <div class="config-group" style="margin-top: 15px;">
                     <label>Colaboradores do Sorter C</label>
-                    <textarea id="in-sorter-reps-A" placeholder=></textarea>
+                    <textarea id="in-sorter-reps-C"></textarea>
                 </div>
             </div>
             <div class="config-col-linha">
@@ -240,7 +246,7 @@
                 </div>
                 <div class="config-group" style="margin-top: 15px;">
                     <label>Colaboradores do Sorter D</label>
-                    <textarea id="in-sorter-reps-D" placeholder=""></textarea>
+                    <textarea id="in-sorter-reps-D"></textarea>
                 </div>
             </div>
         </div>
@@ -447,33 +453,49 @@
         }, 1000);
     }
 
-    const URL_API_GOOGLE = "";
-    function carregarDadosTempoReal() {
-        fetch(URL_API_GOOGLE)
-            .then(response => response.json())
-            .then(registros => {
-                if (registros && registros.length > 0) {
-                    const registrosFiltrados = registros.filter(reg => {
-                        const tlMatch = !nomeTL || !reg.team_leader || reg.team_leader.trim().toUpperCase() === nomeTL.trim().toUpperCase();
-                        const setorMatch = !reg.setor || ['P2M', 'SORTER', 'P2M E SORTER'].includes(String(reg.setor).trim().toUpperCase());
-                        return tlMatch && setorMatch;
-                    });
-                    const dadosAlvo = registrosFiltrados.length > 0 ? registrosFiltrados : registros;
+    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbw1UmfTFvrGLLafPyY8MeocdGW_X-qQhq25ww3fljgC9aRvdMMCgYMny-r2vC75faqj/exec";
 
-                    if (dadosAlvo[0].team_leader && !nomeTL) {
-                        nomeTL = dadosAlvo[0].team_leader;
-                    }   
-                    dadosAlvo.forEach(reg => {
-                        if (reg.colaborador) {
-                            const nomeUpper = reg.colaborador.trim().toUpperCase();
-                            dadosOperacionais[nomeUpper] = {
-                                produtividade: reg.produtividade !== undefined ? parseFloat(reg.produtividade) : undefined,
-                                ociosidade: reg.ociosidade !== undefined ? reg.ociosidade : 0
-                            };
-                        }
-                    });
-                    render();
+    function sincronizarEquipe() {
+        let inputTl = document.getElementById('in-nome-tl');
+        nomeTL = inputTl ? inputTl.value.trim() : "";
+
+        if (nomeTL === "") {
+            alert("Por favor, digite o LDAP.");
+            return;
+        }
+
+        render();
+        salvarNoLocalStorage();
+        carregarDadosTempoReal();
+    }
+
+    function carregarDadosTempoReal() {
+        if (!nomeTL) return;
+
+        let urlBusca = URL_API_GOOGLE + "?";
+        let params = [];
+        params.push("ldap=" + encodeURIComponent(nomeTL));
+        params.push("setor=p2m");
+        urlBusca += params.join("&");
+
+        fetch(urlBusca)
+            .then(response => response.json())
+            .then(data => {
+                if (!data || !data.colaboradores) {
+                    console.warn("Resposta da API de P2M sem 'colaboradores':", data);
+                    return;
                 }
+
+                data.colaboradores.forEach(reg => {
+                    if (reg.nome) {
+                        const ldapUpper = reg.nome.trim().toUpperCase();
+                        dadosOperacionais[ldapUpper] = {
+                            produtividade: reg.produtividade !== undefined ? parseFloat(reg.produtividade) : undefined,
+                            ociosidade: reg.ociosidade !== undefined ? reg.ociosidade : 0
+                        };
+                    }
+                });
+                render();
             })
             .catch(erro => console.error("Erro na sincronização:", erro));
     }
@@ -491,8 +513,6 @@
             if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
         }
         render();
-        carregarDadosTempoReal();
-        setInterval(carregarDadosTempoReal, 5000);
     };
 </script>
 </body>
