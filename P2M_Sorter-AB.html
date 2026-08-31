@@ -206,8 +206,13 @@
     <div class="config-section" id="aba-config">
         <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala </h3> 
         <div class="config-tl-section">
-            <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
-            <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder="LDAP do Team Leader">
+            <label style="font-size: 11px; font-weight: 700; color: #475569;">LDAP do Team Leader (TL):</label>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; flex: 1; min-width: 200px;">
+                <button onclick="sincronizarEquipe()" style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px; text-transform: uppercase;">
+                    🔄 Sincronizar Equipe
+                </button>
+            </div>
         </div>
         <div class="config-grid-container">
             <div class="config-col-linha">
@@ -224,7 +229,7 @@
                 </div>
                 <div class="config-group" style="margin-top: 15px;">
                     <label>Colaboradores do Sorter A</label>
-                    <textarea id="in-sorter-reps-A" placeholder="Um LDAP por linha"></textarea>
+                    <textarea id="in-sorter-reps-A"></textarea>
                 </div>
             </div>
             <div class="config-col-linha">
@@ -241,7 +246,7 @@
                 </div>
                 <div class="config-group" style="margin-top: 15px;">
                     <label>Colaboradores do Sorter B</label>
-                    <textarea id="in-sorter-reps-B" placeholder=""></textarea>
+                    <textarea id="in-sorter-reps-B"></textarea>
                 </div>
             </div>
         </div>
@@ -455,9 +460,18 @@
 
     const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbw1UmfTFvrGLLafPyY8MeocdGW_X-qQhq25ww3fljgC9aRvdMMCgYMny-r2vC75faqj/exec";
 
-    function ldapCorresponde(ldapEscala, ldapMeli) {
-        if (!ldapEscala || !ldapMeli) return false;
-        return ldapEscala.trim().toLowerCase() === ldapMeli.trim().toLowerCase();
+    function sincronizarEquipe() {
+        let inputTl = document.getElementById('in-nome-tl');
+        nomeTL = inputTl ? inputTl.value.trim() : "";
+
+        if (nomeTL === "") {
+            alert("Por favor, digite o LDAP.");
+            return;
+        }
+
+        render();
+        salvarNoLocalStorage();
+        carregarDadosTempoReal();
     }
 
     function carregarDadosTempoReal() {
@@ -504,8 +518,6 @@
             if(salvo.nomeTL !== undefined) nomeTL = salvo.nomeTL;
         }
         render();
-        carregarDadosTempoReal();
-        setInterval(carregarDadosTempoReal, 5000);
     };
 </script>
 </body>
