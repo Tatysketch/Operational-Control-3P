@@ -20,20 +20,20 @@
         .lado-esquerdo { flex: 1; display: flex; flex-direction: column; gap: 6px; }
         .lado-direito { flex: 1; display: flex; flex-direction: column; gap: 6px; }
         .esteira-central { width: 48px; background: #111111; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px; writing-mode: vertical-rl; text-orientation: mixed; text-transform: uppercase; letter-spacing: 2px; box-shadow: inset 0 0 12px rgba(0,0,0,0.8); min-height: 410px; }
-        
+
         .card { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 8px 12px; min-height: 38px; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: all 0.3s ease; }
         .card-ch { border-left: 6px solid #2d3277; }
-        
+
         @keyframes piscarVermelho {
             0% { background-color: white; border-color: #e0e0e0; }
             50% { background-color: #fadbd8; border-color: #c0392b; box-shadow: 0 0 8px rgba(192, 57, 43, 0.6); }
             100% { background-color: white; border-color: #e0e0e0; }
         }
         .piscar-alerta { animation: piscarVermelho 1s infinite; }
-        
+
         .card-conteudo-linha { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .info-esquerda-card { display: flex; align-items: center; gap: 10px; overflow: hidden; }
-        
+
         .badge-bancada {
             background-color: #eef2f7; color: #2d3277; border: 1px solid #d0d7de;
             font-size: 13px; font-weight: 800; padding: 2px 7px; border-radius: 4px;
@@ -42,7 +42,7 @@
 
         .nome-colaborador { color: #1a1a1a; font-size: 15px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .info-metricas { display: flex; gap: 8px; font-size: 13px; color: #333; font-weight: 700; flex-shrink: 0; align-items: center; cursor: pointer; }
-        
+
         .status-bolinha { width: 11px; height: 11px; border-radius: 50%; display: inline-block; flex-shrink: 0; margin-right: 6px; }
         .bolinha-verde { background: #27ae60; }
         .bolinha-amarela { background: #f1c40f; }
@@ -55,7 +55,7 @@
             bottom: 115%;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #1e293b; 
+            background-color: #1e293b;
             color: #fff;
             text-align: left;
             padding: 10px 14px;
@@ -175,7 +175,7 @@
 
 <div class="config-section" id="aba-config">
     <h3 style="margin-top:0; color:#2d3277; font-size: 16px;">⚙️ Gerenciar Escala do Turno</h3>
-    
+
     <div class="sync-box">
         <div class="config-group" style="flex: 1; min-width: 200px;">
             <label for="input-ldap-tl">LDAP do Team Leader (TL)</label>
@@ -188,11 +188,11 @@
 
     <div class="config-grid-container">
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 15px;">Linha A</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 15px;">Linha C</h4>
             <div class="config-grid" id="inputs-linha-C"></div>
         </div>
         <div class="config-col-linha">
-            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 15px;">Linha B</h4>
+            <h4 style="margin:0 0 10px 0; color:#2d3277; font-size: 15px;">Linha D</h4>
             <div class="config-grid" id="inputs-linha-D"></div>
         </div>
     </div>
@@ -223,7 +223,7 @@
         if (isNaN(num)) return "bolinha-amarela";
         if (num >= 260) return "bolinha-verde";
         if (num >= 200) return "bolinha-amarela";
-        return "bolinha-vermelha"; 
+        return "bolinha-vermelha";
     }
 
     function verificarEstouroTarget(colData, cardEl) {
@@ -257,12 +257,12 @@
             let metC = document.getElementById(`met-C-${i}`);
             let cardC = document.getElementById(`card-C-${i}`);
             let tipC = document.getElementById(`tip-C-${i}`);
-            
+
             if (elC) {
                 if (colC && colC.nome && colC.nome.trim() !== '') {
                     let pClass = classeProdutividade(colC.produtividade);
                     elC.innerHTML = `<span class="status-bolinha ${pClass}" title="Produtividade"></span>${colC.nome}`;
-                    
+
                     let prodText = colC.produtividade ?? '-';
                     let ociText = colC.ociosidade ?? '-';
                     let paleteText = colC.tempoPalete ?? '-';
@@ -270,7 +270,7 @@
                     if(metC) {
                         metC.innerHTML = `<span>⏱️ ${paleteText}</span>`;
                     }
-                    
+
                     if(tipC) {
                         tipC.innerHTML = `
                             <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
@@ -291,7 +291,7 @@
             let metD = document.getElementById(`met-D-${i}`);
             let cardD = document.getElementById(`card-D-${i}`);
             let tipD = document.getElementById(`tip-D-${i}`);
-            
+
             if (elD) {
                 if (colD && colD.nome && colD.nome.trim() !== '') {
                     let pClass = classeProdutividade(colD.produtividade);
@@ -309,12 +309,12 @@
                         tipD.innerHTML = `
                             <div class="tooltip-linha-info"><strong>Produtividade:</strong> ${prodText}</div>
                             <div class="tooltip-linha-info"><strong>Ociosidade:</strong> ${ociText}</div>
-                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${paleteText}</div> 
+                            <div class="tooltip-linha-info"><strong>Tempo de Palete:</strong> ${paleteText}</div>
                         `;
                     }
                     verificarEstouroTarget(colD, cardD);
                 } else {
-                    elB.innerHTML = "---";
+                    elD.innerHTML = "---";
                     if(metD) metD.innerHTML = "";
                     if(tipD) tipD.innerHTML = "";
                     if(cardD) cardD.classList.remove('piscar-alerta');
@@ -398,7 +398,7 @@
         render();
 
         localStorage.setItem(
-            'meli_checkin_duplo_save',
+            'meli_checkin_duplo_save_cd',
             JSON.stringify({ escalaC, escalaD, ldapTL })
         );
 
@@ -414,7 +414,7 @@
             gerarInputsConfig();
             let inputTl = document.getElementById('input-ldap-tl');
             if (inputTl) inputTl.value = ldapTL || '';
-            
+
             aba.style.display = 'block';
             aba.scrollIntoView({ behavior:'smooth' });
         }
@@ -425,7 +425,7 @@
             const agora = new Date();
             document.getElementById('relogio').innerText =
                 agora.toLocaleDateString('pt-BR') + ' | ' + agora.toLocaleTimeString('pt-BR');
-            
+
             atualizarTemposEmTempoReal();
         }, 1000);
     }
@@ -442,7 +442,7 @@
                         let diffMins = Math.floor(diffMs / 60000);
                         let horas = Math.floor(diffMins / 60);
                         let mins = diffMins % 60;
-                        
+
                         item.tempoPaleteMinutos = diffMins;
                         item.tempoPalete = `${horas}h ${mins}m`;
                     }
@@ -453,26 +453,21 @@
     }
 
     function sincronizarEquipe() {
-    let inputTl = document.getElementById('input-ldap-tl');
-    let ldapTL = inputTl ? inputTl.value.trim() : "";
+        let inputTl = document.getElementById('input-ldap-tl');
+        ldapTL = inputTl ? inputTl.value.trim() : "";
 
-    if (ldapTL === "") {
-        alert("Por favor, digite o LDAP.");
-        return;
+        if (ldapTL === "") {
+            alert("Por favor, digite o LDAP.");
+            return;
+        }
+
+        carregarDadosTempoReal();
+        carregarDadosPaletes();
     }
 
-    carregarDadosTempoReal(ldapTL);
-    carregarDadosPaletes(ldapTL);
-}
-
-    function nomesCorrespondem(nomeEscala, nomeMeli) {
-        if (!nomeEscala || !nomeMeli) return false;
-        let a = nomeEscala.trim().toLowerCase();
-        let b = nomeMeli.trim().toLowerCase();
-        if (a === b) return true;
-        if (b.length >= 4 && a.includes(b)) return true;
-        if (a.length >= 4 && b.includes(a)) return true;
-        return false;
+    function ldapCorresponde(ldapEscala, ldapMeli) {
+        if (!ldapEscala || !ldapMeli) return false;
+        return ldapEscala.trim().toLowerCase() === ldapMeli.trim().toLowerCase();
     }
 
     function carregarDadosTempoReal() {
@@ -480,25 +475,29 @@
         let urlBusca = URL_API_GOOGLE + "?";
         let params = [];
         params.push("ldap=" + encodeURIComponent(ldapTL));
+        params.push("setor=checkin");
         urlBusca += params.join("&");
 
         fetch(urlBusca)
             .then(res => res.json())
             .then(data => {
-                if (!data || !data.colaboradores) return;
-                
+                if (!data || !data.colaboradores) {
+                    console.warn("Resposta da API de produtividade sem 'colaboradores':", data);
+                    return;
+                }
+
                 for (let i = 1; i <= 18; i++) {
-                    let nomeC = escalaC[i]?.nome;
-                    if (nomeC) {
-                        let matchC = data.colaboradores.find(c => nomesCorrespondem(nomeC, c.nome));
+                    let ldapC = escalaC[i]?.nome;
+                    if (ldapC) {
+                        let matchC = data.colaboradores.find(c => ldapCorresponde(ldapC, c.nome));
                         if (matchC) {
                             escalaC[i].produtividade = matchC.produtividade ?? null;
                             escalaC[i].ociosidade = matchC.ociosidade ?? null;
                         }
                     }
-                    let nomeD = escalaD[i]?.nome;
-                    if (nomeD) {
-                        let matchD = data.colaboradores.find(c => nomesCorrespondem(nomeD, c.nome));
+                    let ldapD = escalaD[i]?.nome;
+                    if (ldapD) {
+                        let matchD = data.colaboradores.find(c => ldapCorresponde(ldapD, c.nome));
                         if (matchD) {
                             escalaD[i].produtividade = matchD.produtividade ?? null;
                             escalaD[i].ociosidade = matchD.ociosidade ?? null;
@@ -512,7 +511,7 @@
 
     function carregarDadosPaletes() {
         if (!URL_PALETES_VALIDA || !ldapTL) return;
-        
+
         let urlBusca = URL_API_PALETES + "?";
         let params = [];
         params.push("ldap=" + encodeURIComponent(ldapTL));
@@ -521,21 +520,24 @@
         fetch(urlBusca)
             .then(res => res.json())
             .then(data => {
-                if (!data || !data.paletes) return;
+                if (!data || !data.paletes) {
+                    console.warn("Resposta da API de paletes sem 'paletes':", data);
+                    return;
+                }
 
                 for (let i = 1; i <= 18; i++) {
-                    let nomeC = escalaC[i]?.nome;
-                    if (nomeC) {
-                        let matchC = data.paletes.find(p => nomesCorrespondem(nomeC, p.nome));
+                    let ldapC = escalaC[i]?.nome;
+                    if (ldapC) {
+                        let matchC = data.paletes.find(p => ldapCorresponde(ldapC, p.nome));
                         if (matchC) {
                             escalaC[i].tempoPalete = matchC.tempoPalete ?? null;
                             escalaC[i].tempoPaleteMinutos = matchC.tempoPaleteMinutos ?? null;
                             if (matchC.dataRecebimento) escalaC[i].dataRecebimento = matchC.dataRecebimento;
                         }
                     }
-                    let nomeD = escalaD[i]?.nome;
-                    if (nomeD) {
-                        let matchD = data.paletes.find(p => nomesCorrespondem(p.nome, nomeD) || nomesCorrespondem(nomeD, p.nome));
+                    let ldapD = escalaD[i]?.nome;
+                    if (ldapD) {
+                        let matchD = data.paletes.find(p => ldapCorresponde(ldapD, p.nome));
                         if (matchD) {
                             escalaD[i].tempoPalete = matchD.tempoPalete ?? null;
                             escalaD[i].tempoPaleteMinutos = matchD.tempoPaleteMinutos ?? null;
@@ -550,7 +552,7 @@
 
     window.onload = function() {
         iniciarRelogio();
-        let salvo = localStorage.getItem('meli_checkin_duplo_save');
+        let salvo = localStorage.getItem('meli_checkin_duplo_save_cd');
         if (salvo) {
             try {
                 let dados = JSON.parse(salvo);
