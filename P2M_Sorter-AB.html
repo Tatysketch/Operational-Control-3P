@@ -207,7 +207,7 @@
         <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala </h3> 
         <div class="config-tl-section">
             <label style="font-size: 11px; font-weight: 700; color: #475569;">Responsável pelo Turno (Team Leader):</label>
-            <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder=>
+            <input type="text" id="in-nome-tl" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px;" placeholder="LDAP do Team Leader">
         </div>
         <div class="config-grid-container">
             <div class="config-col-linha">
@@ -224,7 +224,7 @@
                 </div>
                 <div class="config-group" style="margin-top: 15px;">
                     <label>Colaboradores do Sorter A</label>
-                    <textarea id="in-sorter-reps-A" placeholder=></textarea>
+                    <textarea id="in-sorter-reps-A" placeholder="Um LDAP por linha"></textarea>
                 </div>
             </div>
             <div class="config-col-linha">
@@ -453,33 +453,40 @@
         }, 1000);
     }
 
-    const URL_API_GOOGLE = "";
-    function carregarDadosTempoReal() {
-        fetch(URL_API_GOOGLE)
-            .then(response => response.json())
-            .then(registros => {
-                if (registros && registros.length > 0) {
-                    const registrosFiltrados = registros.filter(reg => {
-                        const tlMatch = !nomeTL || !reg.team_leader || reg.team_leader.trim().toUpperCase() === nomeTL.trim().toUpperCase();
-                        const setorMatch = !reg.setor || ['P2M', 'SORTER', 'P2M E SORTER'].includes(String(reg.setor).trim().toUpperCase());
-                        return tlMatch && setorMatch;
-                    });
-                    const dadosAlvo = registrosFiltrados.length > 0 ? registrosFiltrados : registros;
+    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbw1UmfTFvrGLLafPyY8MeocdGW_X-qQhq25ww3fljgC9aRvdMMCgYMny-r2vC75faqj/exec";
 
-                    if (dadosAlvo[0].team_leader && !nomeTL) {
-                        nomeTL = dadosAlvo[0].team_leader;
-                    }   
-                    dadosAlvo.forEach(reg => {
-                        if (reg.colaborador) {
-                            const nomeUpper = reg.colaborador.trim().toUpperCase();
-                            dadosOperacionais[nomeUpper] = {
-                                produtividade: reg.produtividade !== undefined ? parseFloat(reg.produtividade) : undefined,
-                                ociosidade: reg.ociosidade !== undefined ? reg.ociosidade : 0
-                            };
-                        }
-                    });
-                    render();
+    function ldapCorresponde(ldapEscala, ldapMeli) {
+        if (!ldapEscala || !ldapMeli) return false;
+        return ldapEscala.trim().toLowerCase() === ldapMeli.trim().toLowerCase();
+    }
+
+    function carregarDadosTempoReal() {
+        if (!nomeTL) return;
+
+        let urlBusca = URL_API_GOOGLE + "?";
+        let params = [];
+        params.push("ldap=" + encodeURIComponent(nomeTL));
+        params.push("setor=p2m");
+        urlBusca += params.join("&");
+
+        fetch(urlBusca)
+            .then(response => response.json())
+            .then(data => {
+                if (!data || !data.colaboradores) {
+                    console.warn("Resposta da API de P2M sem 'colaboradores':", data);
+                    return;
                 }
+
+                data.colaboradores.forEach(reg => {
+                    if (reg.nome) {
+                        const ldapUpper = reg.nome.trim().toUpperCase();
+                        dadosOperacionais[ldapUpper] = {
+                            produtividade: reg.produtividade !== undefined ? parseFloat(reg.produtividade) : undefined,
+                            ociosidade: reg.ociosidade !== undefined ? reg.ociosidade : 0
+                        };
+                    }
+                });
+                render();
             })
             .catch(erro => console.error("Erro na sincronização:", erro));
     }
