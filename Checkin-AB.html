@@ -202,7 +202,7 @@
     let escalaB = criarEscalaVazia();
     let ldapTL = "";
     
-    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbwkRgZo4BxzOta0nan0ef07xAY8vncZhjT3zYqBs8qVkLlidW9EA6ANogBg6inHChkq/exec";
+    const URL_API_GOOGLE = "https://script.google.com/a/macros/mercadolivre.com/s/AKfycbw1UmfTFvrGLLafPyY8MeocdGW_X-qQhq25ww3fljgC9aRvdMMCgYMny-r2vC75faqj/exec";
     const URL_API_PALETES = "https://script.google.com/macros/s/AKfycbyBCu2JXyB5rsAWukzA3Mr_GA7bvDEEVH8acF00omqzvrkLjFHYXTE1TEYfCP3_YdkO/exec";
     const URL_PALETES_VALIDA = URL_API_PALETES && URL_API_PALETES.trim() !== "" && !URL_API_PALETES.includes("COLE_AQUI") && !URL_API_PALETES.includes("placeholder");
 
@@ -419,65 +419,25 @@
         }, 1000);
     }
 
-   function carregarDadosTempoReal() {
-    if (!ldapTL) {
-        alert("⚠️ ATENÇÃO: Digite o LDAP do Team Leader no Modo Configuração!");
-        return;
-    }
-    
-    let urlBusca = URL_API_GOOGLE + "?ldap=" + encodeURIComponent(ldapTL) + "&setor=checkin";
-
-    fetch(urlBusca, { method: 'GET', redirect: 'follow' })
-        .then(res => {
-            if (!res.ok) throw new Error("A API respondeu com erro HTTP: " + res.status);
-            return res.json();
-        })
-        .then(data => {
-            if (!data || !data.colaboradores) {
-                alert("❌ ERRO DA API: O Google Apps Script não retornou a lista 'colaboradores'.");
-                return;
-            }
-
-            if (data.colaboradores.length === 0) {
-                alert("⚠️ API CONECTOU, MAS VEIO VAZIA: A planilha não encontrou ninguém associado ao TL '" + ldapTL + "' no setor de Check-in.");
-                return;
-            }
-
-            alert("✅ SUCESSO! A API encontrou " + data.colaboradores.length + " colaboradores para esse TL.");
-
-            let encontrouAlgum = false;
-
+    function atualizarTemposEmTempoReal() {
+        const agora = new Date();
+        [escalaA, escalaB].forEach(escala => {
             for (let i = 1; i <= 18; i++) {
-                let ldapA = escalaA[i]?.nome;
-                if (ldapA) {
-                    let matchA = data.colaboradores.find(c => ldapCorresponde(ldapA, c.nome));
-                    if (matchA) {
-                        escalaA[i].produtividade = matchA.produtividade ?? null;
-                        escalaA[i].ociosidade = matchA.ociosidade ?? null;
-                        encontrouAlgum = true;
-                    }
-                }
-                let ldapB = escalaB[i]?.nome;
-                if (ldapB) {
-                    let matchB = data.colaboradores.find(c => ldapCorresponde(ldapB, c.nome));
-                    if (matchB) {
-                        escalaB[i].produtividade = matchB.produtividade ?? null;
-                        escalaB[i].ociosidade = matchB.ociosidade ?? null;
-                        encontrouAlgum = true;
+                let item = escala[i];
+                if (item && item.dataRecebimento) {
+                    let entrada = new Date(item.dataRecebimento);
+                    if (!isNaN(entrada)) {
+                        let diffMs = agora - entrada;
+                        let diffMins = Math.floor(diffMs / 60000);
+                        let horas = Math.floor(diffMins / 60);
+                        let mins = diffMins % 60;
+
+                        item.tempoPaleteMinutos = diffMins;
+                        item.tempoPalete = `${horas}h ${mins}m`;
                     }
                 }
             }
-
-            if (!encontrouAlgum) {
-                alert("⚠️ A API trouxe dados, mas NENHUM LDAP digitado nas bancadas casou com os LDAPs da planilha.\n\nExemplo do 1º LDAP retornado pela planilha: " + data.colaboradores[0].nome);
-            }
-
-            render();
-        })
-        .catch(err => {
-            alert("🚨 ERRO DE CONEXÃO: O navegador não conseguiu acessar a URL.\nDetalhe: " + err.message);
         });
-}
         render();
     }
 
