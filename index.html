@@ -93,9 +93,9 @@
         .submenu-login button:hover {
             background-color: #059669;
         }
-        
+
         .painel-em-uso {
-            background-color: #cbd5e1 !important; 
+            background-color: #cbd5e1 !important;
             color: #1f2937 !important;
         }
         .painel-em-uso span {
@@ -147,8 +147,62 @@
             background-color: #1e2848;
         }
 
+        #senha-admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+        }
+        .senha-admin-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .senha-admin-content h3 {
+            color: #2b3a67;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .senha-admin-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .senha-admin-content button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2b3a67;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #senha-admin-erro {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
         #painel-admin {
-            display: none; 
+            display: none;
             position: fixed;
             bottom: 15px;
             right: 15px;
@@ -180,42 +234,42 @@
 
     <div class="menu-container">
         <div class="painel-card" id="card-checkin">
-            <button class="btn-painel" onclick="toggleSubmenu('checkin', 'Checkin-AB.html')">
+            <button class="btn-painel" onclick="toggleSubmenu('checkin', 'checkin-ab')">
                 Check-in A/B <span>▼</span>
             </button>
             <div id="sub-checkin" class="submenu-login">
                 <input type="text" id="login-checkin" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                <button onclick="acessarPainel('checkin', 'Checkin-AB.html')">Entrar no Setor</button>
+                <button onclick="acessarPainel('checkin', 'checkin-ab')">Entrar no Setor</button>
             </div>
         </div>
 
         <div class="painel-card" id="card-checkincd">
-            <button class="btn-painel" onclick="toggleSubmenu('checkincd', 'checkin-CD.html')">
+            <button class="btn-painel" onclick="toggleSubmenu('checkincd', 'checkin-cd')">
                 Check-in C/D <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
                 <input type="text" id="login-checkincd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                <button onclick="acessarPainel('checkincd', 'checkin-CD.html')">Entrar no Setor</button>
+                <button onclick="acessarPainel('checkincd', 'checkin-cd')">Entrar no Setor</button>
             </div>
         </div>
 
         <div class="painel-card" id="card-p2mab">
-            <button class="btn-painel" onclick="toggleSubmenu('p2mab', 'P2M_Sorter-AB.html')">
+            <button class="btn-painel" onclick="toggleSubmenu('p2mab', 'p2m-ab')">
                 P2M Sorter A/B <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
                 <input type="text" id="login-p2mab" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                <button onclick="acessarPainel('p2mab', 'P2M_Sorter-AB.html')">Entrar no Setor</button>
+                <button onclick="acessarPainel('p2mab', 'p2m-ab')">Entrar no Setor</button>
             </div>
         </div>
 
         <div class="painel-card" id="card-p2mcd">
-            <button class="btn-painel" onclick="toggleSubmenu('p2mcd', 'P2M_Sorter-CD.html')">
+            <button class="btn-painel" onclick="toggleSubmenu('p2mcd', 'p2m-cd')">
                 P2M Sorter C/D <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
                 <input type="text" id="login-p2mcd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                <button onclick="acessarPainel('p2mcd', 'P2M_Sorter-CD.html')">Entrar no Setor</button>
+                <button onclick="acessarPainel('p2mcd', 'p2m-cd')">Entrar no Setor</button>
             </div>
         </div>
     </div>
@@ -228,6 +282,15 @@
         </div>
     </div>
 
+    <div id="senha-admin-modal">
+        <div class="senha-admin-content">
+            <h3>Acesso Restrito</h3>
+            <input type="password" id="input-senha-admin" placeholder="Digite a senha" autocomplete="off">
+            <div id="senha-admin-erro">Senha incorreta.</div>
+            <button onclick="confirmarSenhaAdmin()">Entrar</button>
+        </div>
+    </div>
+
     <div id="painel-admin">
         <button class="btn-acao" onclick="alternarModoApresentacao()">🎬 Modo Apresentação</button>
         <button class="btn-acao" onclick="resetarTestes()">⚙️ Reset</button>
@@ -236,11 +299,16 @@
     <script>
         const setores = ['checkin', 'checkincd', 'p2mab', 'p2mcd'];
         const PREFIXO = "p2m_v3_bloqueio_";
+        const SENHA_ADMIN_TESTE = "Meli_Idea";
+
+        function navegarPara(pagina) {
+            alert("Em produção isso levaria para a página: " + pagina);
+        }
 
         window.onload = function() {
             const urlCompleta = window.location.href;
             if (urlCompleta.includes("admin=mind")) {
-                document.getElementById("painel-admin").style.display = "flex";
+                document.getElementById("senha-admin-modal").style.display = "flex";
             }
 
             if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
@@ -248,6 +316,19 @@
             }
             atualizarInterface();
         };
+
+        function confirmarSenhaAdmin() {
+            const senha = document.getElementById("input-senha-admin").value;
+            const erro = document.getElementById("senha-admin-erro");
+            erro.style.display = "none";
+
+            if (senha === SENHA_ADMIN_TESTE) {
+                document.getElementById("senha-admin-modal").style.display = "none";
+                document.getElementById("painel-admin").style.display = "flex";
+            } else {
+                erro.style.display = "block";
+            }
+        }
 
         function atualizarInterface() {
             setores.forEach(setor => {
@@ -263,9 +344,9 @@
             });
         }
 
-        function toggleSubmenu(setorId, urlDestino) {
+        function toggleSubmenu(setorId, pagina) {
             if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
-                window.location.href = urlDestino;
+                navegarPara(pagina);
                 return;
             }
 
@@ -283,9 +364,9 @@
             document.getElementById("mind-modal").style.display = "none";
         }
 
-        function acessarPainel(setorId, urlDestino) {
+        function acessarPainel(setorId, pagina) {
             const inputLogin = document.getElementById("login-" + setorId).value.trim();
-            
+
             if (inputLogin === "") {
                 alert("Por favor, digite seu login para prosseguir.");
                 return;
@@ -294,35 +375,3 @@
             const donoAtual = localStorage.getItem(PREFIXO + setorId);
 
             if (donoAtual && donoAtual.toLowerCase() !== inputLogin.toLowerCase()) {
-                document.getElementById("mind-modal").style.display = "flex";
-                return;
-            }
-
-            localStorage.setItem(PREFIXO + setorId, inputLogin);
-            window.location.href = urlDestino;
-        }
-
-        function alternarModoApresentacao() {
-            const ativoAtual = localStorage.getItem("modo_apresentacao_ativo") === "true";
-            if (ativoAtual) {
-                localStorage.removeItem("modo_apresentacao_ativo");
-                alert("Modo Apresentação desativado.");
-            } else {
-                localStorage.setItem("modo_apresentacao_ativo", "true");
-                alert("Modo Apresentação ativado!");
-            }
-            location.reload();
-        }
-
-        function resetarTestes() {
-            setores.forEach(s => {
-                localStorage.removeItem(PREFIXO + s);
-                localStorage.removeItem("duplo_bloqueio_" + s);
-            });
-            alert("Reset realizado com sucesso!");
-            location.reload();
-        }
-    </script>
-
-</body>
-</html>
