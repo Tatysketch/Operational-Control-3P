@@ -172,8 +172,8 @@
                         <div class="card card-gm" id="card-p2m-B-e4"><div class="card-info info-gm"><span class="card-num-box num-gm">04</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-e4">---</div><div class="tooltip-info" id="tip-p2m-B-e4"></div></div>
                         <div class="card card-gm" id="card-p2m-B-e5"><div class="card-info info-gm"><span class="card-num-box num-gm">05</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-e5">---</div><div class="tooltip-info" id="tip-p2m-B-e5"></div></div>
                         <div class="card card-gm" id="card-p2m-B-e6"><div class="card-info info-gm"><span class="card-num-box num-gm">06</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-e6">---</div><div class="tooltip-info" id="tip-p2m-B-e6"></div></div>
-                    </div>     
-                    <div class="esteira-central"></div>     
+                    </div>
+                    <div class="esteira-central"></div>
                     <div class="lado-direito">
                         <div class="card card-pesca" id="card-p2m-B-pesca"><span class="tag-fixo-pesca"></span><div class="card-info info-pesca"><span class="card-num-box num-pesca">Pesca</span></div><div class="nome-colaborador" id="p2m-B-pesca">---</div><div class="tooltip-info" id="tip-p2m-B-pesca"></div></div>
                         <div class="card card-cat" id="card-p2m-B-cat1"><div class="card-info info-cat"><span class="card-num-box num-cat">01</span>ALIMENTO / SAÚDE</div><div class="nome-colaborador" id="p2m-B-cat1">---</div><div class="cat-tag"></div><div class="tooltip-info" id="tip-p2m-B-cat1"></div></div>
@@ -183,7 +183,7 @@
                         <div class="card card-gm" id="card-p2m-B-d6"><div class="card-info info-gm"><span class="card-num-box num-azul">08</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d6">---</div><div class="tooltip-info" id="tip-p2m-B-d6"></div></div>
                         <div class="card card-gm" id="card-p2m-B-d7"><div class="card-info info-gm"><span class="card-num-box num-azul">07</span>Bancada (GM)</div><div class="nome-colaborador" id="p2m-B-d7">---</div><div class="tooltip-info" id="tip-p2m-B-d7"></div></div>
                     </div>
-                </div> 
+                </div>
                 <div class="sorter-container">
                     <div class="sorter-titulo">Sorter B</div>
                     <div class="sorter-grid-canalizacoes">
@@ -204,7 +204,7 @@
     </div>
     <button class="btn-toggle-config" onclick="toggleConfig()">⚙️ Modo Configuração</button>
     <div class="config-section" id="aba-config">
-        <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala </h3> 
+        <h3 style="margin-top:0; color:#2d3277; font-size:16px;">⚙️ Gerenciar Escala </h3>
         <div class="config-tl-section">
             <label style="font-size: 11px; font-weight: 700; color: #475569;">LDAP do Team Leader (TL):</label>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
@@ -255,22 +255,22 @@
 </div>
 
 <script>
-    let p2mGiro_A = Array(6).fill(""); 
-    let p2mFixos_A = Array(7).fill(""); 
+    let p2mGiro_A = Array(6).fill("");
+    let p2mFixos_A = Array(7).fill("");
     let sorterReps_A = [];
-    let p2mGiro_B = Array(6).fill(""); 
-    let p2mFixos_B = Array(7).fill(""); 
+    let p2mGiro_B = Array(6).fill("");
+    let p2mFixos_B = Array(7).fill("");
     let sorterReps_B = [];
     let nomeTL = "";
-    let dadosOperacionais = {}; 
+    let dadosOperacionais = {};
 
     function atualizarCardComTooltip(cardId, tooltipId, nomesColaborador) {
         const cardEl = document.getElementById(cardId);
         const tipEl = document.getElementById(tooltipId);
         if (!cardEl || !tipEl) return;
-        
+
         cardEl.classList.remove('prod-verde', 'prod-amarela', 'prod-vermelha');
-        
+
         if (!nomesColaborador || nomesColaborador === "---" || nomesColaborador.trim() === "") {
             tipEl.innerHTML = `<div class="tooltip-linha-detalhe"><span>Status:</span><span>Vazio</span></div>`;
             return;
@@ -324,7 +324,7 @@
 
     function render() {
         document.getElementById('nome-tl-display').innerText = nomeTL || "---";
-        
+
         const idsGiroA = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6'];
         idsGiroA.forEach((pos, index) => {
             const val = p2mGiro_A[index] || "---";
@@ -393,12 +393,12 @@
         document.getElementById('in-nome-tl').value = nomeTL;
         document.getElementById('in-sorter-reps-A').value = sorterReps_A.join('\n');
         document.getElementById('in-sorter-reps-B').value = sorterReps_B.join('\n');
-        
+
         const esqA = document.getElementById('config-A-esq');
         const dirA = document.getElementById('config-A-dir');
         const esqB = document.getElementById('config-B-esq');
         const dirB = document.getElementById('config-B-dir');
-        
+
         esqA.innerHTML = ''; dirA.innerHTML = '';
         esqB.innerHTML = ''; dirB.innerHTML = '';
 
@@ -433,10 +433,10 @@
     }
 
     function salvarNoLocalStorage() {
-        localStorage.setItem('meli_p2m_sorter_AB_save', JSON.stringify({ 
+        localStorage.setItem('meli_p2m_sorter_AB_save', JSON.stringify({
             p2mGiro_A, p2mFixos_A, sorterReps_A,
-            p2mGiro_B, p2mFixos_B, sorterReps_B, 
-            nomeTL 
+            p2mGiro_B, p2mFixos_B, sorterReps_B,
+            nomeTL
         }));
     }
 
@@ -484,10 +484,24 @@
         urlBusca += params.join("&");
 
         fetch(urlBusca)
-            .then(response => response.json())
-            .then(data => {
+            .then(res => {
+                if (!res.ok) {
+                    return res.text().then(texto => {
+                        throw new Error(`HTTP ${res.status} ao chamar URL_API_GOOGLE. Resposta: ${texto.slice(0, 300)}`);
+                    });
+                }
+                return res.text();
+            })
+            .then(texto => {
+                let data;
+                try {
+                    data = JSON.parse(texto);
+                } catch (e) {
+                    throw new Error(`A resposta de URL_API_GOOGLE não é um JSON válido. Início da resposta: ${texto.slice(0, 300)}`);
+                }
+
                 if (!data || !data.colaboradores) {
-                    console.warn("Resposta da API de P2M sem 'colaboradores':", data);
+                    console.warn("[carregarDadosTempoReal] Resposta da API de P2M sem 'colaboradores':", data);
                     return;
                 }
 
@@ -502,7 +516,7 @@
                 });
                 render();
             })
-            .catch(erro => console.error("Erro na sincronização:", erro));
+            .catch(erro => console.error("[carregarDadosTempoReal] Erro na sincronização:", erro.message || erro));
     }
 
     window.onload = () => {
