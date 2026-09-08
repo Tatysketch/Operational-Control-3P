@@ -1,32 +1,304 @@
-ajustes painel de rotatividade:
-* ajustar um app script para a planilha do stage_in 
-- horário e PL
-- vincular somente ao check - in A/B & C/D
-* mudar a tela inicial de acessos aos TL onde cada pessoa q ter esse link não consiga burlar!!!!
-um acessos aos TL 
-um acesso admin para a supervisora e deixar um acesso para mim fazer possíveis ajustes no painel se necessário!
+const SHEET_ID_DADOS = '1Qjmlzb2AdB4e2GhCGfevWIqFHyo7iC2ypXXyHgTlj5k';
+const ABA_PRODUTIVIDADE = 'Página conectada 1';
 
-*painel check_in:
-- tamanho de fonte sem exagerar;
-- acrescentar no sub menu o resultado de tempo de palete;
-- vincular os links do app script tanto da produtividade de linha tanto de stage_in;
-- sequencia da escala de bancada- mesma da tela inicial;
-- fazer com oq o LDAP do TL que extrai da planilha apareça na tela inicial também;
+const SHEET_ID_PALETES = '1KyZLdpTFbZpuv4V-WA8DLcjj4sO-gi8xVrwWVchrZZo';
+const ABA_PALETES = 'Cópia de Base Mapa';
+const ABA_CADASTRO = 'Página3';
 
-*sobre o P2M ajustar trazer os dados de 2 reps na mesma bancada 
-- puxar as informações de rep e colocar no submenu q temos 
+const SHEET_ID_BANCADA = '1sCpAbLk90JCT4Bdh0P1lShGGZczsSrjlAUqVr5uVA3c';
+const ABA_BANCADA = 'Extração 1';
 
+const SENHA_ADMIN = 'Meli_Idea';
 
-* mudar painel de configuração de TL
-- manter a escala / buscar extrair da planilha os dados por TL com o mesmo sentido do checkin!
-- alinhar os pontos de sequencia das bancadas para q fique iguais a tela inicial:
-tela esquerda 
-- 01                     - Pesca
-- 02                     - 01 cat
-- 03                     - 02 cat
-- 04                     - 03 cat 
-- 05                     - 09 
-- 06                     - 08
-                         - 07
+const PROCESSOS_POR_SETOR = {
+  checkin: ['check in', '1p - check in'],
+  p2m: ['1p - p2m', '1p - sorter']
+};
 
-- único detalhe a pessoa que ficar no sorter deve ser digitada manual devido ser poucas !
+const SUBPROCESSOS_POR_SETOR = {
+  checkin: ['checkin'],
+  p2m: ['p2m']
+};
+
+function doGet(e) {
+  try {
+    const pagina = ((e && e.parameter && e.parameter.page) || 'index').toLowerCase();
+
+    const paginas = {
+      'index': 'index',
+      'checkin-ab': 'Checkin-AB',
+      'checkin-cd': 'Checkin-CD',
+      'p2m-ab': 'P2M_Sorter-AB',
+      'p2m-cd': 'P2M_Sorter-CD'
+    };
+
+    const arquivo = paginas[pagina] || 'index';
+    const template = HtmlService.createTemplateFromFile(arquivo);
+
+    template.scriptUrl = ScriptApp.getService().getUrl();
+
+    return template.evaluate()
+      .setTitle('Controle Operacional - 3P')
+      .addMetaTag('viewport', 'width=1024')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  } catch (error) {
+    return HtmlService.createHtmlOutput(
+      `<h3>Erro ao carregar a página inicial</h3>` +
+      `<p>Verifique se o arquivo HTML chamado <b>index</b> existe no seu projeto Apps Script.</p>` +
+      `<p><b>Detalhes:</b> ${error.message}</p>`
+    );
+  }
+}
+
+function validarSenhaAdmin(senha) {
+  return senha === SENHA_ADMIN;
+}
+
+function include(nomeArquivo) {
+  try {
+    return HtmlService.createHtmlOutputFromFile(nomeArquivo).getContent();
+  } catch (err) {
+    return `<!-- Erro ao incluir o arquivo ${nomeArquivo}: ${err.message} -->`;
+  }
+}
+
+function abrirPlanilha_() {
+  return SHEET_ID_DADOS ? SpreadsheetApp.openById(SHEET_ID_DADOS) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
+function abrirPlanilhaPaletes_() {
+  return SHEET_ID_PALETES ? SpreadsheetApp.openById(SHEET_ID_PALETES) : null;
+}
+
+function abrirPlanilhaBancada_() {
+  return SHEET_ID_BANCADA ? SpreadsheetApp.openById(SHEET_ID_BANCADA) : null;
+}
+
+function getCadastroPorLdap_() {
+  try {
+    const planilhaPaletes = abrirPlanilhaPaletes_();
+    if (!planilhaPaletes) return {};
+
+    const aba = planilhaPaletes.getSheetByName(ABA_CADASTRO);
+    if (!aba) return {};
+
+    const valores = aba.getDataRange().getValues();
+    if (!valores || valores.length === 0) return {};
+
+    const cabecalho = valores[0];
+    const idxLdap = cabecalho.indexOf('LDAP');
+    const idxNome = cabecalho.indexOf('Nome');
+    const idxSituacao = cabecalho.indexOf('Situacao');
+
+    if (idxLdap === -1) return {};
+
+    const cadastro = {};
+    for (let i = 1; i < valores.length; i++) {
+      const linha = valores[i];
+      const ldapLinha = String(linha[idxLdap]).trim().toLowerCase();
+      if (!ldapLinha) continue;
+
+      cadastro[ldapLinha] = {
+        nomeCompleto: idxNome !== -1 ? linha[idxNome] : '',
+        situacao: idxSituacao !== -1 ? linha[idxSituacao] : ''
+      };
+    }
+    return cadastro;
+  } catch (e) {
+    Logger.log('Erro em getCadastroPorLdap_: ' + e.toString());
+    return {};
+  }
+}
+
+function validarLdap(ldap) {
+  const cadastro = getCadastroPorLdap_();
+  const item = cadastro[String(ldap).trim().toLowerCase()];
+  if (!item) return { existe: false, nomeCompleto: '', situacao: '' };
+  return { existe: true, nomeCompleto: item.nomeCompleto, situacao: item.situacao };
+}
+
+function encontrarColuna_(cabecalho, candidatos) {
+  for (const nomeColuna of candidatos) {
+    const idx = cabecalho.indexOf(nomeColuna);
+    if (idx !== -1) return idx;
+  }
+  return -1;
+}
+
+function getDadosColaboradores(ldap, setor) {
+  try {
+    const aba = abrirPlanilha_().getSheetByName(ABA_PRODUTIVIDADE);
+    if (!aba) return { colaboradores: [] };
+
+    const valores = aba.getDataRange().getValues();
+    if (!valores || valores.length === 0) return { colaboradores: [] };
+
+    const cabecalho = valores[0];
+
+    const idxMeliUser = encontrarColuna_(cabecalho, ['MELI_USER_LDAP', 'MELI_USER']);
+    const idxTeamLead = encontrarColuna_(cabecalho, ['TEAM_LEAD', 'TEAM_LEADER']);
+    const idxProcesso = encontrarColuna_(cabecalho, ['PROCESSO', 'PROCESS']);
+    const idxSubprocesso = encontrarColuna_(cabecalho, ['SUBPROCESS', 'SUBPROC']);
+    const idxProdLiquida = encontrarColuna_(cabecalho, ['PROD_LIQU', 'PROD_LIQUIDA']);
+    const idxIdleTime = encontrarColuna_(cabecalho, ['IDLE_TIME']);
+    const idxTotalUnit = encontrarColuna_(cabecalho, ['TOTAL_UNIT', 'TOTAL_UNITS']);
+
+    const processosDoSetor = (PROCESSOS_POR_SETOR[String(setor).toLowerCase()] || [])
+      .map(p => p.toLowerCase());
+    const subprocessosDoSetor = (SUBPROCESSOS_POR_SETOR[String(setor).toLowerCase()] || [])
+      .map(p => p.toLowerCase());
+    const temFiltroDeSetor = processosDoSetor.length > 0 || subprocessosDoSetor.length > 0;
+
+    const acumulado = {};
+    let contadorTotal = 0;
+    let contadorBateuTeamLead = 0;
+    let contadorBateuProcesso = 0;
+    const processosEncontradosParaEsteTL = [];
+    const subprocessosEncontradosParaEsteTL = [];
+
+    for (let i = 1; i < valores.length; i++) {
+      const linha = valores[i];
+      contadorTotal++;
+
+      if (idxTeamLead !== -1 && ldap &&
+          String(linha[idxTeamLead]).trim().toLowerCase() !== String(ldap).trim().toLowerCase()) {
+        continue;
+      }
+      contadorBateuTeamLead++;
+      if (idxProcesso !== -1 && !processosEncontradosParaEsteTL.includes(String(linha[idxProcesso]))) {
+        processosEncontradosParaEsteTL.push(String(linha[idxProcesso]));
+      }
+      if (idxSubprocesso !== -1 && !subprocessosEncontradosParaEsteTL.includes(String(linha[idxSubprocesso]))) {
+        subprocessosEncontradosParaEsteTL.push(String(linha[idxSubprocesso]));
+      }
+
+      contadorBateuProcesso++;
+
+      const nome = idxMeliUser !== -1 ? String(linha[idxMeliUser]).trim() : '';
+      if (!nome) continue;
+
+      const totalUnit = idxTotalUnit !== -1 ? (parseFloat(linha[idxTotalUnit]) || 0) : 0;
+      const prodLiquida = idxProdLiquida !== -1 ? parseFloat(linha[idxProdLiquida]) : NaN;
+      const idleTime = idxIdleTime !== -1 ? parseFloat(linha[idxIdleTime]) : NaN;
+
+      if (!acumulado[nome]) {
+        acumulado[nome] = { prodPonderadaSoma: 0, unidadesSoma: 0, idleSoma: 0, idleCount: 0 };
+      }
+      const acc = acumulado[nome];
+
+      if (!isNaN(prodLiquida) && totalUnit > 0) {
+        acc.prodPonderadaSoma += prodLiquida * totalUnit;
+        acc.unidadesSoma += totalUnit;
+      }
+      if (!isNaN(idleTime)) {
+        acc.idleSoma += idleTime;
+        acc.idleCount += 1;
+      }
+    }
+
+    const cadastro = getCadastroPorLdap_();
+
+    const colaboradores = Object.keys(acumulado).map(nome => {
+      const acc = acumulado[nome];
+      const produtividade = acc.unidadesSoma > 0 ? (acc.prodPonderadaSoma / acc.unidadesSoma) : null;
+      const ociosidade = acc.idleCount > 0 ? Math.round((acc.idleSoma / acc.idleCount) * 1000) / 10 : null;
+      const infoCadastro = cadastro[nome.toLowerCase()];
+
+      return {
+        nome,
+        produtividade,
+        ociosidade,
+        nomeCompleto: infoCadastro ? infoCadastro.nomeCompleto : '',
+        situacao: infoCadastro ? infoCadastro.situacao : ''
+      };
+    });
+
+    return {
+      colaboradores,
+      diagnostico: {
+        colunaMeliUserEncontrada: idxMeliUser !== -1,
+        colunaTeamLeadEncontrada: idxTeamLead !== -1,
+        colunaProcessoEncontrada: idxProcesso !== -1,
+        colunaSubprocessoEncontrada: idxSubprocesso !== -1,
+        totalLinhasNaAba: contadorTotal,
+        linhasComEsteTeamLead: contadorBateuTeamLead,
+        linhasQuePassaramFiltroSetor: contadorBateuProcesso,
+        processosEncontradosParaEsteTL: processosEncontradosParaEsteTL,
+        subprocessosEncontradosParaEsteTL: subprocessosEncontradosParaEsteTL,
+        processosEsperadosParaSetor: processosDoSetor,
+        subprocessosEsperadosParaSetor: subprocessosDoSetor
+      }
+    };
+  } catch (e) {
+    Logger.log('Erro em getDadosColaboradores: ' + e.toString());
+    return { colaboradores: [], erro: e.toString() };
+  }
+}
+
+function paraMinutos_(valor) {
+  if (valor === null || valor === undefined || valor === '') return null;
+
+  if (valor instanceof Date) {
+    return valor.getHours() * 60 + valor.getMinutes() + valor.getSeconds() / 60;
+  }
+  if (typeof valor === 'number') {
+    return valor * 24 * 60;
+  }
+  const partes = String(valor).split(':').map(Number);
+  if (partes.length === 3 && partes.every(p => !isNaN(p))) {
+    const [h, m, s] = partes;
+    return h * 60 + m + s / 60;
+  }
+  return null;
+}
+
+function formatarMinutos_(totalMinutos) {
+  if (totalMinutos === null) return null;
+  const horas = Math.floor(totalMinutos / 60);
+  const minutos = Math.round(totalMinutos % 60);
+  return `${horas}h ${minutos}m`;
+}
+
+function getDadosPaletesPorLinha(linha) {
+  try {
+    const planilha = abrirPlanilhaBancada_();
+    if (!planilha) return { paletes: [] };
+
+    const aba = planilha.getSheetByName(ABA_BANCADA);
+    if (!aba) return { paletes: [] };
+
+    const valores = aba.getDataRange().getValues();
+    if (!valores || valores.length === 0) return { paletes: [] };
+
+    const cabecalho = valores[0];
+
+    const idxLinha = cabecalho.indexOf('LINHA');
+    const idxBancada = cabecalho.indexOf('BANCADA');
+    const idxTempo = cabecalho.indexOf('TEMPO EM BANCADA');
+
+    if (idxLinha === -1 || idxBancada === -1 || idxTempo === -1) return { paletes: [] };
+
+    const linhaAlvo = `linha ${String(linha).trim().toLowerCase()}`;
+    const paletes = [];
+
+    for (let i = 1; i < valores.length; i++) {
+      const linhaDados = valores[i];
+      const linhaTexto = String(linhaDados[idxLinha] || '').trim().toLowerCase();
+      if (linhaTexto !== linhaAlvo) continue;
+
+      const bancada = parseInt(linhaDados[idxBancada], 10);
+      if (isNaN(bancada)) continue;
+
+      const minutos = paraMinutos_(linhaDados[idxTempo]);
+      paletes.push({
+        bancada,
+        tempoBancadaMinutos: minutos !== null ? Math.round(minutos) : null,
+        tempoBancada: formatarMinutos_(minutos)
+      });
+    }
+    return { paletes };
+  } catch (e) {
+    Logger.log('Erro em getDadosPaletesPorLinha: ' + e.toString());
+    return { paletes: [], erro: e.toString() };
+  }
+}
