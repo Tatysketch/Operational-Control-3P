@@ -299,10 +299,14 @@
     <script>
         const setores = ['checkin', 'checkincd', 'p2mab', 'p2mcd'];
         const PREFIXO = "p2m_v3_bloqueio_";
-        const SENHA_ADMIN_TESTE = "Meli_Idea";
+        const SCRIPT_URL = "<?= scriptUrl ?>";
+
+        function urlAbsoluta(pagina) {
+            return SCRIPT_URL + "?page=" + pagina;
+        }
 
         function navegarPara(pagina) {
-            alert("Em produção isso levaria para a página: " + pagina);
+            window.top.location.href = urlAbsoluta(pagina);
         }
 
         window.onload = function() {
@@ -322,12 +326,19 @@
             const erro = document.getElementById("senha-admin-erro");
             erro.style.display = "none";
 
-            if (senha === SENHA_ADMIN_TESTE) {
-                document.getElementById("senha-admin-modal").style.display = "none";
-                document.getElementById("painel-admin").style.display = "flex";
-            } else {
-                erro.style.display = "block";
-            }
+            google.script.run
+                .withSuccessHandler(function(valido) {
+                    if (valido) {
+                        document.getElementById("senha-admin-modal").style.display = "none";
+                        document.getElementById("painel-admin").style.display = "flex";
+                    } else {
+                        erro.style.display = "block";
+                    }
+                })
+                .withFailureHandler(function() {
+                    erro.style.display = "block";
+                })
+                .validarSenhaAdmin(senha);
         }
 
         function atualizarInterface() {
@@ -375,3 +386,35 @@
             const donoAtual = localStorage.getItem(PREFIXO + setorId);
 
             if (donoAtual && donoAtual.toLowerCase() !== inputLogin.toLowerCase()) {
+                document.getElementById("mind-modal").style.display = "flex";
+                return;
+            }
+
+            localStorage.setItem(PREFIXO + setorId, inputLogin);
+            navegarPara(pagina);
+        }
+
+        function alternarModoApresentacao() {
+            const ativoAtual = localStorage.getItem("modo_apresentacao_ativo") === "true";
+            if (ativoAtual) {
+                localStorage.removeItem("modo_apresentacao_ativo");
+                alert("Modo Apresentação desativado.");
+            } else {
+                localStorage.setItem("modo_apresentacao_ativo", "true");
+                alert("Modo Apresentação ativado!");
+            }
+            location.reload();
+        }
+
+        function resetarTestes() {
+            setores.forEach(s => {
+                localStorage.removeItem(PREFIXO + s);
+                localStorage.removeItem("duplo_bloqueio_" + s);
+            });
+            alert("Reset realizado com sucesso!");
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
