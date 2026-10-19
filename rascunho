@@ -1,11 +1,1 @@
-                                    layout time IDEA
-
-
-T1 - 9 pessoas   
-T2 - 7 pessoas 
-T3 - 7 pessoas 
-
-
-
- 1 supervisor 
-1 Team Leader,    2 Analista,  2 assistentes,  2 axulixiares, 1 jovem aprendiz;
+Tenho este código e preciso ajustar a leitura dos dados da planilha: no Check-in (A/B e C/D) preciso trazer produtividade, ociosidade e tempo de palete; no P2M_Sorter (A/B e C/D) apenas produtividade e ociosidade. Como adaptar a função?
