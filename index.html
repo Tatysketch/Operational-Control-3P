@@ -147,62 +147,8 @@
             background-color: #1e2848;
         }
 
-        #senha-admin-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 10001;
-        }
-        .senha-admin-content {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 320px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .senha-admin-content h3 {
-            color: #2b3a67;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        .senha-admin-content input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 15px;
-            box-sizing: border-box;
-        }
-        .senha-admin-content button {
-            width: 100%;
-            padding: 10px;
-            background-color: #2b3a67;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        #senha-admin-erro {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: -5px;
-            margin-bottom: 10px;
-            display: none;
-        }
-
         #painel-admin {
-            display: none;
+            display: flex;
             position: fixed;
             bottom: 15px;
             right: 15px;
@@ -282,15 +228,6 @@
         </div>
     </div>
 
-    <div id="senha-admin-modal">
-        <div class="senha-admin-content">
-            <h3>Acesso Restrito</h3>
-            <input type="password" id="input-senha-admin" placeholder="Digite a senha" autocomplete="off">
-            <div id="senha-admin-erro">Senha incorreta.</div>
-            <button onclick="confirmarSenhaAdmin()">Entrar</button>
-        </div>
-    </div>
-
     <div id="painel-admin">
         <button class="btn-acao" onclick="alternarModoApresentacao()">🎬 Modo Apresentação</button>
         <button class="btn-acao" onclick="resetarTestes()">⚙️ Reset</button>
@@ -311,12 +248,6 @@
         }
 
         window.onload = function() {
-            const urlCompleta = window.location.href;
-            
-            if (urlCompleta.includes("admin=mind")) {
-                document.getElementById("senha-admin-modal").style.display = "flex";
-            }
-
             if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
                 document.getElementById("banner-modo-demo").style.display = "block";
             } else {
@@ -324,19 +255,6 @@
             }
             atualizarInterface();
         };
-
-        function confirmarSenhaAdmin() {
-            const senha = document.getElementById("input-senha-admin").value;
-            const erro = document.getElementById("senha-admin-erro");
-            erro.style.display = "none";
-
-            if (senha === "admin123" || senha === "I.D.E.A") {
-                document.getElementById("senha-admin-modal").style.display = "none";
-                document.getElementById("painel-admin").style.display = "flex"; 
-            } else {
-                erro.style.display = "block";
-            }
-        }
 
         function atualizarInterface() {
             setores.forEach(setor => {
