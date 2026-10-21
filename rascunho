@@ -1,1 +1,105 @@
-Tenho este código e preciso ajustar a leitura dos dados da planilha: no Check-in (A/B e C/D) preciso trazer produtividade, ociosidade e tempo de palete; no P2M_Sorter (A/B e C/D) apenas produtividade e ociosidade. Como adaptar a função?
+Plano de Ação: SLA de Unidades 3P
+1. Contexto
+Operação: 4 linhas de produção 3P, com fluxo padrão checkin → P2M → armado de HU.
+Relógio do SLA: começa quando a IS é criada em doca.
+Sintoma 1: muitas unidades vencem ainda no stage in, aguardando a puxada do FIFO (por horário de criação da IS e chegada no CAD).
+Sintoma 2: MUs acumulam nas bancadas de P2M aguardando ocupação, por causa do target de tote funes.
+Desvios do fluxo: divergência no checkin gera cubing ou passagem pelo Problem Solver (PS). No P2M, a MU pode gerar auditoria ou IMA, tratada pelo ICQA.
+2. Diagnóstico
+
+O SLA é consumido em quatro esperas ao longo do fluxo:
+
+Stage in: unidades vencem aguardando a puxada do FIFO.
+PS / Cubing: MELI não clicável e perfil de palete travam o checkin, e o tempo depende da agilidade do rep.
+Bancada P2M: MUs aguardam ocupação, e a canalização errada abre mais de uma MU para o mesmo destino.
+Auditoria / IMA: o rep não identifica o problema na bancada, só no sorter, e o ICQA espera o palete completo para tratar.
+
+Existe também um conflito de metas: o tote funes incentiva segurar a MU até encher, enquanto o SLA pede que ela ande.
+
+3. Objetivo e indicadores
+
+Objetivo: elevar o SLA de unidades 3P medindo e reduzindo o tempo parado em cada etapa, sem abrir mão do tote funes de forma descontrolada.
+
+Indicadores a acompanhar (metas a definir com a liderança):
+
+SLA de unidades 3P: % entregue no prazo. Dono: Torre de Controle.
+Aging no stage in: tempo entre a criação da IS e o início do checkin. Dono: Torre.
+Unidades em risco: unidades a menos de X horas do vencimento. Dono: Torre. Meta: zero vencidas no stage in.
+Tempo de retorno do PS: tempo entre o envio ao PS e a devolução para a linha. Dono: liderança do PS.
+Aging de MU em bancada: tempo da MU aberta até sair para o sorter. Dono: líderes de linha.
+MUs duplicadas por destino: destinos com mais de uma MU aberta. Dono: líderes de linha. Meta: zero.
+Aging de IMA / auditoria: tempo entre a chegada no ICQA e a tratativa. Dono: ICQA.
+Tote funes: ocupação média das MUs expedidas. Dono: liderança de operação. Meta: target atual.
+4. Plano de ação por frente
+
+Frente 1: Visibilidade (Torre de Controle)
+
+Medir o aging por etapa (stage in, checkin, PS, bancada e IMA), por linha e por turno. Prazo: semana 1.
+Levantar quais destinos e bancadas mais seguram MU aberta. Prazo: semana 1.
+
+Frente 2: Stage in (Torre + líderes de turno)
+
+Criar uma faixa de alerta: unidade a menos de X horas do vencimento ganha prioridade oficial, e cada exceção ao FIFO fica registrada. Prazo: semana 2.
+Fazer uma varredura horária das ISs em risco e enviar a lista ao líder do turno. Prazo: semana 2.
+
+Frente 3: Checkin (líderes de linha + PS)
+
+Fazer pré-triagem do palete: perfil complexo ou MELI não clicável vai direto ao PS, sem travar o rep. Prazo: semana 2.
+Definir um SLA interno de retorno do PS (sugestão: 15 a 20 minutos). Prazo: semana 2.
+Registrar o motivo de cada PS e cubing, para levar às origens 3P. Prazo: semana 3.
+
+Frente 4: P2M (liderança de operação + líderes de linha)
+
+Criar uma regra de corte: MU acima de X tempo em bancada, ou perto do vencimento, fecha e segue mesmo sem a ocupação ideal. Prazo: semana 2.
+Usar identificação visual por cor de destino e fazer uma conferência no meio do turno (“um destino = uma MU aberta”). Prazo: semana 2.
+Criar uma bancada consolidadora para destinos de baixo volume. Prazo: semana 3.
+Dar feedback de canalização errada por rep, e não só por turno. Prazo: semana 3.
+
+Frente 5: Auditoria / IMA (Torre + ICQA)
+
+Fechar um acordo com o ICQA: unidade perto do SLA é tratada na hora, sem esperar o palete completo. Prazo: semana 2.
+Criar um painel da fila de IMA com aging e escalonamento quando passar do limite combinado. Prazo: semana 3.
+5. Rituais de governança
+Start de turno (10 minutos, Torre + líderes): revisar o backlog herdado e as unidades em risco, definindo um dono para cada uma.
+Check horário (Torre + líderes): acompanhar as ISs em risco, as MUs paradas em bancada e as filas de PS e IMA.
+Passagem de turno (líder que sai + líder que entra): registrar o que ficou, por quê e quem assume.
+Revisão semanal (Torre, liderança, PS e ICQA): analisar os indicadores, os motivos de atraso e ajustar o plano.
+
+O indicador por turno passa a comparar o que o turno recebeu com o que entregou, para evitar avanço de FIFO só para bater número.
+
+6. Cronograma de 30 dias
+
+Semana 1: Medir
+
+Montar a visão de aging por etapa, linha e turno.
+Levantar destinos e bancadas críticos.
+Levar os números e as decisões pendentes à liderança.
+
+Semana 2: Regras
+
+Aprovar a regra de corte do P2M e a faixa de alerta do stage in.
+Fechar o acordo com o ICQA e o SLA de retorno do PS.
+Iniciar a pré-triagem no checkin e a identificação visual nas bancadas.
+Começar os rituais de turno.
+
+Semana 3: Ajustes
+
+Implantar a bancada consolidadora.
+Iniciar o registro de motivos de PS e cubing.
+Publicar o painel da fila de IMA.
+Iniciar o feedback de canalização por rep.
+
+Semana 4: Resultado
+
+Comparar os indicadores antes e depois.
+Ajustar os limites (X horas, tempo de corte) com base nos dados.
+Apresentar o resultado e os próximos passos à liderança.
+7. Decisões pendentes para a liderança
+
+A decisão mais importante é definir quando o SLA passa a valer mais que o tote funes. Sem ela, cada rep e cada turno decide de um jeito.
+
+Regra de corte do P2M: depois de quanto tempo em bancada (ou a quantas horas do vencimento) a MU fecha sem ocupação ideal?
+Faixa de alerta do stage in: qual o valor de X horas para a unidade furar o FIFO de forma oficial?
+SLA de retorno do PS: qual o tempo máximo aceito?
+Acordo com o ICQA: qual o tempo máximo para tratar IMA de unidade perto do vencimento, e para quem escalar?
+Metas dos indicadores da seção 3.
