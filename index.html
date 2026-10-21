@@ -244,14 +244,12 @@
         </div>
 
         <div class="painel-card" id="card-checkincd">
-            <!-- CORRIGIDO AQUI DE 'checkin-cd' para 'Checkin-CD' -->
-            <button class="btn-painel" onclick="toggleSubmenu('checkincd', 'Checkin-CD')">
+            <button class="btn-painel" onclick="toggleSubmenu('checkincd', 'checkin-cd')">
                 Check-in C/D <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
                 <input type="text" id="login-checkincd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                <!-- CORRIGIDO AQUI TAMBÉM -->
-                <button onclick="acessarPainel('checkincd', 'Checkin-CD')">Entrar no Setor</button>
+                <button onclick="acessarPainel('checkincd', 'checkin-cd')">Entrar no Setor</button>
             </div>
         </div>
 
@@ -278,7 +276,7 @@
 
     <div id="mind-modal">
         <div class="mind-modal-content">
-            <h3>Time MIND - Operacional</h3>
+            <h3>Time I.D.E.A - Operacional</h3>
             <p>Este setor já está sob a responsabilidade de outro Team Leader e encontra-se bloqueado para novos acessos.</p>
             <button onclick="fecharModal()">OK</button>
         </div>
@@ -301,14 +299,16 @@
     <script>
         const setores = ['checkin', 'checkincd', 'p2mab', 'p2mcd'];
         const PREFIXO = "p2m_v3_bloqueio_";
-        const SCRIPT_URL = "<?= scriptUrl ?>";
-
-        function urlAbsoluta(pagina) {
-            return SCRIPT_URL + "?page=" + pagina;
-        }
 
         function navegarPara(pagina) {
-            window.top.location.href = urlAbsoluta(pagina);
+            const rotas = {
+                'checkin-ab': 'Checkin-AB.html',
+                'checkin-cd': 'checkin-CD.html',
+                'p2m-ab': 'P2M_Sorter-AB.html',
+                'p2m-cd': 'P2M_Sorter-CD.html'
+            };
+            
+            window.location.href = rotas[pagina] || pagina + '.html';
         }
 
         window.onload = function() {
@@ -328,19 +328,12 @@
             const erro = document.getElementById("senha-admin-erro");
             erro.style.display = "none";
 
-            google.script.run
-                .withSuccessHandler(function(valido) {
-                    if (valido) {
-                        document.getElementById("senha-admin-modal").style.display = "none";
-                        document.getElementById("painel-admin").style.display = "flex";
-                    } else {
-                        erro.style.display = "block";
-                    }
-                })
-                .withFailureHandler(function() {
-                    erro.style.display = "block";
-                })
-                .validarSenhaAdmin(senha);
+            if (senha === "admin123" || senha === "I.D.E.A") {
+                document.getElementById("senha-admin-modal").style.display = "none";
+                document.getElementById("painel-admin").style.display = "flex";
+            } else {
+                erro.style.display = "block";
+            }
         }
 
         function atualizarInterface() {
