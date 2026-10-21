@@ -246,7 +246,7 @@
                 <span>▼</span>
             </button>
             <div id="sub-checkin" class="submenu-login">
-                <input type="text" id="login-checkin" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <input type="text" id="login-checkin" placeholder="Digite seu LDAP..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('checkin', 'checkin-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -257,7 +257,7 @@
                 <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
-                <input type="text" id="login-checkincd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <input type="text" id="login-checkincd" placeholder="Digite seu LDAP..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('checkincd', 'checkin-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -268,7 +268,7 @@
                 <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
-                <input type="text" id="login-p2mab" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <input type="text" id="login-p2mab" placeholder="Digite seu LDAP..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('p2mab', 'p2m-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -279,7 +279,7 @@
                 <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
-                <input type="text" id="login-p2mcd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <input type="text" id="login-p2mcd" placeholder="Digite seu LDAP..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button onclick="acessarPainel('p2mcd', 'p2m-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -318,7 +318,6 @@
                 'p2m-ab': 'P2M_Sorter-AB.html',
                 'p2m-cd': 'P2M_Sorter-CD.html'
             };
-            
             window.location.href = rotas[pagina] || pagina + '.html';
         }
 
@@ -330,6 +329,8 @@
 
             if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
                 document.getElementById("banner-modo-demo").style.display = "block";
+            } else {
+                document.getElementById("banner-modo-demo").style.display = "none";
             }
             atualizarInterface();
         };
@@ -392,7 +393,7 @@
             const inputLogin = document.getElementById("login-" + setorId).value.trim();
 
             if (inputLogin === "") {
-                alert("Por favor, digite seu login para prosseguir.");
+                alert("Por favor, digite seu LDAP para prosseguir.");
                 return;
             }
 
