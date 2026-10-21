@@ -101,6 +101,13 @@
         .painel-em-uso span {
             color: #1f2937 !important;
         }
+        .status-ocupado-txt {
+            font-size: 12px;
+            font-weight: normal;
+            display: block;
+            color: #4b5563;
+            margin-top: 4px;
+        }
 
         #mind-modal {
             display: none;
@@ -235,7 +242,8 @@
     <div class="menu-container">
         <div class="painel-card" id="card-checkin">
             <button class="btn-painel" onclick="toggleSubmenu('checkin', 'checkin-ab')">
-                Check-in A/B <span>▼</span>
+                <div>Check-in A/B <span class="status-ocupado-txt" id="txt-status-checkin"></span></div>
+                <span>▼</span>
             </button>
             <div id="sub-checkin" class="submenu-login">
                 <input type="text" id="login-checkin" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -245,7 +253,8 @@
 
         <div class="painel-card" id="card-checkincd">
             <button class="btn-painel" onclick="toggleSubmenu('checkincd', 'checkin-cd')">
-                Check-in C/D <span>▼</span>
+                <div>Check-in C/D <span class="status-ocupado-txt" id="txt-status-checkincd"></span></div>
+                <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
                 <input type="text" id="login-checkincd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -255,7 +264,8 @@
 
         <div class="painel-card" id="card-p2mab">
             <button class="btn-painel" onclick="toggleSubmenu('p2mab', 'p2m-ab')">
-                P2M Sorter A/B <span>▼</span>
+                <div>P2M Sorter A/B <span class="status-ocupado-txt" id="txt-status-p2mab"></span></div>
+                <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
                 <input type="text" id="login-p2mab" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -265,7 +275,8 @@
 
         <div class="painel-card" id="card-p2mcd">
             <button class="btn-painel" onclick="toggleSubmenu('p2mcd', 'p2m-cd')">
-                P2M Sorter C/D <span>▼</span>
+                <div>P2M Sorter C/D <span class="status-ocupado-txt" id="txt-status-p2mcd"></span></div>
+                <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
                 <input type="text" id="login-p2mcd" placeholder="Digite seu login..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -341,11 +352,18 @@
                 const donoSetor = localStorage.getItem(PREFIXO + setor);
                 const card = document.getElementById("card-" + setor);
                 const btn = card.querySelector(".btn-painel");
+                const txtStatus = document.getElementById("txt-status-" + setor);
 
                 if (donoSetor) {
                     btn.classList.add("painel-em-uso");
+                    if (txtStatus) {
+                        txtStatus.innerText = "Em uso por: " + donoSetor.toUpperCase();
+                    }
                 } else {
                     btn.classList.remove("painel-em-uso");
+                    if (txtStatus) {
+                        txtStatus.innerText = "";
+                    }
                 }
             });
         }
@@ -386,6 +404,7 @@
             }
 
             localStorage.setItem(PREFIXO + setorId, inputLogin);
+            atualizarInterface();
             navegarPara(pagina);
         }
 
