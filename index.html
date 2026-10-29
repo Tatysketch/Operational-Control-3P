@@ -159,7 +159,6 @@
             background-color: #1e2848;
         }
 
-        /* Oculto por padrão para operadores */
         #painel-admin {
             display: none;
             position: fixed;
@@ -201,7 +200,7 @@
                 Check-in A/B <span>▼</span>
             </button>
             <div id="sub-checkin" class="submenu-login">
-                <input type="text" id="login-checkin" placeholder="Digite seu LDAP..." autocomplete="new-password">
+                <input type="text" id="login-checkin" name="no_history_chk_ab" placeholder="Digite seu LDAP..." autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                 <button onclick="acessarPainel('checkin', 'checkin-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -211,7 +210,7 @@
                 Check-in C/D <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
-                <input type="text" id="login-checkincd" placeholder="Digite seu LDAP..." autocomplete="new-password">
+                <input type="text" id="login-checkincd" name="no_history_chk_cd" placeholder="Digite seu LDAP..." autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                 <button onclick="acessarPainel('checkincd', 'checkin-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -221,7 +220,7 @@
                 P2M Sorter A/B <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
-                <input type="text" id="login-p2mab" placeholder="Digite seu LDAP..." autocomplete="new-password">
+                <input type="text" id="login-p2mab" name="no_history_p2m_ab" placeholder="Digite seu LDAP..." autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                 <button onclick="acessarPainel('p2mab', 'p2m-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -231,7 +230,7 @@
                 P2M Sorter C/D <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
-                <input type="text" id="login-p2mcd" placeholder="Digite seu LDAP..." autocomplete="new-password">
+                <input type="text" id="login-p2mcd" name="no_history_p2m_cd" placeholder="Digite seu LDAP..." autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                 <button onclick="acessarPainel('p2mcd', 'p2m-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -270,8 +269,7 @@
                 if (el) el.value = "";
             });
 
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'mind') {
+            if (window.location.href.includes("admin=IDEA")) {
                 document.getElementById('painel-admin').style.display = 'flex';
             } else {
                 document.getElementById('painel-admin').style.display = 'none';
