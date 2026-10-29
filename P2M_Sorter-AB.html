@@ -8,9 +8,10 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .painel { background: white; width: 1550px; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .header-container { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #2d3277; padding-bottom: 10px; margin-bottom: 20px; }
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .logo-meli { height: auto; object-fit: contain; }
-        .header-titles h1 { color: #2d3277; margin: 0; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header-left { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+        .logo-meli { width: 110px; height: auto; object-fit: contain; flex-shrink: 0; }
+        .header-titles { display: flex; align-items: center; }
+        .header-titles h1 { color: #2d3277; margin: 0; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
         .header-right { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; color: #475569; }
         .tl-nome { color: #475569; font-weight: 700; text-transform: uppercase; }
         #relogio { background: #000000; color: white; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-size: 13px; }
@@ -115,9 +116,9 @@
 <div class="painel">
     <div class="header-container">
         <div class="header-left">
-            <img src="https://raw.githubusercontent.com/Tatysketch/Operational-Control-3P/main/Log-I.D.E.A.jpeg" class="logo-meli" style="width: 75px; height: auto;" alt="Logo I.D.E.A">
-        <div class="header-titles">
-            <h1>Controle Operacional - 3P</h1>
+            <img src="https://raw.githubusercontent.com/Tatysketch/Operational-Control-3P/main/Log-I.D.E.A.jpeg" class="logo-meli" alt="Logo I.D.E.A">
+            <div class="header-titles">
+                <h1>Controle Operacional - 3P</h1>
         </div>
         <div class="header-right">
             <div>TL: <span class="tl-nome" id="nome-tl-display"></span></div>
