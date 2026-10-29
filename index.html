@@ -160,7 +160,7 @@
         }
 
         #painel-admin {
-            display: flex;
+            display: none;
             position: fixed;
             bottom: 15px;
             right: 15px;
@@ -187,7 +187,6 @@
 </head>
 <body>
 
-    <!-- Logo oficial puxada diretamente do GitHub -->
     <div class="logo-container">
         <img src="https://raw.githubusercontent.com/Tatysketch/Operational-Control-3P/main/Log-I.D.E.A.jpeg" alt="Logo I.D.E.A">
     </div>
@@ -201,7 +200,7 @@
                 Check-in A/B <span>▼</span>
             </button>
             <div id="sub-checkin" class="submenu-login">
-                <input type="text" id="login-checkin" placeholder="Digite seu LDAP..." autocomplete="off">
+                <input type="text" id="login-checkin" placeholder="Digite seu LDAP..." autocomplete="off" value="">
                 <button onclick="acessarPainel('checkin', 'checkin-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -211,7 +210,7 @@
                 Check-in C/D <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
-                <input type="text" id="login-checkincd" placeholder="Digite seu LDAP..." autocomplete="off">
+                <input type="text" id="login-checkincd" placeholder="Digite seu LDAP..." autocomplete="off" value="">
                 <button onclick="acessarPainel('checkincd', 'checkin-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -221,7 +220,7 @@
                 P2M Sorter A/B <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
-                <input type="text" id="login-p2mab" placeholder="Digite seu LDAP..." autocomplete="off">
+                <input type="text" id="login-p2mab" placeholder="Digite seu LDAP..." autocomplete="off" value="">
                 <button onclick="acessarPainel('p2mab', 'p2m-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -231,7 +230,7 @@
                 P2M Sorter C/D <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
-                <input type="text" id="login-p2mcd" placeholder="Digite seu LDAP..." autocomplete="off">
+                <input type="text" id="login-p2mcd" placeholder="Digite seu LDAP..." autocomplete="off" value="">
                 <button onclick="acessarPainel('p2mcd', 'p2m-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -265,6 +264,11 @@
         }
 
         window.onload = function() {
+            setores.forEach(s => {
+                const input = document.getElementById("login-" + s);
+                if(input) input.value = "";
+            });
+
             if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
                 document.getElementById("banner-modo-demo").style.display = "block";
             } else {
@@ -272,6 +276,13 @@
             }
             atualizarInterface();
         };
+
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.shiftKey && event.code === 'KeyA') {
+                const painelAdmin = document.getElementById('painel-admin');
+                painelAdmin.style.display = painelAdmin.style.display === 'flex' ? 'none' : 'flex';
+            }
+        });
 
         function atualizarInterface() {
             setores.forEach(setor => {
