@@ -159,6 +159,7 @@
             background-color: #1e2848;
         }
 
+        /* Oculto por padrão para operadores */
         #painel-admin {
             display: none;
             position: fixed;
@@ -200,7 +201,7 @@
                 Check-in A/B <span>▼</span>
             </button>
             <div id="sub-checkin" class="submenu-login">
-                <input type="text" id="login-checkin" placeholder="Digite seu LDAP..." autocomplete="off" value="">
+                <input type="text" id="login-checkin" placeholder="Digite seu LDAP..." autocomplete="new-password">
                 <button onclick="acessarPainel('checkin', 'checkin-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -210,7 +211,7 @@
                 Check-in C/D <span>▼</span>
             </button>
             <div id="sub-checkincd" class="submenu-login">
-                <input type="text" id="login-checkincd" placeholder="Digite seu LDAP..." autocomplete="off" value="">
+                <input type="text" id="login-checkincd" placeholder="Digite seu LDAP..." autocomplete="new-password">
                 <button onclick="acessarPainel('checkincd', 'checkin-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -220,7 +221,7 @@
                 P2M Sorter A/B <span>▼</span>
             </button>
             <div id="sub-p2mab" class="submenu-login">
-                <input type="text" id="login-p2mab" placeholder="Digite seu LDAP..." autocomplete="off" value="">
+                <input type="text" id="login-p2mab" placeholder="Digite seu LDAP..." autocomplete="new-password">
                 <button onclick="acessarPainel('p2mab', 'p2m-ab')">Entrar no Setor</button>
             </div>
         </div>
@@ -230,7 +231,7 @@
                 P2M Sorter C/D <span>▼</span>
             </button>
             <div id="sub-p2mcd" class="submenu-login">
-                <input type="text" id="login-p2mcd" placeholder="Digite seu LDAP..." autocomplete="off" value="">
+                <input type="text" id="login-p2mcd" placeholder="Digite seu LDAP..." autocomplete="new-password">
                 <button onclick="acessarPainel('p2mcd', 'p2m-cd')">Entrar no Setor</button>
             </div>
         </div>
@@ -265,9 +266,16 @@
 
         window.onload = function() {
             setores.forEach(s => {
-                const input = document.getElementById("login-" + s);
-                if(input) input.value = "";
+                const el = document.getElementById("login-" + s);
+                if (el) el.value = "";
             });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'mind') {
+                document.getElementById('painel-admin').style.display = 'flex';
+            } else {
+                document.getElementById('painel-admin').style.display = 'none';
+            }
 
             if (localStorage.getItem("modo_apresentacao_ativo") === "true") {
                 document.getElementById("banner-modo-demo").style.display = "block";
@@ -276,13 +284,6 @@
             }
             atualizarInterface();
         };
-
-        document.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && event.shiftKey && event.code === 'KeyA') {
-                const painelAdmin = document.getElementById('painel-admin');
-                painelAdmin.style.display = painelAdmin.style.display === 'flex' ? 'none' : 'flex';
-            }
-        });
 
         function atualizarInterface() {
             setores.forEach(setor => {
